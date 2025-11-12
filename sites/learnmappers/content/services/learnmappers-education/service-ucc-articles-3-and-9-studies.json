@@ -1,0 +1,35 @@
+{
+  "id": "ucc-articles-3-and-9-studies",
+  "title": "UCC Articles 3 & 9 Studies",
+  "description": "Educational study of negotiable instruments and secured transactions.",
+  "purpose": "Show elements, timelines, and interactions of Articles 3 and 9 with diagrams.",
+  "icon": "\ud83d\udcdc",
+  "category": "learnmappers-education",
+  "pricing": {
+    "type": "hourly",
+    "rate": 115,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Negotiability checklist",
+    "Attachment/Perfection flow",
+    "Priority ladder"
+  ],
+  "tools": [
+    "learnmapverse-master-table",
+    "source-register"
+  ],
+  "outcomes": [
+    "Correct article mapping",
+    "Risk awareness",
+    "Better questions for counsel"
+  ],
+  "whatYouCanBuild": [
+    "Instrument elements grid",
+    "Filing-name accuracy checklist"
+  ],
+  "whyNeed": "To classify 'paper' and collateral correctly in learning contexts.",
+  "categoryId": "learnmappers-education",
+  "categoryTitle": "LearnMappers \u2014 Research & Education"
+}

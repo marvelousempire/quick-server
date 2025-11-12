@@ -1,0 +1,81 @@
+<?php
+/*
+Template Name: Medium width
+*/
+?>
+
+<?php
+	get_header();
+?>
+
+<?php
+	$efor_select_page_featured_area = get_option('efor_select_page_featured_area' . '__' . get_the_ID(), 'No Featured Area');
+	
+	if ((! isset($_GET['featured_area'])) && is_active_sidebar($efor_select_page_featured_area))
+	{
+		?>
+			<section class="top-content">
+				<div class="layout-medium">
+					<div class="featured-area">
+						<?php
+							dynamic_sidebar($efor_select_page_featured_area);
+						?>
+					</div> <!-- .featured-area -->
+				</div> <!-- .layout-medium -->
+			</section> <!-- .top-content -->
+		<?php
+	}
+?>
+
+<div id="main" class="site-main">
+	<div class="layout-medium">
+		<div id="primary" class="content-area">
+			<div id="content" class="site-content" role="main">
+				<?php
+					while (have_posts()) : the_post();
+						?>
+							<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+								<div class="hentry-wrap">
+									<div class="post-header page-header post-header-classic">
+										<?php
+											$efor_title_visibility = get_option(get_the_ID() . 'efor_title_visibility', false);
+										?>
+										<header class="entry-header" <?php if ($efor_title_visibility == true) { echo 'style="display: none;"'; } ?>>
+											<?php
+												the_title('<h1 class="entry-title">', '</h1>');
+											?>
+										</header>
+									</div> <!-- .post-header-classic -->
+									<?php
+										if (has_post_thumbnail())
+										{
+											?>
+												<div class="featured-image">
+													<?php
+														the_post_thumbnail('efor_image_size_1');
+													?>
+												</div> <!-- .featured-image -->
+											<?php
+										}
+									?>
+									<div class="entry-content">
+										<?php
+											efor_content();
+										?>
+									</div> <!-- .entry-content -->
+								</div> <!-- .hentry-wrap -->
+							</article>
+							<?php
+								comments_template("", true);
+							?>
+						<?php
+					endwhile;
+				?>
+			</div> <!-- #content .site-content -->
+		</div> <!-- #primary .content-area -->
+	</div> <!-- .layout-medium -->
+</div> <!-- #main .site-main -->
+
+<?php
+	get_footer();
+?>

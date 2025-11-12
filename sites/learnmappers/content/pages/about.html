@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>About — LearnMappers HQ Dev</title>
+<script src="../../config.js"></script>
+<script>
+  document.title = window.CONFIG?.site?.name ? `${window.CONFIG.site.name} — About` : 'LearnMappers HQ Dev — About';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', window.CONFIG?.site?.themeColor || '#0b0c10');
+</script>
+<link rel="manifest" href="../../manifest.webmanifest"><meta name="theme-color" content="#0b0c10">
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; --wide:1200px; }
+*{box-sizing:border-box} html,body{background:radial-gradient(1200px 500px at 15% -10%, rgba(124,227,255,.14), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(96,255,168,.09), transparent 60%), var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6}
+a{color:var(--brand);text-decoration:none}
+.wrap{max-width:1200px;margin:0 auto;padding:clamp(18px,4vw,60px)}
+header.hero.wrap{padding-top:54px;padding-bottom:24px}
+main[data-page]{padding:0}
+nav.stick{position:sticky;top:0;z-index:90;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter: blur(10px);border-bottom:1px solid var(--line)}
+nav .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900}
+.logo .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+nav .links{display:flex;gap:12px;flex-wrap:wrap}
+nav .links a{padding:10px 12px;border-radius:12px}
+nav .links a:hover{background:color-mix(in srgb, var(--brand) 18%, transparent)}
+h1,h2,h3,h4{color:var(--ink);margin-top:2em;margin-bottom:1em;line-height:1.2}
+h1{font-size:clamp(32px,5vw,48px);font-weight:900}
+h2{font-size:clamp(24px,4vw,32px);font-weight:800}
+h3{font-size:clamp(20px,3vw,24px);font-weight:700}
+h4{font-size:clamp(18px,2.5vw,20px);font-weight:600}
+p{color:var(--muted);margin:1em 0;line-height:1.7}
+ul,ol{margin:1em 0;padding-left:1.5em;color:var(--muted);line-height:1.8}
+li{margin:0.5em 0}
+section.wrap{margin:2em auto;padding:2em 0}
+.card{background:color-mix(in srgb, var(--card) 88%, transparent);border:1px solid var(--line);border-radius:var(--radius);padding:var(--gap);margin:var(--gap) 0}
+.btn{display:inline-block;padding:10px 20px;background:color-mix(in srgb, var(--brand) 20%, transparent);border:1px solid var(--brand);border-radius:8px;color:var(--brand);font-weight:600;transition:all 0.15s}
+.btn:hover{background:color-mix(in srgb, var(--brand) 30%, transparent);transform:translateY(-1px)}
+</style>
+<script src="../../scripts.js"></script>
+<script>
+  // Populate navigation when config loads
+  window.addEventListener('configLoaded', function() {
+    const nav = document.getElementById('nav');
+    if (nav && window.CONFIG?.navigation) {
+      const logo = window.CONFIG.navigation.logo;
+      const links = window.CONFIG.navigation.links || [];
+      
+      let navHTML = '<div class="row">';
+      navHTML += `<a href="${logo.href || '/'}" class="logo"><span class="dot"></span><span>${logo.text || 'LearnMappers'}</span></a>`;
+      navHTML += '<div class="links">';
+      links.forEach(link => {
+        navHTML += `<a href="${link.href}" data-nav>${link.label}</a>`;
+      });
+      navHTML += '</div></div>';
+      nav.innerHTML = navHTML;
+    }
+  });
+  
+  // Try immediately if config already loaded
+  if (window.CONFIG) {
+    window.dispatchEvent(new CustomEvent('configLoaded'));
+  }
+</script>
+</head>
+<body>
+<header class="hero wrap">
+  <nav id="nav" class="stick wrap" style="padding: 12px clamp(18px,4vw,60px);">
+    <div class="row">
+      <a href="/" class="logo"><span class="dot"></span><span>LearnMappers HQ Dev</span></a>
+      <div class="links">
+        <a href="/" data-nav>Home</a>
+        <a href="/about.html" data-nav>About</a>
+        <a href="/inventory.html" data-nav>Resources</a>
+        <a href="/service-menu.html" data-nav>Services</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<main data-page="about">
+  <section class="wrap">
+    <h2>💼 About LearnMappers — Complete Solutions</h2>
+    <p>LearnMappers provides comprehensive Headquarters Development and Family Office Administration services. We combine hands-on homesteading and handyman work with administrative excellence, tech support, and systems management — creating complete solutions for home, office, and business operations.</p>
+    <p>Our clients value the seamless integration of physical work (carpentry, electrical, gardening) with administrative services (documentation, compliance, education, tech support). Whether you need a tool assembled, a system documented, or operations streamlined, we map your setup so you can keep it working.</p>
+
+    <h3>🌟 Why Clients Choose LearnMappers</h3>
+    <ul>
+      <li><strong>Headquarters Development:</strong> Homesteading, handyman services, carpentry, electrical work, gardening, and home improvement</li>
+      <li><strong>Family Office Administration:</strong> Administrative services, tech support, systems management, compliance, and education</li>
+      <li><strong>Complete Solutions:</strong> From physical projects to administrative excellence — all in one platform</li>
+      <li><strong>Systems Thinking:</strong> We map your setup so you can keep it working, whether it's a tool, a process, or an entire operation</li>
+      <li><strong>Reliable & Professional:</strong> Fully equipped, on schedule, with lasting quality and attention to detail</li>
+    </ul>
+
+    <h3>🧰 Tools & Equipment Inventory</h3>
+
+    <h4>Power Tools</h4>
+    <ul>
+      <li>Compact ½" Drill/Driver & Impact Combo</li>
+      <li>10" Single-Bevel Miter Saw</li>
+      <li>7¼" Circular & 4½" Compact Saws</li>
+      <li>Brushless Jig Saw</li>
+      <li>Compact Reciprocating Saw</li>
+      <li>5" Random Orbit & Detail Sanders</li>
+      <li>Rotary & Routing Tool System</li>
+      <li>Oscillating Multi-Tool</li>
+      <li>Cordless Air Compressor</li>
+      <li>Shop Vac & Dust Extractor</li>
+    </ul>
+
+    <h4>Precision & Build Tools</h4>
+    <ul>
+      <li>Stud Finder, Laser Level, Bubble Level</li>
+      <li>Tape Measures, Squares, Angle Guides</li>
+      <li>Clamps, Bench Vice, Portable Work Stand</li>
+      <li>Allen Key Sets, Ratchets, Bit Kits, Screwdrivers</li>
+      <li>Rubber Mallet, Claw Hammer, Dead-Blow Hammer</li>
+      <li>Pliers, Adjustable Wrenches, Vice Grips (small/large)</li>
+      <li>Drill Bits, Anchors, Fasteners, Hook Systems</li>
+    </ul>
+
+    <h4>Digital & Diagnostic Tools</h4>
+    <ul>
+      <li>Foxwell NT1009 OBD2 Diagnostic Reader</li>
+      <li>Power Meters, Voltage Testers, Cable Checkers</li>
+      <li>Mesh Router Kit & Smart Network System</li>
+      <li>Compact UPS & EcoFlow Power Unit</li>
+      <li>Foldable Solar Panel Kit</li>
+    </ul>
+
+    <h4>Creative & Custom Build Gear</h4>
+    <ul>
+      <li>Snapmaker 3D Printer (FDM, Laser, CNC)</li>
+      <li>Rotary Engraving & Cutting Tools</li>
+      <li>Painting & Finishing Gear</li>
+      <li>Photography Equipment: 4K Cinema Camera, DSLR Kit</li>
+      <li>Tripods, LED Panels, Light Meters</li>
+    </ul>
+
+    <h4>Garden & Eco Systems</h4>
+    <ul>
+      <li>Compost Bins, Soil Mixers</li>
+      <li>Self-Watering Planters</li>
+      <li>Drip Systems, Rain Barrels</li>
+      <li>Seed Starters, Grow Lights</li>
+    </ul>
+
+    <h3>🔁 Cross-Project Collaboration</h3>
+    <p>Clients often invite us back for new work — from mounting and smart home setups to administrative documentation, compliance support, or systems integration. Once we learn your style, space, and operations, it's easy to keep building smarter, more connected solutions together — whether that's a physical project or an administrative process.</p>
+    
+    <h3>📋 Family Office Administration Services</h3>
+    <ul>
+      <li><strong>Administrative Services:</strong> Documentation, record-keeping, compliance support, and administrative workflows</li>
+      <li><strong>Tech Support:</strong> Systems setup, troubleshooting, integration, and technical documentation</li>
+      <li><strong>Systems Management:</strong> Process mapping, workflow optimization, and operational efficiency</li>
+      <li><strong>Compliance & Education:</strong> Legal literacy, UCC studies, credit & capital literacy, privacy & jurisdictions, enforcement chain mapping</li>
+      <li><strong>Resource Management:</strong> Inventory tracking, asset management, and resource optimization</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>
+

@@ -1,0 +1,35 @@
+{
+  "id": "apple-linux-setup",
+  "title": "Apple & Linux Setup",
+  "description": "Clean installs, updates, backup plans, and secure logins.",
+  "purpose": "Give your home office stable, safe, and fast systems.",
+  "icon": "\ud83c\udf4e",
+  "category": "office-tech",
+  "pricing": {
+    "type": "hourly",
+    "rate": 95,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Accounts, keys, and backups",
+    "File and photo structure that makes sense",
+    "Peripheral and printer setup"
+  ],
+  "tools": [
+    "network-system-mesh-router-kit-smart",
+    "ups-ecoflow-power-unit-compact",
+    "power-meters-voltage-testers-cable-checkers"
+  ],
+  "outcomes": [
+    "Stable daily workflow",
+    "Safer data and faster find",
+    "Clear steps for upkeep"
+  ],
+  "whatYouCanBuild": [
+    "Home office suite, shared drives, backup plan"
+  ],
+  "whyNeed": "Start with a clean, tested setup that lasts.",
+  "categoryId": "office-tech",
+  "categoryTitle": "Office & Computer"
+}

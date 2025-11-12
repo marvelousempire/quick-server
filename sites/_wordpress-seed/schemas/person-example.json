@@ -1,0 +1,82 @@
+{
+  "id": "john-smith-contractor",
+  "name": {
+    "first": "John",
+    "last": "Smith",
+    "preferred": "John",
+    "full": "John Smith"
+  },
+  "meta": {
+    "title": "Licensed Electrician",
+    "company": "smith-electric-services",
+    "tags": ["electrician", "licensed", "residential", "commercial"]
+  },
+  "role": "contractor",
+  "relationship": "service-provider",
+  "purpose": "Provides licensed electrical work for projects that require permits or specialized electrical expertise. Reliable partner for complex electrical installations and repairs.",
+  "contact": {
+    "email": "john@smith-electric.com",
+    "phone": "(555) 123-4567",
+    "mobile": "(555) 123-4568",
+    "address": {
+      "street": "123 Electric Ave",
+      "city": "San Francisco",
+      "state": "CA",
+      "zip": "94102",
+      "country": "USA"
+    },
+    "website": "https://smith-electric.com",
+    "social": {
+      "linkedin": "https://linkedin.com/in/johnsmith-electric"
+    }
+  },
+  "capabilities": [
+    {
+      "capability": "Electrical panel upgrades",
+      "level": "expert",
+      "description": "Licensed to upgrade electrical panels and service connections"
+    },
+    {
+      "capability": "Smart home electrical integration",
+      "level": "proficient",
+      "description": "Installs smart switches, outlets, and electrical infrastructure for home automation"
+    },
+    {
+      "capability": "Solar system electrical connections",
+      "level": "competent",
+      "description": "Can connect solar systems to main electrical panel"
+    }
+  ],
+  "canProduceWith": [
+    {
+      "output": "Permitted electrical work",
+      "description": "Provides licensed electrical services that meet code requirements",
+      "requires": ["project scope", "permits", "materials"],
+      "value": "Legal compliance, safety, insurance coverage"
+    },
+    {
+      "output": "Smart home electrical infrastructure",
+      "description": "Installs proper electrical foundation for smart home systems",
+      "requires": ["smart devices", "electrical plan"],
+      "value": "Reliable smart home foundation, future-proofing"
+    }
+  ],
+  "history": [
+    {
+      "date": "2024-06-15",
+      "type": "project",
+      "description": "Completed electrical panel upgrade for smart home project",
+      "outcome": "Successfully upgraded to 200A panel, all permits approved"
+    },
+    {
+      "date": "2024-09-20",
+      "type": "project",
+      "description": "Installed electrical infrastructure for solar system connection",
+      "outcome": "System connected and operational, passed inspection"
+    }
+  ],
+  "status": "active",
+  "createdAt": "2024-01-10T09:00:00Z",
+  "updatedAt": "2024-11-08T15:00:00Z"
+}
+

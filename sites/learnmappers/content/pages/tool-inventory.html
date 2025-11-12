@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Resources (Tools) — LearnMappers HQ Dev</title>
+<script src="../../config.js"></script>
+<script>
+  document.title = window.CONFIG?.site?.name ? `${window.CONFIG.site.name} — Resources` : 'LearnMappers HQ Dev — Resources';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', window.CONFIG?.site?.themeColor || '#0b0c10');
+</script>
+<link rel="manifest" href="../../manifest.webmanifest"><meta name="theme-color" content="#0b0c10">
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; --wide:1200px; }
+*{box-sizing:border-box} html,body{background:radial-gradient(1200px 500px at 15% -10%, rgba(124,227,255,.14), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(96,255,168,.09), transparent 60%), var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6}
+a{color:var(--brand);text-decoration:none}
+.wrap{max-width:1200px;margin:0 auto;padding:clamp(18px,4vw,60px)}
+header.hero.wrap{padding-top:54px;padding-bottom:24px}
+main[data-page]{padding:0}
+nav.stick{position:sticky;top:0;z-index:90;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter: blur(10px);border-bottom:1px solid var(--line)}
+nav .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900}
+.logo .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+nav .links{display:flex;gap:12px;flex-wrap:wrap}
+nav .links a{padding:10px 12px;border-radius:12px}
+nav .links a:hover{background:color-mix(in srgb, var(--brand) 18%, transparent)}
+h1,h2,h3,h4{color:var(--ink);margin-top:2em;margin-bottom:1em;line-height:1.2}
+h1{font-size:clamp(32px,5vw,48px);font-weight:900}
+h2{font-size:clamp(24px,4vw,32px);font-weight:800}
+h3{font-size:clamp(20px,3vw,24px);font-weight:700}
+p{color:var(--muted);margin:1em 0;line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--gap);margin:2em 0}
+.card{background:color-mix(in srgb, var(--card) 88%, transparent);border:1px solid var(--line);border-radius:var(--radius);padding:var(--gap);transition:all 0.15s}
+.card:hover{transform:translateY(-2px);border-color:var(--brand);box-shadow:0 8px 24px var(--shadow)}
+.card h3{margin-top:0;color:var(--ink);font-size:18px;font-weight:700}
+.card p{color:var(--muted);font-size:14px;margin:0.5em 0 1em}
+.btn{display:inline-block;padding:8px 16px;background:color-mix(in srgb, var(--brand) 20%, transparent);border:1px solid var(--brand);border-radius:8px;color:var(--brand);font-size:13px;font-weight:600;transition:all 0.15s;margin-top:0.5em}
+.btn:hover{background:color-mix(in srgb, var(--brand) 30%, transparent);transform:translateY(-1px)}
+section.wrap{margin:2em auto;padding:2em 0}
+</style>
+<script src="../../scripts.js"></script>
+<script>
+  // Populate navigation when config loads
+  window.addEventListener('configLoaded', function() {
+    const nav = document.getElementById('nav');
+    if (nav && window.CONFIG?.navigation) {
+      const logo = window.CONFIG.navigation.logo;
+      const links = window.CONFIG.navigation.links || [];
+      
+      let navHTML = '<div class="row">';
+      navHTML += `<a href="${logo.href || '/'}" class="logo"><span class="dot"></span><span>${logo.text || 'LearnMappers'}</span></a>`;
+      navHTML += '<div class="links">';
+      links.forEach(link => {
+        navHTML += `<a href="${link.href}" data-nav>${link.label}</a>`;
+      });
+      navHTML += '</div></div>';
+      nav.innerHTML = navHTML;
+    }
+  });
+  
+  // Try immediately if config already loaded
+  if (window.CONFIG) {
+    window.dispatchEvent(new CustomEvent('configLoaded'));
+  }
+</script>
+<script>
+// Load tools from database API
+async function loadTools() {
+  const toolsGrid = document.getElementById('toolsGrid');
+  if (!toolsGrid) return;
+  
+  try {
+    const config = window.CONFIG || {};
+    const apiBase = config.api?.baseUrl || '/api';
+    const response = await fetch(`${apiBase}/inventory`);
+    
+    if (!response.ok) {
+      throw new Error('Failed to load resources');
+    }
+    
+    const items = await response.json();
+    
+    if (!items || items.length === 0) {
+      toolsGrid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)"><p>No resources found. Add resources via the <a href="/inventory.html">Inventory</a> page.</p></div>';
+      return;
+    }
+    
+    // Filter to show only tools and equipment (exclude materials/consumables)
+    const tools = items.filter(item => {
+      const cat = item.category || item.type || '';
+      return cat.toLowerCase().includes('tool') || cat.toLowerCase().includes('equipment') || 
+             item.type?.toLowerCase().includes('tool') || item.type?.toLowerCase().includes('equipment');
+    });
+    
+    // Sort by name
+    tools.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    
+    if (tools.length === 0) {
+      toolsGrid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)"><p>No tools or equipment found.</p></div>';
+      return;
+    }
+    
+    // Generate cards
+    toolsGrid.innerHTML = tools.map(item => {
+      const purpose = item.purpose || item.notes || `Professional ${item.category || 'tool'} for LearnMappers projects.`;
+      const shortPurpose = purpose.length > 120 ? purpose.substring(0, 120) + '...' : purpose;
+      
+      // Create slug from name: noun phrase first, then features/descriptors
+      function createSlug(name) {
+        const leadingDescriptors = ['compact', 'cordless', 'brushless', 'single', 'double', 'portable', 'foldable', 'self', 'smart', 'professional', 'heavy', 'light', 'mini', 'micro', 'large', 'small', 'watering'];
+        const words = name.toLowerCase().split(/[^a-z0-9]+/).filter(w => w);
+        
+        // Find the LAST main noun (usually the actual object name)
+        let mainNounIndex = -1;
+        for (let i = words.length - 1; i >= 0; i--) {
+          if (!leadingDescriptors.includes(words[i]) && !/^\d+$/.test(words[i])) {
+            mainNounIndex = i;
+            break;
+          }
+        }
+        
+        if (mainNounIndex === -1) {
+          // Fallback: just join all words
+          return words.join('-').substring(0, 80);
+        }
+        
+        // Build noun phrase: include ALL consecutive non-descriptor words ending at the last noun
+        let nounStart = mainNounIndex;
+        for (let i = mainNounIndex - 1; i >= 0; i--) {
+          // Stop if we hit a descriptor
+          if (leadingDescriptors.includes(words[i]) || /^\d+$/.test(words[i])) {
+            break;
+          }
+          // Include this word in noun phrase (it's part of compound noun like 'jig saw')
+          nounStart = i;
+        }
+        
+        // Reorder: noun phrase first, then descriptors
+        const nounPhrase = words.slice(nounStart, mainNounIndex + 1);
+        const beforeNoun = words.slice(0, nounStart);
+        const afterNoun = words.slice(mainNounIndex + 1);
+        const ordered = [...nounPhrase, ...beforeNoun, ...afterNoun];
+        
+        return ordered.join('-').substring(0, 80);
+      }
+      const slug = createSlug(item.name);
+      
+      return `
+        <div class="card">
+          <h3>${item.name || 'Untitled Resource'}</h3>
+          <p>${shortPurpose}</p>
+          <a href="/pages/resource-cards/${slug}.html" class="btn">View Resource Details</a>
+        </div>
+      `;
+    }).join('');
+    
+  } catch (error) {
+    console.error('Error loading tools:', error);
+    toolsGrid.innerHTML = `
+      <div style="text-align:center;padding:40px;color:var(--muted)">
+        <p>Unable to load resources. ${error.message}</p>
+        <p style="margin-top:16px;font-size:14px">Try <a href="/inventory.html">viewing the inventory page</a> or check your connection.</p>
+      </div>
+    `;
+  }
+}
+
+// Load tools when config is ready
+window.addEventListener('configLoaded', loadTools);
+if (window.CONFIG) {
+  loadTools();
+} else {
+  // Wait a bit for config to load
+  setTimeout(loadTools, 500);
+}
+
+// Populate navigation when config loads
+function populateNavigation() {
+  const nav = document.getElementById('nav');
+  if (nav && window.CONFIG?.navigation) {
+    const logo = window.CONFIG.navigation.logo;
+    const links = window.CONFIG.navigation.links || [];
+    
+    let navHTML = '<div class="row">';
+    navHTML += `<a href="${logo.href || '/'}" class="logo">${logo.showDot ? '<span class="dot"></span>' : ''}<span>${logo.text || 'LearnMappers'}</span></a>`;
+    navHTML += '<div class="links">';
+    links.forEach(link => {
+      navHTML += `<a href="${link.href}" data-nav>${link.label}</a>`;
+    });
+    navHTML += '</div></div>';
+    nav.innerHTML = navHTML;
+  }
+}
+
+window.addEventListener('configLoaded', populateNavigation);
+if (window.CONFIG) {
+  populateNavigation();
+}
+</script>
+</head>
+<body>
+<header class="hero wrap">
+  <nav id="nav" class="stick wrap" style="padding: 12px clamp(18px,4vw,60px);">
+    <!-- Navigation will be populated from config -->
+  </nav>
+</header>
+<main data-page="tool-inventory">
+  <section class="wrap">
+    <h2>📦 Resources (Tools & Equipment)</h2>
+    <p>Here's the complete list of professional tools and equipment (resources) used across LearnMappers projects. Each card links to its detailed resource page.</p>
+
+    <div class="grid" id="toolsGrid">
+      <!-- Tools loaded dynamically from database -->
+      <div style="text-align:center;padding:40px;color:var(--muted)">
+        <p>Loading resources...</p>
+      </div>
+    </div>
+  </section>
+</main>
+</body>
+</html>
+

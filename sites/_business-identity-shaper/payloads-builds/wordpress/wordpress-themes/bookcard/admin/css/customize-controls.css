@@ -1,0 +1,32 @@
+
+
+.customize-control label {
+	display: inline-block;
+}
+
+.customize-control-textarea label {
+	display: inline;
+}
+
+.customize-control-select label,
+.customize-control-range label,
+.customize-control-text label,
+.customize-control-radio label {
+	display: block;
+}
+
+.customize-control input[type=number] {
+	width: auto;
+}
+
+.customize-control-range input[type=range] {
+	width: 100%;
+}
+
+.customize-control .customize-control-description {
+	font-size: 11px;
+	padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-right: 0px !important;
+}
+

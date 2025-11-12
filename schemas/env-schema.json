@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LearnMappers Environment Configuration Schema",
+  "description": "Schema for .env file configuration - enables fast project replication",
+  "type": "object",
+  "properties": {
+    "DOMAIN": {
+      "type": "string",
+      "description": "Top-level domain (TLD) for the site. Priority 1 for URL selection.",
+      "examples": ["mysite.com", "app.example.com"],
+      "default": ""
+    },
+    "HOSTNAME": {
+      "type": "string",
+      "description": "Hostname for the site. Alternative to DOMAIN. Priority 1 for URL selection.",
+      "examples": ["mysite.local", "app.local"],
+      "default": ""
+    },
+    "HTTP_PORT": {
+      "type": "integer",
+      "description": "HTTP port for the server",
+      "minimum": 1,
+      "maximum": 65535,
+      "default": 8000
+    },
+    "HTTPS_PORT": {
+      "type": "integer",
+      "description": "HTTPS port for the server",
+      "minimum": 1,
+      "maximum": 65535,
+      "default": 8443
+    },
+    "HTTPS": {
+      "type": "boolean",
+      "description": "Enable HTTPS (requires SSL certificates)",
+      "default": true
+    },
+    "SITE_DIR": {
+      "type": "string",
+      "description": "Directory path to the site files",
+      "pattern": "^sites/[^/]+$",
+      "examples": ["sites/learnmappers", "sites/my-site"],
+      "default": "sites/learnmappers"
+    },
+    "NODE_ENV": {
+      "type": "string",
+      "enum": ["development", "production", "test"],
+      "description": "Node.js environment",
+      "default": "production"
+    },
+    "DB_TYPE": {
+      "type": "string",
+      "enum": ["sqlite", "mysql"],
+      "description": "Database type (sqlite for dev, mysql for production)",
+      "default": "sqlite"
+    },
+    "DB_HOST": {
+      "type": "string",
+      "description": "Database host (for MySQL)",
+      "default": "localhost"
+    },
+    "DB_PORT": {
+      "type": "integer",
+      "description": "Database port (for MySQL)",
+      "default": 3306
+    },
+    "DB_NAME": {
+      "type": "string",
+      "description": "Database name",
+      "default": "learnmappers"
+    },
+    "DB_USER": {
+      "type": "string",
+      "description": "Database user (for MySQL)",
+      "default": "learnmappers"
+    },
+    "DB_PASSWORD": {
+      "type": "string",
+      "description": "Database password (for MySQL)",
+      "default": ""
+    }
+  },
+  "required": []
+}
+

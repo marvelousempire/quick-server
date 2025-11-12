@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vue.js Seed - Business Identity Shaper</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="../../config.js"></script>
+<link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+<div id="app">
+  <header class="hero">
+    <div class="wrap">
+      <h1>{{ heroTitle }}</h1>
+      <p class="lead">{{ heroSubtitle }}</p>
+      <p>{{ heroDescription }}</p>
+    </div>
+  </header>
+
+  <main data-page="index">
+    <div class="wrap">
+      <section class="intro">
+        <h2>Vue.js + BIS Framework</h2>
+        <p>This seed template provides a foundation for Vue.js sites integrated with the Business Identity Shaper framework.</p>
+        <p>Features:</p>
+        <ul>
+          <li>Vue.js 3 reactive framework</li>
+          <li>BIS framework integration</li>
+          <li>Resource and service management</li>
+          <li>RAG-ready data structures</li>
+          <li>Component-based architecture</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data() {
+    return {
+      heroTitle: 'Vue.js Site',
+      heroSubtitle: 'Powered by Business Identity Shaper',
+      heroDescription: 'A Vue.js site integrated with the BIS framework for comprehensive entity management.'
+    };
+  },
+  mounted() {
+    if (window.CONFIG) {
+      this.heroTitle = window.CONFIG.content?.hero?.title || this.heroTitle;
+      this.heroSubtitle = window.CONFIG.content?.hero?.subtitle || this.heroSubtitle;
+      this.heroDescription = window.CONFIG.content?.hero?.description || this.heroDescription;
+      document.title = window.CONFIG.seo?.metaTitle || window.CONFIG.site?.title || 'Vue.js Seed';
+    }
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
+

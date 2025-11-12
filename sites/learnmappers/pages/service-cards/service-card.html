@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../../config.js"></script>
+<script>
+  document.title = window.CONFIG?.site?.title ? `${window.CONFIG.site.name} — Furniture Assembly` : 'LearnMappers — Furniture Assembly';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', window.CONFIG?.site?.themeColor || '#0b0c10');
+</script>
+<title>LearnMappers — Furniture Assembly</title>
+<link rel="manifest" href="../../manifest.webmanifest"><meta name="theme-color" content="#0b0c10">
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; }
+*{box-sizing:border-box} html,body{background:radial-gradient(1200px 500px at 15% -10%, rgba(124,227,255,.14), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(96,255,168,.09), transparent 60%), var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6}
+a{color:var(--brand);text-decoration:none}
+main[data-page]{padding:0}
+.wrap{max-width:1440px;margin:0 auto;padding:clamp(18px,4vw,60px)}
+nav.stick{position:sticky;top:0;z-index:90;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter: blur(10px);border-bottom:1px solid var(--line)}
+nav .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900}
+.logo .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+nav .links{display:flex;gap:12px;flex-wrap:wrap}
+nav .links a{padding:10px 12px;border-radius:12px}
+nav .links a:hover{background:color-mix(in srgb, var(--brand) 18%, transparent)}
+.pill{display:inline-flex;align-items:center;gap:6px;margin-right:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 90%, transparent), color-mix(in srgb, var(--card) 96%, transparent));font-size:12px}
+.pill.online{color:#073b18;border-color:#0ea35a;background:linear-gradient(180deg,#d6ffe9,#f1fff7)}
+.pill.offline{color:#4b1a1a;border-color:#cc5151;background:linear-gradient(180deg,#ffe3e3,#fff7f7)}
+header.hero{position:relative;isolation:isolate;padding:54px 0 24px;margin-bottom:32px}
+header.hero.wrap{padding-top:54px;padding-bottom:24px;padding-left:clamp(18px,4vw,60px);padding-right:clamp(18px,4vw,60px)}
+h1{font-size:clamp(36px,5vw,56px);margin:0 0 12px;font-weight:900;background:linear-gradient(135deg,var(--ink) 0%,var(--brand) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.lead{font-size:clamp(16px,2.2vw,19px);color:var(--muted);max-width:74ch;margin:0 0 20px;line-height:1.6}
+.btn{padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 85%, transparent), color-mix(in srgb, var(--card) 95%, transparent));color:var(--ink);font-weight:800;cursor:pointer;transition:.18s ease;box-shadow:0 14px 40px -20px var(--shadow);text-decoration:none;display:inline-block}
+.btn:hover{transform:translateY(-2px)}
+.btn.brand{background:linear-gradient(135deg,var(--brand),#c9f5ff);color:#041018;border:none}
+.card{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:0 14px 44px -28px var(--shadow);transition:all 0.2s}
+.card:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:0 20px 48px -16px var(--shadow)}
+.section{margin:48px 0}
+.section h2{font-size:32px;font-weight:900;margin:0 0 24px;padding-top:16px;border-top:1px solid var(--line);margin-top:32px}
+.section h2:first-child{border-top:none;margin-top:0;padding-top:0}
+.section h3{font-size:24px;font-weight:800;margin:32px 0 16px}
+.section p{margin:16px 0;font-size:16px;line-height:1.7;color:var(--ink)}
+.section ul,.section ol{margin:16px 0;padding-left:24px}
+.section li{margin:8px 0;line-height:1.6}
+.service-icon{font-size:64px;margin-bottom:16px;display:block}
+.service-meta{display:flex;gap:24px;flex-wrap:wrap;margin:24px 0;padding:20px;background:color-mix(in srgb, var(--card) 88%, transparent);border:1px solid var(--line);border-radius:12px}
+.meta-item{display:flex;flex-direction:column;gap:4px}
+.meta-label{font-size:12px;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);font-weight:700}
+.meta-value{font-size:18px;font-weight:800;color:var(--brand)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:24px 0}
+.feature-item{display:flex;align-items:start;gap:12px;padding:16px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:12px}
+.feature-item::before{content:'✓';color:var(--brand2);font-weight:900;font-size:20px}
+.tools-list{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.tool-tag{font-size:12px;padding:6px 12px;border-radius:8px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:0.5px}
+.back-link{display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;color:var(--muted);font-size:14px}
+.back-link:hover{color:var(--brand)}
+.engagement-card{background:linear-gradient(135deg, color-mix(in srgb, var(--brand) 15%, transparent), color-mix(in srgb, var(--brand2) 10%, transparent));border:1px solid var(--line);border-radius:var(--radius);padding:28px;margin:24px 0;position:relative;overflow:hidden}
+.engagement-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+.engagement-card h3{color:var(--brand);margin-top:0}
+.outcome-item{display:flex;align-items:start;gap:12px;padding:14px;background:color-mix(in srgb, var(--card) 85%, transparent);border-left:3px solid var(--brand2);border-radius:8px;margin:12px 0}
+.outcome-item::before{content:'💰';font-size:20px}
+.build-item{display:flex;align-items:start;gap:12px;padding:14px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px;margin:8px 0}
+.build-item::before{content:'🔨';font-size:18px}
+.why-need{background:linear-gradient(135deg, color-mix(in srgb, var(--brand2) 20%, transparent), transparent);border-left:4px solid var(--brand2);padding:20px;border-radius:12px;margin:24px 0}
+.why-need p{font-size:18px;font-weight:700;color:var(--ink);margin:0;line-height:1.6}
+</style>
+</head>
+<body>
+<nav class="stick wrap">
+  <div class="row">
+    <a href="../../" class="logo" id="logo">
+      <span class="dot"></span>
+      <span>LearnMappers</span>
+    </a>
+    <div class="links">
+      <span id="netPill" class="pill" title="Connection status">● offline</span>
+      <div id="navLinks">
+        <a href="../../content/pages/index.html" data-nav>Home</a>
+        <a href="../../content/pages/docs-index.html" data-nav>Docs</a>
+        <a href="../../content/pages/inventory.html" data-nav>Resources</a>
+        <a href="../../content/pages/service-menu.html" data-nav>Services</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main data-page>
+  <section class="wrap">
+    <a href="../../content/pages/service-menu.html" class="back-link">← Back to Services</a>
+    
+    <header class="hero" id="serviceHeader">
+      <span class="service-icon" id="serviceIcon">🔨</span>
+      <h1 id="serviceTitle">Furniture Assembly</h1>
+      <p class="lead" id="serviceDescription">Fast, neat, and secure builds.</p>
+      
+      <div class="service-meta" id="serviceMeta">
+        <div class="meta-item">
+          <span class="meta-label">Pricing</span>
+          <span class="meta-value" id="servicePricing">Starting at $50</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Duration</span>
+          <span class="meta-value" id="serviceDuration">1-3 hours</span>
+        </div>
+      </div>
+      
+      <div style="margin-top:24px">
+        <a href="#" id="bookButton" class="btn brand" target="_blank" rel="noopener">📅 Book This Service</a>
+      </div>
+    </header>
+
+    <div class="section" id="whyNeedSection">
+      <div class="why-need">
+        <p id="whyNeedText">You need this if you've ever spent hours on assembly only to find it wobbly, if you lack the right tools, if you want it done right the first time, or if your time is worth more than the frustration of DIY assembly.</p>
+      </div>
+    </div>
+
+    <div class="section" id="purposeSection">
+      <div class="engagement-card">
+        <h3>🎯 Purpose</h3>
+        <p id="purposeText" style="font-size:18px;line-height:1.7;margin:0">Transform flat-pack boxes into functional, stable furniture that lasts. Save time, avoid mistakes, and ensure proper assembly with professional tools and techniques.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>What You Get</h2>
+      <div id="whatYouGetList">
+        <!-- Populated from config -->
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>What You Can Build</h2>
+      <div id="whatYouCanBuildList">
+        <!-- Populated from config -->
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Real Outcomes</h2>
+      <div id="outcomesList">
+        <!-- Populated from config -->
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>What's Included</h2>
+      <div class="features-grid" id="featuresList">
+        <!-- Features populated from config -->
+      </div>
+    </div>
+
+    <div class="section" id="toolsSection">
+      <h2>Tools & Equipment</h2>
+      <p style="color:var(--muted);margin-bottom:16px">We bring professional-grade tools to ensure quality results:</p>
+      <div class="tools-list" id="toolsList">
+        <!-- Tools populated from config -->
+      </div>
+    </div>
+
+    <div class="section" style="text-align:center;padding:32px 0;border-top:1px solid var(--line);margin-top:48px">
+      <h2>Ready to Get Started?</h2>
+      <p style="color:var(--muted);margin-bottom:24px">Book this service today and experience the LearnMappers difference.</p>
+      <a href="#" id="ctaButton" class="btn brand" style="font-size:16px;padding:14px 24px" target="_blank" rel="noopener">📅 Book Furniture Assembly</a>
+    </div>
+  </section>
+</main>
+
+<script src="../../scripts.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('../../service-worker.js').catch(()=>{});}</script>
+<script>
+// Populate service page from config
+async function populateServicePage() {
+  const config = window.CONFIG;
+  if (!config) {
+    setTimeout(populateServicePage, 100);
+    return;
+  }
+
+  // Get service ID from URL path
+  // Handle both /sites/learnmappers/pages/service-cards/{id}.html and /pages/service-cards/{id}.html
+  const pathParts = window.location.pathname.split('/').filter(p => p);
+  let serviceId = '';
+  
+  // Find the service ID in the path (look for service-cards/{id}.html pattern)
+  const serviceCardsIndex = pathParts.indexOf('service-cards');
+  if (serviceCardsIndex >= 0 && pathParts[serviceCardsIndex + 1]) {
+    serviceId = pathParts[serviceCardsIndex + 1].replace('.html', '');
+  } else {
+    // Fallback: use last part of path
+    serviceId = pathParts[pathParts.length - 1]?.replace('.html', '') || '';
+  }
+  
+  console.log('🔍 Looking for service ID:', serviceId, 'from path:', window.location.pathname);
+  console.log('   Full URL:', window.location.href);
+  console.log('   Path parts:', pathParts);
+  
+  if (!serviceId) {
+    console.error('❌ No service ID extracted from URL');
+    document.body.innerHTML = `
+      <div style="padding: 60px; text-align: center;">
+        <h1>Service ID Missing</h1>
+        <p>Could not extract service ID from URL: <code>${window.location.pathname}</code></p>
+        <p><a href="../../content/pages/service-menu.html">← Back to Services</a></p>
+      </div>
+    `;
+    return;
+  }
+  
+  // Try API endpoint first (most reliable)
+  let service = null;
+  try {
+    const apiUrl = `/api/services?id=${encodeURIComponent(serviceId)}`;
+    console.log('📡 Fetching service from API:', apiUrl);
+    const response = await fetch(apiUrl);
+    if (response.ok) {
+      service = await response.json();
+      console.log('✅ Loaded service from API:', serviceId, '→', service.title || service.id);
+      // Verify the service ID matches
+      if (service.id !== serviceId) {
+        console.warn('⚠️  Service ID mismatch! Requested:', serviceId, 'Got:', service.id);
+        // Don't use mismatched service
+        service = null;
+      }
+    } else if (response.status === 404) {
+      console.log('⚠️  Service not found in API (404), trying config.json...');
+    } else {
+      console.warn('⚠️  API returned status:', response.status, 'trying config.json...');
+    }
+  } catch (e) {
+    console.log('⚠️  API not available, trying config.json...', e.message);
+  }
+  
+  // Fallback to config.json if API didn't work
+  if (!service) {
+    console.log('📋 Searching config.json for service ID:', serviceId);
+    const categories = config.content?.services?.categories || [];
+    for (const category of categories) {
+      // Check if category itself is a service (legacy structure - category.id matches)
+      if (category.id === serviceId && !category.services) {
+        service = category;
+        console.log('✅ Found service in config.json (category):', serviceId, '→', service.title);
+        break;
+      }
+      // Check services within category (new structure - category.services[])
+      if (category.services && Array.isArray(category.services)) {
+        const found = category.services.find(s => s.id === serviceId);
+        if (found) {
+          service = found;
+          console.log('✅ Found service in config.json (nested):', serviceId, '→', service.title);
+          break;
+        }
+      }
+    }
+  }
+
+  if (!service) {
+    console.error('❌ Service not found:', serviceId);
+    const allServiceIds = config.content?.services?.categories?.flatMap(c => 
+      c.services ? c.services.map(s => s.id) : (c.id ? [c.id] : [])
+    ) || [];
+    console.error('   Available service IDs:', allServiceIds);
+    document.body.innerHTML = `
+      <div style="padding: 60px; text-align: center;">
+        <h1>Service Not Found</h1>
+        <p>Service ID: <code>${serviceId}</code></p>
+        <p>Available IDs: <code>${allServiceIds.join(', ')}</code></p>
+        <p><a href="../../content/pages/service-menu.html">← Back to Services</a></p>
+      </div>
+    `;
+    return;
+  }
+  
+  console.log('✅ Found service:', service.title || service.id, '(ID:', service.id, ')');
+
+  // Update logo and navigation
+  const logo = document.getElementById('logo');
+  if (logo && config.navigation?.logo) {
+    logo.innerHTML = `
+      ${config.navigation.logo.showDot ? '<span class="dot"></span>' : ''}
+      <span>${config.navigation.logo.text || 'LearnMappers'}</span>
+    `;
+    if (config.navigation.logo.href) {
+      // From pages/service-cards/, logo href needs to go to content/pages/
+      let href = config.navigation.logo.href;
+      if (!href.startsWith('/') && !href.startsWith('http')) {
+        href = `../../content/pages/${href}`;
+      }
+      logo.href = href;
+    }
+  }
+
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks && config.navigation?.links) {
+    navLinks.innerHTML = config.navigation.links.map(link => {
+      // From pages/service-cards/, links need to go to content/pages/
+      // If link.href is already absolute or starts with /, use as-is
+      // Otherwise, prepend ../../content/pages/
+      let href = link.href;
+      if (!href.startsWith('/') && !href.startsWith('http')) {
+        href = `../../content/pages/${href}`;
+      }
+      return `<a href="${href}" data-nav>${link.icon ? link.icon + ' ' : ''}${link.label}</a>`;
+    }).join('');
+  }
+
+  // Update service details
+  const serviceIcon = document.getElementById('serviceIcon');
+  const serviceTitle = document.getElementById('serviceTitle');
+  const serviceDescription = document.getElementById('serviceDescription');
+  const servicePricing = document.getElementById('servicePricing');
+  const serviceDuration = document.getElementById('serviceDuration');
+  const featuresList = document.getElementById('featuresList');
+  const toolsList = document.getElementById('toolsList');
+  const bookButton = document.getElementById('bookButton');
+  const ctaButton = document.getElementById('ctaButton');
+  const purposeText = document.getElementById('purposeText');
+  const whyNeedText = document.getElementById('whyNeedText');
+  const whatYouGetList = document.getElementById('whatYouGetList');
+  const whatYouCanBuildList = document.getElementById('whatYouCanBuildList');
+  const outcomesList = document.getElementById('outcomesList');
+
+  console.log('📝 Updating page with service data:', {
+    id: service.id,
+    title: service.title,
+    description: service.description,
+    icon: service.icon
+  });
+  
+  if (serviceIcon) {
+    serviceIcon.textContent = service.icon || '⚙️';
+    console.log('   ✓ Updated icon:', service.icon || '⚙️');
+  }
+  if (serviceTitle) {
+    serviceTitle.textContent = service.title || 'Service';
+    console.log('   ✓ Updated title:', service.title);
+  }
+  if (serviceDescription) {
+    serviceDescription.textContent = service.description || service.purpose || '';
+    console.log('   ✓ Updated description');
+  }
+  if (servicePricing) {
+    // Handle both string and object pricing
+    let pricingText = 'Contact for pricing';
+    if (typeof service.pricing === 'string') {
+      pricingText = service.pricing;
+    } else if (service.pricing?.rate) {
+      pricingText = `$${service.pricing.rate}/${service.pricing.type === 'hourly' ? 'hr' : 'fixed'}`;
+    }
+    servicePricing.textContent = pricingText;
+    console.log('   ✓ Updated pricing:', pricingText);
+  }
+  if (serviceDuration) {
+    serviceDuration.textContent = service.duration || 'Varies';
+    console.log('   ✓ Updated duration');
+  }
+  if (purposeText && service.purpose) {
+    purposeText.textContent = service.purpose;
+    console.log('   ✓ Updated purpose');
+  }
+  if (whyNeedText && service.whyNeed) {
+    whyNeedText.textContent = service.whyNeed;
+    console.log('   ✓ Updated whyNeed');
+  }
+
+  // Populate what you get
+  if (whatYouGetList && service.whatYouGet) {
+    whatYouGetList.innerHTML = service.whatYouGet.map(item => 
+      `<div class="feature-item">${item}</div>`
+    ).join('');
+  }
+
+  // Populate what you can build
+  if (whatYouCanBuildList && service.whatYouCanBuild) {
+    whatYouCanBuildList.innerHTML = service.whatYouCanBuild.map(item => 
+      `<div class="build-item">${item}</div>`
+    ).join('');
+  }
+
+  // Populate outcomes
+  if (outcomesList && service.outcomes) {
+    outcomesList.innerHTML = service.outcomes.map(item => 
+      `<div class="outcome-item">${item}</div>`
+    ).join('');
+  }
+
+  // Populate features
+  if (featuresList && service.features) {
+    featuresList.innerHTML = service.features.map(feature => 
+      `<div class="feature-item">${feature}</div>`
+    ).join('');
+  }
+
+  // Populate tools
+  if (toolsList && service.tools && service.tools.length > 0) {
+    toolsList.innerHTML = service.tools.map(tool => 
+      `<span class="tool-tag">${tool}</span>`
+    ).join('');
+  } else if (document.getElementById('toolsSection')) {
+    document.getElementById('toolsSection').style.display = 'none';
+  }
+
+  // Update booking links
+  const taskrabbitUrl = config.integrations?.taskrabbit?.profileUrl || 'https://www.taskrabbit.com/profile/marvin-h--14';
+  const utmSource = config.integrations?.taskrabbit?.utmSource || 'learnmappers_site';
+  const utmMedium = config.integrations?.taskrabbit?.utmMedium || 'services';
+  const bookingUrl = `${taskrabbitUrl}?utm_source=${utmSource}&utm_medium=${utmMedium}&utm_campaign=${service.id || 'service'}`;
+
+  if (bookButton) {
+    bookButton.href = bookingUrl;
+    bookButton.textContent = `📅 Book ${service.title}`;
+  }
+  if (ctaButton) {
+    ctaButton.href = bookingUrl;
+    ctaButton.textContent = `📅 Book ${service.title}`;
+  }
+
+  // Update page title
+  document.title = `${config.site?.name || 'LearnMappers'} — ${service.title}`;
+  console.log('✅ Service page fully populated for:', service.title, '(ID:', service.id, ')');
+}
+
+// Track if we've already populated to avoid duplicate calls
+let servicePagePopulated = false;
+
+// Call populateServicePage when DOM and config are ready
+function initServicePage() {
+  if (servicePagePopulated) {
+    console.log('⚠️  Service page already populated, skipping...');
+    return;
+  }
+  
+  if (!window.CONFIG) {
+    console.log('⏳ Waiting for CONFIG...');
+    setTimeout(initServicePage, 100);
+    return;
+  }
+  
+  servicePagePopulated = true;
+  populateServicePage();
+}
+
+// Listen for config loaded
+window.addEventListener('configLoaded', () => {
+  if (!servicePagePopulated) {
+    initServicePage();
+  }
+});
+
+// Call when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initServicePage);
+} else {
+  initServicePage();
+}
+</script>
+<script>
+/* v7.3 net pill */
+(function(){
+  const el = document.getElementById('netPill'); if(!el) return;
+  function setStatus(){
+    const on = navigator.onLine;
+    el.textContent = (on ? '● online' : '● offline');
+    el.classList.toggle('online', on);
+    el.classList.toggle('offline', !on);
+  }
+  window.addEventListener('online', setStatus);
+  window.addEventListener('offline', setStatus);
+  setStatus();
+})();
+</script>
+</body>
+</html>
+

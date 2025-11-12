@@ -1,0 +1,37 @@
+{
+  "id": "legal-compliance-literacy",
+  "title": "Legal & Compliance Literacy",
+  "description": "Learn what statutes and rules say, side-by-side with definitions and plain-language maps.",
+  "purpose": "Teach the boundary between education and advice and show verified sources.",
+  "icon": "\u2696\ufe0f",
+  "category": "learnmappers-education",
+  "pricing": {
+    "type": "hourly",
+    "rate": 95,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "UPL boundary explainer",
+    "Pro Se / Pro Bono literacy",
+    "Communications Policy practice"
+  ],
+  "tools": [
+    "learnmapverse-master-table",
+    "boundary-matrix",
+    "source-register"
+  ],
+  "outcomes": [
+    "Clarity on process",
+    "Verified citations",
+    "Visual maps"
+  ],
+  "whatYouCanBuild": [
+    "Personal study binder",
+    "Court/agency process map",
+    "Glossary of terms"
+  ],
+  "whyNeed": "To understand the system safely before speaking with licensed counsel.",
+  "categoryId": "learnmappers-education",
+  "categoryTitle": "LearnMappers \u2014 Research & Education"
+}

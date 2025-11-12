@@ -1,0 +1,70 @@
+{
+  "site": {
+    "name": "wordpress-seed",
+    "title": "WordPress Seed",
+    "description": "Seed template for creating WordPress-based sites with BIS framework integration",
+    "version": "1.0.0",
+    "type": "wordpress",
+    "themeColor": "#21759b",
+    "brand": "#21759b",
+    "brand2": "#135e96",
+    "accent": "#00a0d2",
+    "deployment": {
+      "docker": {
+        "enabled": true,
+        "composeFile": "docker-compose.yml",
+        "services": ["wordpress", "mysql"]
+      },
+      "caddy": {
+        "enabled": true,
+        "configFile": "Caddyfile"
+      },
+      "traefik": {
+        "enabled": true,
+        "labels": {
+          "traefik.enable": "true",
+          "traefik.http.routers.wordpress.rule": "Host(`wordpress.local`)"
+        }
+      }
+    }
+  },
+  "navigation": {
+    "links": [
+      {
+        "label": "Home",
+        "href": "/content/pages/index.html",
+        "icon": "🏠"
+      },
+      {
+        "label": "About",
+        "href": "/content/pages/about.html",
+        "icon": "💼"
+      },
+      {
+        "label": "Blog",
+        "href": "/content/pages/blog.html",
+        "icon": "📝"
+      },
+      {
+        "label": "Settings",
+        "href": "/content/pages/settings.html",
+        "icon": "⚙️"
+      }
+    ]
+  },
+  "content": {
+    "hero": {
+      "title": "WordPress Site",
+      "subtitle": "Powered by Business Identity Shaper",
+      "description": "A WordPress site integrated with the BIS framework for comprehensive entity management."
+    },
+    "highlights": [],
+    "services": [],
+    "resources": []
+  },
+  "seo": {
+    "metaTitle": "WordPress Site - Business Identity Shaper",
+    "metaDescription": "WordPress site with BIS framework integration"
+  }
+}
+

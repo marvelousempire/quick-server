@@ -1,0 +1,10 @@
+{
+  "name": "LearnMappers Task Suite",
+  "short_name": "LearnMappers",
+  "start_url": "/sites/learnmappers/content/pages/index.html",
+  "scope": "/sites/learnmappers/",
+  "display": "standalone",
+  "background_color": "#0b0c10",
+  "theme_color": "#0b0c10",
+  "icons": []
+}

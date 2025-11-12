@@ -1,0 +1,80 @@
+{
+  "site": {
+    "name": "vue-seed",
+    "title": "Vue.js Seed",
+    "description": "Seed template for creating Vue.js-based sites with BIS framework integration",
+    "version": "1.0.0",
+    "type": "vue",
+    "themeColor": "#42b983",
+    "brand": "#42b983",
+    "brand2": "#35495e",
+    "accent": "#4fc08d",
+    "deployment": {
+      "docker": {
+        "enabled": true,
+        "composeFile": "docker-compose.yml",
+        "services": ["vue", "vite"]
+      },
+      "caddy": {
+        "enabled": true,
+        "configFile": "Caddyfile"
+      },
+      "traefik": {
+        "enabled": true,
+        "labels": {
+          "traefik.enable": "true",
+          "traefik.http.routers.vue.rule": "Host(`vue.local`)"
+        }
+      },
+      "vite": {
+        "enabled": true,
+        "hmr": true,
+        "port": 5173
+      }
+    }
+  },
+  "navigation": {
+    "links": [
+      {
+        "label": "Home",
+        "href": "/content/pages/index.html",
+        "icon": "🏠"
+      },
+      {
+        "label": "About",
+        "href": "/content/pages/about.html",
+        "icon": "💼"
+      },
+      {
+        "label": "Resources",
+        "href": "/content/pages/resources.html",
+        "icon": "📦"
+      },
+      {
+        "label": "Services",
+        "href": "/content/pages/services.html",
+        "icon": "⚙️"
+      },
+      {
+        "label": "Settings",
+        "href": "/content/pages/settings.html",
+        "icon": "⚙️"
+      }
+    ]
+  },
+  "content": {
+    "hero": {
+      "title": "Vue.js Site",
+      "subtitle": "Powered by Business Identity Shaper",
+      "description": "A Vue.js site integrated with the BIS framework for comprehensive entity management."
+    },
+    "highlights": [],
+    "services": [],
+    "resources": []
+  },
+  "seo": {
+    "metaTitle": "Vue.js Site - Business Identity Shaper",
+    "metaDescription": "Vue.js site with BIS framework integration"
+  }
+}
+

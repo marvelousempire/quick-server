@@ -1,0 +1,267 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Service Schema",
+  "description": "Schema for services offered by LearnMappers",
+  "type": "object",
+  "required": ["title", "category", "purpose", "description"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the service",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "title": {
+      "type": "string",
+      "description": "Name/title of the service",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "meta": {
+      "type": "object",
+      "description": "Metadata about the service",
+      "properties": {
+        "serviceCode": {
+          "type": "string",
+          "description": "Internal service code or SKU"
+        },
+        "category": {
+          "type": "string",
+          "description": "Service category tag"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional tags for categorization"
+        },
+        "availability": {
+          "type": "string",
+          "enum": ["available", "limited", "seasonal", "on-request", "discontinued"],
+          "description": "Service availability status"
+        },
+        "estimatedDuration": {
+          "type": "string",
+          "description": "Typical duration (e.g., '2-4 hours', '1 day')"
+        },
+        "pricingModel": {
+          "type": "string",
+          "enum": ["fixed", "hourly", "per-item", "quote", "free"],
+          "description": "How the service is priced"
+        }
+      }
+    },
+    "category": {
+      "type": "string",
+      "description": "Primary service category",
+      "enum": [
+        "assembly",
+        "mounting",
+        "installation",
+        "repair",
+        "maintenance",
+        "consultation",
+        "setup",
+        "configuration",
+        "training",
+        "other"
+      ]
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Primary purpose or goal of this service",
+      "minLength": 10,
+      "maxLength": 500
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of what the service includes",
+      "minLength": 20,
+      "maxLength": 2000
+    },
+    "useCases": {
+      "type": "array",
+      "description": "List of specific scenarios where this service is used",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scenario": {
+            "type": "string",
+            "description": "Description of the use case"
+          },
+          "frequency": {
+            "type": "string",
+            "enum": ["daily", "weekly", "monthly", "occasional", "rare"],
+            "description": "How often this use case occurs"
+          },
+          "typicalClient": {
+            "type": "string",
+            "description": "Type of client who typically needs this"
+          }
+        },
+        "required": ["scenario"]
+      },
+      "minItems": 1
+    },
+    "canProduceWith": {
+      "type": "array",
+      "description": "What outcomes, results, or deliverables this service produces",
+      "items": {
+        "type": "object",
+        "properties": {
+          "output": {
+            "type": "string",
+            "description": "What is produced/delivered"
+          },
+          "description": {
+            "type": "string",
+            "description": "How this service achieves the output"
+          },
+          "requires": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Resources, tools, or materials needed"
+          },
+          "value": {
+            "type": "string",
+            "description": "Value or benefit to the client"
+          }
+        },
+        "required": ["output"]
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "description": "What is needed to perform this service",
+      "properties": {
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required tools or equipment"
+        },
+        "materials": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required materials or supplies"
+        },
+        "skills": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required skills or expertise"
+        },
+        "certifications": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required certifications or licenses"
+        },
+        "clientProvides": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "What the client needs to provide"
+        }
+      }
+    },
+    "pricing": {
+      "type": "object",
+      "description": "Pricing information",
+      "properties": {
+        "basePrice": {
+          "type": "number",
+          "description": "Base price in USD"
+        },
+        "hourlyRate": {
+          "type": "number",
+          "description": "Hourly rate if applicable"
+        },
+        "priceRange": {
+          "type": "string",
+          "description": "Price range (e.g., '$50-$200')"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Pricing notes or conditions"
+        }
+      }
+    },
+    "process": {
+      "type": "array",
+      "description": "Steps or phases of the service",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step": {
+            "type": "string",
+            "description": "Step number or name"
+          },
+          "description": {
+            "type": "string",
+            "description": "What happens in this step"
+          },
+          "duration": {
+            "type": "string",
+            "description": "Estimated time for this step"
+          }
+        },
+        "required": ["step", "description"]
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "paused", "seasonal", "discontinued"],
+      "description": "Current service status",
+      "default": "active"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or observations",
+      "maxLength": 2000
+    },
+    "links": {
+      "type": "array",
+      "description": "Related links (examples, portfolios, etc.)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Link label"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link URL"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["portfolio", "example", "documentation", "website", "other"],
+            "description": "Type of link"
+          }
+        },
+        "required": ["label", "url"]
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this service entry was created (ISO 8601)"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this service entry was last updated (ISO 8601)"
+    }
+  }
+}
+

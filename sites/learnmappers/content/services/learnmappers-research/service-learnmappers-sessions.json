@@ -1,0 +1,35 @@
+{
+  "id": "learnmappers-sessions",
+  "title": "Research & Systems Support",
+  "description": "Map how your home, tools, and tech work together.",
+  "purpose": "Teach and document your systems for easy upkeep.",
+  "icon": "\ud83d\udcd8",
+  "category": "learnmappers-research",
+  "pricing": {
+    "type": "hourly",
+    "rate": 65,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Light training while we work",
+    "Diagrams and notes",
+    "Optional one-page system report (+$20\u2013$50)"
+  ],
+  "tools": [
+    "snapmaker-3d-printer-fdm-laser-cnc",
+    "network-system-mesh-router-kit-smart",
+    "ups-ecoflow-power-unit-compact"
+  ],
+  "outcomes": [
+    "Clarity on how things run",
+    "Simple steps you can keep",
+    "Better choices next time"
+  ],
+  "whatYouCanBuild": [
+    "System maps, quick SOPs, asset lists"
+  ],
+  "whyNeed": "Learn and improve while tasks get done.",
+  "categoryId": "learnmappers-research",
+  "categoryTitle": "LearnMappers Research & Systems"
+}

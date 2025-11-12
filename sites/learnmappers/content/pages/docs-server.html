@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../../config.js"></script>
+<script>
+  document.title = window.CONFIG?.site?.title ? `${window.CONFIG.site.name} — Server Guide` : 'LearnMappers — Server Guide';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', window.CONFIG?.site?.themeColor || '#0b0c10');
+</script>
+<title>LearnMappers — Server Guide</title>
+<link rel="manifest" href="../../manifest.webmanifest"><meta name="theme-color" content="#0b0c10">
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; --wide:1200px; }
+*{box-sizing:border-box} html,body{background:radial-gradient(1200px 500px at 15% -10%, rgba(124,227,255,.14), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(96,255,168,.09), transparent 60%), var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6}
+a{color:var(--brand);text-decoration:none}
+main[data-page]{padding:0}
+.wrap{max-width:1440px;margin:0 auto;padding:clamp(18px,4vw,60px)}
+nav.stick{position:sticky;top:0;z-index:90;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter: blur(10px);border-bottom:1px solid var(--line)}
+nav .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900}
+.logo .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+nav .links{display:flex;gap:12px;flex-wrap:wrap}
+nav .links a{padding:10px 12px;border-radius:12px}
+nav .links a:hover{background:color-mix(in srgb, var(--brand) 18%, transparent)}
+header.hero{position:relative;isolation:isolate;padding:54px 0 24px}
+header.hero.wrap{padding-top:54px;padding-bottom:24px;padding-left:clamp(18px,4vw,60px);padding-right:clamp(18px,4vw,60px)}
+.glow{position:absolute;inset:-10% -10% auto -10%;height:60vh;background:radial-gradient(1200px 400px at 20% 0%,rgba(124,227,255,.2),transparent 60%),radial-gradient(900px 350px at 80% 0%,rgba(96,255,168,.12),transparent 70%);filter:blur(20px);z-index:-1}
+h1{font-size:clamp(36px,5vw,56px);margin:0 0 12px;font-weight:900}
+.lead{font-size:clamp(16px,2.2vw,19px);color:var(--muted);max-width:74ch;margin:0 0 10px}
+.content{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:var(--radius);padding:32px;box-shadow:0 14px 44px -28px var(--shadow);max-width:900px;margin:0 auto}
+.content h1,.content h2,.content h3{margin-top:32px;margin-bottom:16px}
+.content h1:first-child,.content h2:first-child,.content h3:first-child{margin-top:0}
+.content p,.content ul,.content ol{margin-bottom:16px}
+.content code{background:color-mix(in srgb, var(--card) 95%, transparent);padding:2px 6px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:0.9em}
+.content pre{background:#1a1a1a;padding:20px;border-radius:8px;overflow-x:auto;margin:20px 0}
+.content pre code{background:none;padding:0}
+.content a{color:var(--brand);text-decoration:underline}
+.content a:hover{color:var(--brand2)}
+.tiny{font-size:12px;color:var(--muted);margin-bottom:24px}
+</style>
+</head>
+<body>
+<nav class="stick wrap">
+  <div class="row">
+    <div class="logo"><span class="dot"></span><span>LearnMappers</span></div>
+    <div class="links">
+      <span id="netPill" class="pill" title="Connection status">● offline</span>
+      <a href="index.html" data-nav>Home</a>
+      <a href="docs.html" data-nav>About</a>
+      <a href="inventory.html" data-nav>Resources</a>
+      <a href="service-menu.html" data-nav>Services</a>
+    </div>
+  </div>
+</nav>
+
+<main data-page>
+  <header class="hero wrap">
+    <div class="glow"></div>
+    <h1>Server Guide</h1>
+    <p class="lead">Complete server setup, configuration, and usage documentation.</p>
+  </header>
+
+  <section class="wrap">
+    <div class="content" id="content">
+      <p>Loading documentation...</p>
+    </div>
+  </section>
+</main>
+
+<script>
+/* v7.3 net pill */
+(function(){
+  const el = document.getElementById('netPill'); if(!el) return;
+  function setStatus(){
+    const on = navigator.onLine;
+    el.textContent = (on ? '● online' : '● offline');
+    el.classList.toggle('online', on);
+    el.classList.toggle('offline', !on);
+  }
+  window.addEventListener('online', setStatus);
+  window.addEventListener('offline', setStatus);
+  setStatus();
+})();
+</script>
+<script src="../js/markdown-to-html.js"></script>
+<script>
+(async function() {
+  try {
+    const response = await fetch('../../../docs/server/README-SERVER.md');
+    if (!response.ok) throw new Error('Failed to load');
+    const markdown = await response.text();
+    const html = markdownToHTML(markdown);
+    document.getElementById('content').innerHTML = html;
+    
+    // Generate TOC
+    const headings = document.querySelectorAll('.content h2, .content h3');
+    if (headings.length > 0) {
+      const toc = document.createElement('div');
+      toc.className = 'toc';
+      toc.style.cssText = 'background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:32px';
+      toc.innerHTML = '<h3 style="margin-top:0">Table of Contents</h3><ul style="list-style:none;padding-left:0">' + 
+        Array.from(headings).map(h => {
+          const id = h.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+          h.id = id;
+          const indent = h.tagName === 'H3' ? 'padding-left:20px' : '';
+          return `<li style="${indent}"><a href="#${id}" style="color:var(--brand)">${h.textContent}</a></li>`;
+        }).join('') + '</ul>';
+      document.getElementById('content').insertBefore(toc, document.getElementById('content').firstChild);
+    }
+  } catch(e) {
+    document.getElementById('content').innerHTML = '<p>Error loading documentation: ' + e.message + '</p>';
+  }
+})();
+</script>
+<script src="../../scripts.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('../service-worker.js').catch(()=>{});}</script>
+</body>
+</html>
+

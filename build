@@ -1,0 +1,15 @@
+#!/bin/bash
+# Universal build command - auto-detects system and runs appropriate build script
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+# Check if build.sh exists and is executable
+if [ -f "build.sh" ] && [ -x "build.sh" ]; then
+    echo "🚀 Running build.sh..."
+    exec ./build.sh "$@"
+else
+    echo "❌ Error: build.sh not found or not executable"
+    exit 1
+fi
+

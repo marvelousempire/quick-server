@@ -1,0 +1,56 @@
+# Caddy Configuration for LearnMappers
+# Automatic HTTPS with Let's Encrypt
+#
+# To customize, set environment variables:
+# - DOMAIN=your-domain.com
+# - ACME_EMAIL=admin@your-domain.com
+#
+# Or edit this file directly and replace ${DOMAIN} with your domain
+
+{
+    # Global options
+    # email admin@example.com  # Set via environment variable
+    # Use staging for testing (comment out for production)
+    acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+    # acme_ca https://acme-v02.api.letsencrypt.org/directory  # Production
+}
+
+# HTTP to HTTPS redirect
+# Replace 'localhost' with your domain
+localhost {
+    redir https://localhost{uri} permanent
+}
+
+# Main site
+# Replace 'localhost' with your domain
+https://localhost {
+    reverse_proxy learnmappers-app:8000 {
+        header_up Host {host}
+        header_up X-Real-IP {remote}
+        header_up X-Forwarded-For {remote}
+        header_up X-Forwarded-Proto {scheme}
+    }
+    
+    # Enable compression
+    encode gzip zstd
+    
+    # Security headers
+    header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+}
+
+# API endpoints (optional)
+# Uncomment and customize if you want separate API subdomain
+# https://api.localhost {
+#     reverse_proxy learnmappers-app:8000 {
+#         header_up Host {host}
+#         header_up X-Real-IP {remote}
+#         header_up X-Forwarded-For {remote}
+#         header_up X-Forwarded-Proto {scheme}
+#     }
+# }
+

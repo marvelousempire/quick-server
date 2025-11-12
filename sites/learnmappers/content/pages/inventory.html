@@ -1,0 +1,1646 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!--
+  LearnMappers PWA — Configuration
+  =================================
+  Master Config: config.js (single source of truth)
+  Site: sites/default/
+  Version: 7.3.0
+  
+  All settings are managed in config.js. Update that file to change:
+  - Site name, title, description
+  - Navigation links
+  - Theme colors
+  - Layout settings
+  - PWA settings
+  - API endpoints
+  - Feature flags
+-->
+<script src="../../config.js"></script>
+<script>
+  // Apply config to page
+  document.title = window.CONFIG?.site?.title ? `${window.CONFIG.site.name} — Inventory (v${window.CONFIG.site.version})` : 'LearnMappers — Inventory (v7.1)';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', window.CONFIG?.site?.themeColor || '#0b0c10');
+  
+  // CRITICAL: Prevent browser from opening dropped files - MUST RUN IMMEDIATELY
+  // This prevents the browser's default file:// behavior when files are dropped
+  (function() {
+    'use strict';
+    
+    // Check if page is served from server (not file://)
+    if (window.location.protocol === 'file:') {
+      console.error('❌ This page must be served from a web server, not opened as a file:// URL.');
+      console.error('Please run the server (e.g., ./go) and access the page via http:// or https://');
+    }
+    
+    // Aggressively prevent default drag-and-drop behavior at the earliest possible moment
+    // NOTE: We only prevent default, NOT stop propagation, so our custom handlers can still process files
+    function preventDefaultDragDrop(e) {
+      // Always prevent default for dragenter/dragover/drop to stop browser from opening files
+      e.preventDefault();
+      // DO NOT stop propagation - let our custom handlers process the files
+      return false;
+    }
+    
+    // Attach to window immediately (before DOM is ready) - capture phase
+    // This runs BEFORE other handlers, preventing browser default behavior
+    ['dragenter', 'dragover', 'drop'].forEach(ev => {
+      window.addEventListener(ev, preventDefaultDragDrop, { capture: true, passive: false });
+    });
+    
+    // Also attach to document when it's available
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        ['dragenter', 'dragover', 'drop'].forEach(ev => {
+          document.addEventListener(ev, preventDefaultDragDrop, { capture: true, passive: false });
+          if (document.body) {
+            document.body.addEventListener(ev, preventDefaultDragDrop, { capture: true, passive: false });
+          }
+        });
+      });
+    } else {
+      // DOM already ready
+      ['dragenter', 'dragover', 'drop'].forEach(ev => {
+        document.addEventListener(ev, preventDefaultDragDrop, { capture: true, passive: false });
+        if (document.body) {
+          document.body.addEventListener(ev, preventDefaultDragDrop, { capture: true, passive: false });
+        }
+      });
+    }
+  })();
+</script>
+<title>LearnMappers — Inventory (v7.1)</title>
+<link rel="manifest" href="../../manifest.webmanifest"><meta name="theme-color" content="#0b0c10">
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; --wide:1200px; }
+*{box-sizing:border-box} html,body{background:radial-gradient(1200px 500px at 15% -10%, rgba(124,227,255,.14), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(96,255,168,.09), transparent 60%), var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6}
+a{color:var(--brand);text-decoration:none}
+main[data-page]{padding:0}
+.wrap{max-width:1440px;margin:0 auto;padding:clamp(18px,4vw,60px)}
+nav.stick{position:sticky;top:0;z-index:90;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter: blur(10px);border-bottom:1px solid var(--line)}
+nav .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900}
+.logo .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+nav .links{display:flex;gap:12px;flex-wrap:wrap}
+nav .links a{padding:10px 12px;border-radius:12px}
+nav .links a:hover{background:color-mix(in srgb, var(--brand) 18%, transparent)}
+header.hero{position:relative;isolation:isolate;padding:54px 0 24px}
+header.hero.wrap{padding-top:54px;padding-bottom:24px;padding-left:clamp(18px,4vw,60px);padding-right:clamp(18px,4vw,60px)}
+.glow{position:absolute;inset:-10% -10% auto -10%;height:60vh;background:radial-gradient(1200px 400px at 20% 0%,rgba(124,227,255,.2),transparent 60%),radial-gradient(900px 350px at 80% 0%,rgba(96,255,168,.12),transparent 70%);filter:blur(20px);z-index:-1}
+h1{font-size:clamp(36px,5vw,56px);margin:0 0 12px;font-weight:900}
+.lead{font-size:clamp(16px,2.2vw,19px);color:var(--muted);max-width:74ch;margin:0 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.chip{padding:7px 11px;border-radius:999px;background:linear-gradient(180deg, color-mix(in srgb, var(--card) 85%, transparent), color-mix(in srgb, var(--card) 95%, transparent));border:1px solid var(--line);color:color-mix(in srgb, var(--ink) 90%, var(--muted));font-weight:700;font-size:12px}
+.btn{padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 85%, transparent), color-mix(in srgb, var(--card) 95%, transparent));color:var(--ink);font-weight:800;cursor:pointer;transition:.18s ease;box-shadow:0 14px 40px -20px var(--shadow)}
+.btn:hover{transform:translateY(-2px)}
+.btn.brand{background:linear-gradient(135deg,var(--brand),#c9f5ff);color:#041018;border:none}
+.card{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color:color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 14px 44px -28px var(--shadow)}
+.grid{display:grid;gap:var(--gap)}
+.cols-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.tiny{font-size:12px;color:#9bb1c7}
+.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.list li{list-style:none}
+.list a.block{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));}
+.doc{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:start}
+.toc{position:sticky;top:70px;background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:12px;padding:14px;max-height:70vh;overflow:auto}
+.toc-title{font-weight:900;margin-bottom:8px}
+.badge{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 30% 30%, var(--brand2), var(--brand));color:#041018;font-weight:900;font-size:12px}
+#tocNav a{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:8px;color:var(--muted)}
+#tocNav a.active,#tocNav a:hover{background:color-mix(in srgb, var(--brand) 16%, transparent);color:var(--ink)}
+@media (max-width: 860px){ .doc{grid-template-columns:1fr;} .toc{position:static; max-height:none;} }
+@media print{ body *{visibility:hidden} main[data-page], main[data-page] *{visibility:visible} main[data-page]{position:static; margin:0;} }
+
+/* v7.2.1 layout & table polish */
+.section{margin-block:24px}
+.toolbar{margin-top:14px}
+table thead th{position:sticky; top:0; background:color-mix(in srgb, var(--card) 96%, transparent); z-index:2; backdrop-filter: blur(4px)}
+tbody tr:nth-child(odd){background:color-mix(in srgb, var(--card) 94%, transparent)}
+tbody tr:hover{outline:1px solid var(--line)}
+/* Toast */
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);color:var(--ink);padding:10px 14px;border-radius:12px;box-shadow:0 10px 30px -20px var(--shadow);z-index:999;display:none}
+.toast.show{display:block}
+
+/* v7.3 connection pill */
+.pill{display:inline-flex;align-items:center;gap:6px;margin-right:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);
+background:linear-gradient(180deg, color-mix(in srgb, var(--card) 90%, transparent), color-mix(in srgb, var(--card) 96%, transparent));font-size:12px}
+.pill.online{color:#073b18;border-color:#0ea35a;background:linear-gradient(180deg,#d6ffe9,#f1fff7)}
+.pill.offline{color:#4b1a1a;border-color:#cc5151;background:linear-gradient(180deg,#ffe3e3,#fff7f7)}
+</style>
+</head>
+<body>
+<nav class="stick wrap">
+  <div class="row">
+    <div class="logo"><span class="dot"></span><span>LearnMappers</span></div>
+    <div class="links"><span id="netPill" class="pill" title="Connection status">● offline</span>
+      <div id="navLinks">
+        <a href="index.html" data-nav>Home</a>
+        <a href="docs-index.html" data-nav>Docs</a>
+        <a href="inventory.html" data-nav>Resources</a>
+        <a href="service-menu.html" data-nav>Services</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main data-page>
+  <header class="hero wrap">
+    <div class="glow"></div>
+    <h1>Resources & Inventory — full editor</h1>
+    <p class="lead">Drop your vendor files (ZIP/CSV/JSON). Auto type. Auto bin. Full control.</p>
+  </header>
+
+  <section class="wrap" id="inventory">
+    <div class="card" style="border-style:dashed;position:relative">
+      <p><b>Drag & drop</b> your <b>eBay ZIP</b>, <b>Amazon CSV/JSON</b>, <b>Home Depot CSV</b>, <b>Lowe's CSV</b>, or <b>B&amp;H CSV</b> anywhere on this card.</p>
+      <div id="drop" class="drop" aria-label="Drop zone for imports" style="margin-top:10px;min-height:80px;display:flex;align-items:center;justify-content:center;border:2px dashed var(--line);border-radius:12px;padding:20px;transition:all 0.2s;cursor:pointer">
+        <div style="text-align:center">
+          <div style="font-size:32px;margin-bottom:8px">📦</div>
+          <div><strong>Drop files here</strong> or click to browse</div>
+          <div class="tiny" style="margin-top:4px">CSV, JSON, or ZIP files</div>
+        </div>
+      </div>
+      <input type="file" id="fileInput" accept=".csv,.json,.zip" multiple style="display:none">
+      <div id="importStatus" style="margin-top:12px;display:none"></div>
+    </div>
+    
+    <!-- Vendor Details Modal -->
+    <div id="vendorDetailsModal" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px">
+      <div class="card" style="max-width:800px;width:100%;max-height:90vh;overflow:auto;position:relative">
+        <button id="closeVendorDetails" style="position:absolute;top:12px;right:12px;width:32px;height:32px;border:none;background:var(--card);border:1px solid var(--line);border-radius:50%;color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>
+        <h2 style="margin:0 0 16px 0">Full Vendor Data</h2>
+        <div id="vendorDetailsContent" style="font-family:monospace;font-size:12px;white-space:pre-wrap;background:var(--bg);padding:16px;border-radius:8px;border:1px solid var(--line);max-height:70vh;overflow:auto"></div>
+      </div>
+    </div>
+
+    <!-- Import Preview Modal -->
+    <div id="importPreview" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px">
+      <div class="card" style="max-width:900px;width:100%;max-height:90vh;overflow:auto;position:relative">
+        <button id="closePreview" style="position:absolute;top:12px;right:12px;width:32px;height:32px;border:none;background:var(--card);border:1px solid var(--line);border-radius:50%;color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center">×</button>
+        <h2 style="margin:0 0 16px 0">Import Preview</h2>
+        <div id="previewContent"></div>
+        <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">
+          <button class="btn" id="cancelImport">Cancel</button>
+          <button class="btn brand" id="confirmImport">Import <span id="importCount">0</span> items</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toolbar" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+      <select id="fType" class="btn" style="min-width:180px"><option value="">All types</option></select>
+      <select id="fVendor" class="btn" style="min-width:160px"><option value="">All vendors</option><option>Amazon</option><option>eBay</option><option>Home Depot</option><option>Lowe's</option><option>B&H</option></select>
+      <input id="fSearch" class="btn" placeholder="Search name/brand/vendor/notes" style="min-width:220px">
+      <button class="btn" id="pdfBtn">Export current view → PDF</button>
+<button class="btn" id="clearFilters" title="Reset all filters">Clear all</button>
+      <button class="btn" id="addBtn">Add item</button>
+      <button class="btn" id="expBtn">Export CSV</button>
+      <button class="btn" id="expFullBtn" title="Export full data with vendor details">Export Full Data (JSON)</button>
+      <label class="btn" for="imp">Import CSV</label><input id="imp" type="file" accept=".csv" style="display:none">
+      <button class="btn" id="pasteBtn">Paste notes → table</button>
+      <button class="btn" id="bakBtn">Backup JSON</button>
+      <label class="btn" for="rest">Restore JSON</label><input id="rest" type="file" accept=".json" style="display:none">
+      <button class="btn brand" id="generateCardsBtn" title="Generate resource card HTML files for all items">📄 Generate All Cards</button>
+    </div>
+
+    <div style="overflow:auto;max-height:62vh;border:1px solid #1e2636;border-radius:12px;margin-top:12px">
+      <table id="tbl" aria-label="Tools table" style="width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed">
+        <colgroup>
+          <col style="width:40px">
+          <col style="width:9%">
+          <col style="width:20%">
+          <col style="width:9%">
+          <col style="width:9%">
+          <col style="width:11%">
+          <col style="width:9%">
+          <col style="width:11%">
+          <col style="width:22%">
+        </colgroup>
+        <thead><tr><th style="width:40px"></th><th>Type</th><th>Name</th><th>Brand</th><th>Vendor</th><th>Transaction ID</th><th>Price Paid</th><th>Last Used</th><th>Notes</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="tiny" style="margin-top:8px">Click a row to quick-edit (<code>Type|Name|Brand|Vendor|Transaction ID|Price Paid|Last Used|Notes</code>). ⚠️ Badge indicates missing transaction ID/proof of purchase. 📋 Details button shows full vendor data. Data stored in: <strong>localStorage</strong> (browser) + <strong>Server Database</strong> (if API available). Export options: <strong>CSV Ledger</strong> or <strong>Full JSON</strong> with all vendor details.</p>
+  </section>
+</main>
+<div id="toastUpdate" class="toast">App updated. <a href="#" onclick="location.reload()">Reload</a></div>
+
+<script>
+const KEY="lm_inventory";
+let data=[];
+const tbody=document.querySelector("#tbl tbody");
+
+// No seed data - start with empty inventory
+const seed = [];
+
+async function load(){ 
+  try{ 
+    // Try to load from API first (server mode)
+    try {
+      // Get API base URL - ensure it's a valid absolute URL
+      let apiUrl;
+      const apiBase = window.CONFIG?.api?.baseUrl || '';
+      
+      if (!apiBase || apiBase === '' || apiBase === '/api') {
+        // Use current origin with /api path
+        apiUrl = `${window.location.origin}/api/inventory`;
+      } else if (apiBase.startsWith('http://') || apiBase.startsWith('https://')) {
+        // Absolute URL - use as-is and append /inventory
+        apiUrl = apiBase.endsWith('/') ? `${apiBase}api/inventory` : `${apiBase}/api/inventory`;
+      } else {
+        // Relative path - make it absolute
+        const base = apiBase.startsWith('/') ? window.location.origin + apiBase : window.location.origin + '/' + apiBase;
+        apiUrl = base.endsWith('/api') ? `${base}/inventory` : `${base}/api/inventory`;
+      }
+      
+      // Validate URL before fetching
+      try {
+        new URL(apiUrl); // This will throw if URL is invalid
+        console.log('🔍 Fetching inventory from:', apiUrl);
+        const response = await fetch(apiUrl);
+        if (response.ok) {
+          const apiData = await response.json();
+          if (apiData && Array.isArray(apiData)) {
+            if (apiData.length > 0) {
+            // Convert API data to inventory format
+            data = apiData.map(item => ({
+              type: item.type || '',
+              name: item.name || '',
+              brand: item.brand || '',
+              vendor: item.vendor || '',
+              transactionId: item.transactionId || '',
+              pricePaid: item.pricePaid || '',
+              lastUsed: item.lastUsed || 'N/A',
+              notes: item.notes || '',
+              id: item.id
+            }));
+              console.log(`✅ Loaded ${data.length} items from API`);
+              return;
+            } else {
+              // API returned empty array - fall through to localStorage/seed
+              console.log('API returned empty array, trying localStorage...');
+            }
+          }
+        } else {
+          console.log(`API returned ${response.status}, trying localStorage...`);
+        }
+      } catch (urlError) {
+        console.log('Invalid API URL, trying localStorage...', urlError.message);
+        throw urlError; // Re-throw to trigger outer catch
+      }
+    } catch (apiError) {
+      console.log('API not available, trying localStorage...', apiError.message);
+    }
+    
+    // Fallback to localStorage
+    const raw=localStorage.getItem(KEY); 
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          data = parsed;
+          console.log(`✅ Loaded ${data.length} items from localStorage`);
+          return;
+        }
+      } catch (e) {
+        console.log('localStorage data invalid, using seed data');
+      }
+    }
+    
+    // Final fallback: empty inventory
+    data = [];
+    console.log(`✅ Starting with empty inventory`);
+  }catch(e){ 
+    console.error('Error loading inventory:', e);
+    data = []; 
+    console.log(`✅ Fallback: Starting with empty inventory`);
+  }
+}
+function save(){ 
+  // Save to localStorage (browser storage) - primary storage
+  localStorage.setItem(KEY, JSON.stringify(data));
+  console.log(`💾 Saved ${data.length} items to localStorage (${KEY})`);
+  
+  // Also try to save to API if available (server database)
+  if (window.CONFIG?.api?.baseUrl) {
+    try {
+      let apiBase = window.CONFIG.api.baseUrl;
+      if (!apiBase || apiBase === '' || apiBase === '/api') {
+        apiBase = window.location.origin;
+      } else if (!apiBase.startsWith('http://') && !apiBase.startsWith('https://')) {
+        apiBase = window.location.origin + (apiBase.startsWith('/') ? apiBase : '/' + apiBase);
+      }
+      const apiUrl = apiBase.endsWith('/api') ? `${apiBase}/inventory` : `${apiBase}/api/inventory`;
+      
+      // Save to server database via API
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(res => {
+        if (res.ok) {
+          console.log(`✅ Also saved ${data.length} items to server database`);
+        } else {
+          console.log(`⚠️ Server save returned ${res.status}, using localStorage only`);
+        }
+      }).catch(e => {
+        console.log('Server save not available, using localStorage only');
+      });
+    } catch (e) {
+      // API not available, localStorage only
+      console.log('API configuration not available, using localStorage only');
+    }
+  }
+  
+  // Legacy: Also try to save to API if data has IDs
+  if (data.length > 0 && data[0].id) {
+    // Data has IDs, try to sync with API
+    try {
+      const apiBase = window.CONFIG?.api?.baseUrl || '/api';
+      // Note: We don't sync back to API automatically to avoid conflicts
+      // User can manually export/import if needed
+    } catch (e) {
+      // Ignore API errors for save
+    }
+  }
+}
+function stateTag(v){ const t=(v||"").toLowerCase(); if(t.includes("new")) return '<span style="color:#10b981">New</span>'; if(t.includes("good")||t.includes("great")) return '<span style="color:#10b981">'+v+'</span>'; if(t.includes("repair")) return '<span style="color:#f05a78">'+v+'</span>'; return v; }
+function draw(){
+  tbody.innerHTML="";
+  data.forEach((r,i)=>{
+    const tr=document.createElement("tr");
+    // Determine resource ID for card linking
+    // Priority: database ID > resource data ID > slug-based ID
+    let resourceId = null;
+    let cardUrl = null;
+    
+    // Check if we have a database ID (from server mode)
+    if (r.id && typeof r.id === 'number') {
+      resourceId = `resource-${r.id}`;
+      cardUrl = `resource-cards/${resourceId}.html`;
+    } else if (r._resourceData?.id) {
+      // Use resource data ID if available
+      resourceId = r._resourceData.id;
+      cardUrl = `resource-cards/${resourceId}.html`;
+    } else if (r.name) {
+      // Fallback: generate slug-based ID
+      resourceId = r.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').substring(0, 50);
+      cardUrl = `resource-cards/${resourceId}.html`;
+    }
+    
+    const nameCell = cardUrl ? 
+      `<td><a href="${cardUrl}" style="color:var(--brand);text-decoration:none" title="View resource card">${r.name||""}</a></td>` :
+      `<td>${r.name||""}</td>`;
+    const priceDisplay = r.pricePaid ? (typeof r.pricePaid === 'number' ? '$' + r.pricePaid.toFixed(2) : r.pricePaid) : '';
+    const lastUsedDisplay = r.lastUsed && r.lastUsed !== 'N/A' ? formatTimestamp(r.lastUsed) : (r.lastUsed || 'N/A');
+    const hasTransactionId = r.transactionId && r.transactionId.trim() !== '';
+    const badgeIcon = hasTransactionId ? '' : '<span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f05a78;color:#fff;font-size:12px;line-height:20px;text-align:center;font-weight:bold;cursor:help" title="⚠️ Missing transaction ID / proof of purchase">⚠</span>';
+    tr.innerHTML=`<td style="text-align:center;padding:4px">${badgeIcon}</td><td>${r.type||""}</td>${nameCell}<td>${r.brand||""}</td><td>${r.vendor||""}</td><td style="font-family:monospace;font-size:11px">${r.transactionId||""}</td><td>${priceDisplay}</td><td>${lastUsedDisplay}</td><td>${r.notes||""}</td>`;
+    tr.addEventListener("click",()=>edit(i));
+    tbody.appendChild(tr);
+  });
+}
+
+function edit(i){
+  const r=data[i]||{};
+  const val=prompt("Edit (Type|Name|Brand|Vendor|Transaction ID|Price Paid|Last Used|Notes)", `${r.type||""}|${r.name||""}|${r.brand||""}|${r.vendor||""}|${r.transactionId||""}|${r.pricePaid||""}|${r.lastUsed||"N/A"}|${r.notes||""}`);
+  if(!val) return;
+  const p=val.split("|");
+  if(p.length!==8) return;
+  const [type,name,brand,vendor,transactionId,pricePaid,lastUsed,notes]=p.map(s=>s.trim());
+  
+  // Check for duplicates by transaction ID (if provided)
+  if (transactionId && transactionId.trim() !== '') {
+    const duplicate = data.find((item, idx) => 
+      idx !== i && 
+      item.transactionId && 
+      item.transactionId.trim() !== '' && 
+      item.transactionId.toLowerCase() === transactionId.toLowerCase()
+    );
+    if (duplicate) {
+      if (!confirm(`⚠️ Warning: Transaction ID "${transactionId}" already exists for "${duplicate.name}". Continue anyway?`)) {
+        return;
+      }
+    }
+  }
+  
+  data[i]={type,name,brand,vendor,transactionId,pricePaid,lastUsed:lastUsed||"N/A",notes};
+  save(); draw();
+}
+
+document.getElementById("addBtn").addEventListener("click",()=>{
+  const v=prompt("New item (Type|Name|Brand|Vendor|Transaction ID|Price Paid|Last Used|Notes)");
+  if(!v) return;
+  const p=v.split("|").map(s=>s.trim());
+  if(p.length!==8) return;
+  const [type,name,brand,vendor,transactionId,pricePaid,lastUsed,notes]=p;
+  
+  // Check for duplicates by transaction ID (if provided)
+  if (transactionId && transactionId.trim() !== '') {
+    const duplicate = data.find(item => 
+      item.transactionId && 
+      item.transactionId.trim() !== '' && 
+      item.transactionId.toLowerCase() === transactionId.toLowerCase()
+    );
+    if (duplicate) {
+      alert(`⚠️ Error: Transaction ID "${transactionId}" already exists for "${duplicate.name}". Please use a unique transaction ID.`);
+      return;
+    }
+  }
+  
+  data.unshift({type,name,brand,vendor,transactionId,pricePaid,lastUsed:lastUsed||"N/A",notes});
+  save(); draw();
+});
+
+// Export CSV (refactored ledger view)
+document.getElementById("expBtn").addEventListener("click",()=>{
+  const cols=["Type","Name","Brand","Vendor","Transaction ID","Price Paid","Last Used","Notes"];
+  const lines=[cols.join(",")].concat(data.map(r=>{
+    const priceDisplay = r.pricePaid ? (typeof r.pricePaid === 'number' ? r.pricePaid.toFixed(2) : r.pricePaid) : '';
+    const lastUsedDisplay = r.lastUsed && r.lastUsed !== 'N/A' ? r.lastUsed : 'N/A';
+    return [
+      r.type||"",
+      r.name||"",
+      r.brand||"",
+      r.vendor||"",
+      r.transactionId||"",
+      priceDisplay,
+      lastUsedDisplay,
+      r.notes||""
+    ].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",");
+  }));
+  const blob=new Blob([lines.join("\n")],{type:"text/csv"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="learnmappers-inventory-ledger.csv"; a.click();
+});
+
+// Export Full Data (JSON with all vendor details)
+document.getElementById("expFullBtn").addEventListener("click",()=>{
+  // Export refactored data with full vendor details preserved
+  const exportData = data.map(item => ({
+    // Uniform ledger columns
+    type: item.type || '',
+    name: item.name || '',
+    brand: item.brand || '',
+    vendor: item.vendor || '',
+    transactionId: item.transactionId || '',
+    pricePaid: item.pricePaid || '',
+    lastUsed: item.lastUsed || 'N/A',
+    notes: item.notes || '',
+    // Full original vendor data
+    _vendorData: item._vendorData || item._originalData || item._resourceData || null,
+    // Metadata
+    _importedAt: item._importedAt || new Date().toISOString(),
+    _sourceFile: item._sourceFile || ''
+  }));
+  
+  const json = JSON.stringify(exportData, null, 2);
+  const blob = new Blob([json], {type: "application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `learnmappers-inventory-full-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+});
+
+// Import CSV
+document.getElementById("imp").addEventListener("change", async (e)=>{
+  const f=e.target.files[0]; if(!f) return;
+  importCSV(await f.text());
+  e.target.value="";
+});
+
+// CSV parser (quotes-aware)
+function parseCSV(text){
+  return text.split(/\r?\n/).filter(r=>r.trim().length>0).map(line=>{
+    let out=[], cur="", q=false;
+    for(let i=0;i<line.length;i++){
+      const ch=line[i];
+      if(ch=='"'){ if(q && line[i+1]=='"'){ cur+='"'; i++; } else { q=!q; } }
+      else if(ch=="," && !q){ out.push(cur); cur=""; }
+      else { cur+=ch; }
+    } out.push(cur); return out;
+  });
+}
+
+function importCSV(text){
+  const rows=parseCSV(text);
+  const head=rows[0].map(h=>h.trim().toLowerCase());
+  const idx=(name)=>head.indexOf(name);
+  const out=[];
+  for(let i=1;i<rows.length;i++){
+    const r=rows[i]; if(!r||!r.length) continue;
+    const row = headerMapToRow(head, r);
+    if(!row.name) continue;
+    out.push(autoBin(mapToTool(row)));
+  }
+  data = out.concat(data);
+  save(); draw();
+}
+
+// Header map supports Amazon, eBay, Home Depot, Lowe's, B&H
+function headerMapToRow(head, r){
+  function pick(names){ for(const n of names){ const j=head.indexOf(n); if(j>-1) return r[j]; } return ""; }
+  const name = pick(["name","title","item name","product name","description","product title"]);
+  const notes = pick(["notes","category","sub-category","subcategory","dept","department","class"]);
+  const power = pick(["power","voltage","battery","watt","wattage"]);
+  const spot = pick(["location","bin","shelf","spot"]);
+  const state = pick(["condition","state","status"]);
+  return {name, notes, power, spot, state};
+}
+
+// Enhanced Vendor Import System
+let pendingImport = null;
+let importer = null;
+
+// Initialize importer when available
+function initImporter() {
+  if (window.VendorImporter) {
+    try {
+      importer = new VendorImporter();
+      console.log('✅ VendorImporter initialized successfully');
+      return true; // Success
+    } catch (e) {
+      console.error('❌ Failed to create VendorImporter instance:', e);
+      return false; // Failed, will retry
+    }
+  } else {
+    return false; // Not available yet
+  }
+}
+
+// Start initialization - will be called after scripts load
+// Make it globally accessible for onload handler
+window.startImporterInit = function startImporterInit() {
+  if (!initImporter()) {
+    // Retry with exponential backoff (max 5 attempts)
+    let attempts = 0;
+    const maxAttempts = 5;
+    const retry = () => {
+      attempts++;
+      if (attempts > maxAttempts) {
+        console.warn('⚠️ VendorImporter not available after multiple attempts. File import may not work.');
+        return;
+      }
+      if (!initImporter()) {
+        const delay = Math.min(100 * Math.pow(2, attempts), 1000); // 100ms, 200ms, 400ms, 800ms, 1000ms
+        setTimeout(retry, delay);
+      }
+    };
+    setTimeout(retry, 100);
+  }
+};
+
+// Wait for DOM and scripts to be ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.startImporterInit);
+} else {
+  // DOM already loaded, but scripts might still be loading
+  setTimeout(window.startImporterInit, 50);
+}
+
+// Setup file input
+const fileInput = document.getElementById('fileInput');
+const drop = document.getElementById('drop');
+const importStatus = document.getElementById('importStatus');
+const importPreview = document.getElementById('importPreview');
+const previewContent = document.getElementById('previewContent');
+const confirmImport = document.getElementById('confirmImport');
+const cancelImport = document.getElementById('cancelImport');
+const closePreview = document.getElementById('closePreview');
+const importCount = document.getElementById('importCount');
+const vendorDetailsModal = document.getElementById('vendorDetailsModal');
+const vendorDetailsContent = document.getElementById('vendorDetailsContent');
+const closeVendorDetails = document.getElementById('closeVendorDetails');
+
+// Click to browse
+drop.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', (e) => handleFiles(Array.from(e.target.files)));
+
+// Show warning if page is opened as file://
+if (window.location.protocol === 'file:') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const statusEl = document.getElementById('importStatus');
+    if (statusEl) {
+      statusEl.style.display = 'block';
+      statusEl.innerHTML = `<div style="color:#f05a78;padding:16px;background:color-mix(in srgb, #f05a78 10%, transparent);border:2px solid #f05a78;border-radius:12px;margin:16px 0">
+        <strong>❌ File Protocol Detected</strong><br>
+        This page must be served from a web server (e.g., <code>./go</code>), not opened as a <code>file://</code> URL.<br>
+        <strong>Drag-and-drop will not work when opened directly.</strong><br>
+        Please access via: <code>https://localhost:8443/sites/learnmappers/inventory.html</code>
+      </div>`;
+    }
+  });
+}
+
+// Drag & Drop - Custom handlers that process files (prevention is already in <head>)
+let dragCounter = 0;
+let windowDragCounter = 0;
+
+// Now add our custom handlers that will process files
+['dragenter', 'dragover'].forEach(ev => {
+  window.addEventListener(ev, e => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    windowDragCounter++;
+    // Visual feedback for window-level drag
+    if (windowDragCounter === 1 && document.body) {
+      document.body.style.opacity = '0.95';
+    }
+    return false; // Prevent default
+  }, { capture: true, passive: false });
+});
+
+['dragleave'].forEach(ev => {
+  window.addEventListener(ev, e => {
+    e.preventDefault();
+    e.stopPropagation();
+    windowDragCounter--;
+    if (windowDragCounter === 0 && document.body) {
+      document.body.style.opacity = '1';
+    }
+    return false;
+  }, { capture: true, passive: false });
+});
+
+// Handle drops anywhere on the window - Process files
+window.addEventListener('drop', async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation(); // Prevent other handlers
+  windowDragCounter = 0;
+  if (document.body) {
+    document.body.style.opacity = '1';
+  }
+  
+  const files = Array.from(e.dataTransfer?.files || []);
+  console.log('Window drop detected:', files.length, 'files', files.map(f => f.name));
+  
+  if (files.length > 0) {
+    // Filter for CSV, JSON, ZIP files
+    const validFiles = files.filter(f => {
+      const name = f.name.toLowerCase();
+      return name.endsWith('.csv') || name.endsWith('.json') || name.endsWith('.zip');
+    });
+    
+    if (validFiles.length > 0) {
+      // Prevent browser from opening the file - MULTIPLE TIMES
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      
+      // Highlight the drop zone to show where files are being processed
+      const dropEl = document.getElementById('drop');
+      if (dropEl) {
+        dropEl.style.borderColor = 'var(--brand)';
+        dropEl.style.background = 'color-mix(in srgb, var(--brand) 20%, transparent)';
+        dropEl.style.borderWidth = '3px';
+        setTimeout(() => {
+          const dropEl2 = document.getElementById('drop');
+          if (dropEl2) {
+            dropEl2.style.borderColor = 'var(--line)';
+            dropEl2.style.background = 'transparent';
+            dropEl2.style.borderWidth = '2px';
+          }
+        }, 2000);
+      }
+      
+      // Process files
+      if (typeof handleFiles === 'function') {
+        await handleFiles(validFiles);
+      } else {
+        console.error('handleFiles function not available yet');
+      }
+      return false; // Prevent default behavior
+    } else {
+      const statusEl = document.getElementById('importStatus');
+      if (statusEl) {
+        statusEl.style.display = 'block';
+        statusEl.innerHTML = `<div style="color:#f05a78">❌ Invalid file type. Please drop CSV, JSON, or ZIP files only.</div>`;
+        setTimeout(() => { 
+          const statusEl2 = document.getElementById('importStatus');
+          if (statusEl2) statusEl2.style.display = 'none';
+        }, 5000);
+      }
+    }
+  }
+  
+  return false; // Always prevent default
+}, { capture: true, passive: false });
+
+// Drop zone visual feedback
+['dragenter', 'dragover'].forEach(ev => {
+  drop.addEventListener(ev, e => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    dragCounter++;
+    drop.style.borderColor = 'var(--brand)';
+    drop.style.background = 'color-mix(in srgb, var(--brand) 10%, transparent)';
+    drop.style.borderWidth = '3px';
+    return false;
+  }, { capture: true, passive: false });
+});
+
+['dragleave'].forEach(ev => {
+  drop.addEventListener(ev, e => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter--;
+    if (dragCounter === 0) {
+      drop.style.borderColor = 'var(--line)';
+      drop.style.background = 'transparent';
+      drop.style.borderWidth = '2px';
+    }
+    return false;
+  }, { capture: true, passive: false });
+});
+
+drop.addEventListener('drop', async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+  dragCounter = 0;
+  drop.style.borderColor = 'var(--line)';
+  drop.style.background = 'transparent';
+  drop.style.borderWidth = '2px';
+  
+  const files = Array.from(e.dataTransfer?.files || []);
+  console.log('Files dropped on drop zone:', files.length, files.map(f => f.name));
+  
+  if (files.length > 0) {
+    // Filter for CSV, JSON, ZIP files
+    const validFiles = files.filter(f => {
+      const name = f.name.toLowerCase();
+      return name.endsWith('.csv') || name.endsWith('.json') || name.endsWith('.zip');
+    });
+    
+    if (validFiles.length > 0) {
+      await handleFiles(validFiles);
+    } else {
+      importStatus.style.display = 'block';
+      importStatus.innerHTML = `<div style="color:#f05a78">❌ Invalid file type. Please drop CSV, JSON, or ZIP files only.</div>`;
+      setTimeout(() => { importStatus.style.display = 'none'; }, 5000);
+    }
+  } else {
+    console.warn('No files in dataTransfer');
+  }
+  
+  return false; // Prevent default
+}, { capture: true, passive: false });
+
+// Also allow dropping on the entire card area
+const card = drop.closest('.card');
+if (card) {
+  card.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    const files = Array.from(e.dataTransfer?.files || []);
+    if (files.length > 0) {
+      const validFiles = files.filter(f => {
+        const name = f.name.toLowerCase();
+        return name.endsWith('.csv') || name.endsWith('.json') || name.endsWith('.zip');
+      });
+      if (validFiles.length > 0) {
+        await handleFiles(validFiles);
+      }
+    }
+    return false;
+  }, { capture: true, passive: false });
+}
+
+// Handle file import
+async function handleFiles(files) {
+  console.log('handleFiles called with', files.length, 'files');
+  
+  if (!files || files.length === 0) {
+    console.error('No files provided');
+    importStatus.style.display = 'block';
+    importStatus.innerHTML = '<div style="color:#f05a78">❌ No files provided</div>';
+    setTimeout(() => { importStatus.style.display = 'none'; }, 5000);
+    return;
+  }
+  
+  importStatus.style.display = 'block';
+  importStatus.innerHTML = `<div style="color:var(--brand)">⏳ Processing ${files.length} file(s)...</div>`;
+  
+  try {
+    const allResults = [];
+    const allErrors = [];
+    const detectedTypes = [];
+    
+    for (const file of files) {
+      console.log('Processing file:', file.name, file.type, file.size);
+      try {
+        // Wait for importer to be ready
+        let attempts = 0;
+        while (!importer && attempts < 20) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          attempts++;
+        }
+        
+        if (!importer) {
+          const reason = window.VendorImporter 
+            ? 'VendorImporter class exists but instance not created' 
+            : 'VendorImporter script not loaded - check if vendor-importer.js is included';
+          console.error('VendorImporter not available:', reason);
+          importStatus.innerHTML = `<div style="color:#f05a78">❌ Import system not ready. ${reason}. Please refresh the page.</div>`;
+          allErrors.push({ 
+            file: file.name, 
+            error: `Import system not loaded - ${reason}. Please refresh the page.` 
+          });
+          continue;
+        }
+        
+        // Show which vendor format was detected
+        console.log(`📦 Processing ${file.name}...`);
+        importStatus.innerHTML = `<div style="color:var(--brand)">⏳ Processing ${file.name}... Detecting vendor format...</div>`;
+        
+        // Show detection message
+        const fileName = file.name.toLowerCase();
+        let fileTypeHint = '';
+        if (fileName.endsWith('.zip')) {
+          fileTypeHint = 'ZIP archive';
+        } else if (fileName.endsWith('.csv')) {
+          fileTypeHint = 'CSV file';
+        } else if (fileName.endsWith('.json')) {
+          fileTypeHint = 'JSON file';
+        }
+        
+        importStatus.innerHTML = `<div style="color:var(--brand)">
+          <div>🔍 Auto-Know: Analyzing ${file.name}...</div>
+          <div style="font-size:12px;margin-top:4px;opacity:0.8">Detected: ${fileTypeHint}</div>
+        </div>`;
+        
+        console.log('Importing file:', file.name, 'with importer:', importer.constructor.name);
+        const result = await importer.importFile(file);
+        console.log('Import result:', result);
+        
+        // Show vendor detection result
+        if (result.vendorType) {
+          const vendorNames = {
+            'amazon': 'Amazon',
+            'ebay': 'eBay',
+            'homedepot': 'Home Depot',
+            'lowes': 'Lowe\'s',
+            'bh': 'B&H Photo',
+            'generic': 'Generic CSV'
+          };
+          const vendorName = vendorNames[result.vendorType] || result.vendorType;
+          detectedTypes.push({ file: file.name, vendor: vendorName });
+          
+          importStatus.innerHTML = `<div style="color:#10b981">
+            <div>✅ Auto-Know: Detected ${vendorName} format</div>
+            <div style="font-size:12px;margin-top:4px;opacity:0.8">Processing ${result.results?.length || 0} items...</div>
+          </div>`;
+        }
+        
+        if (result.success) {
+          allResults.push(...(result.results || []));
+          if (result.errors && result.errors.length > 0) {
+            allErrors.push(...result.errors);
+          }
+        } else {
+          const errorMsg = result.error || result.errors?.[0]?.error || 'Import failed';
+          allErrors.push({ file: file.name, error: errorMsg });
+        }
+      } catch (e) {
+        console.error('Error importing file:', file.name, e);
+        const errorMsg = e.message || e.toString() || 'Unknown error';
+        allErrors.push({ file: file.name, error: errorMsg });
+      }
+    }
+    
+    console.log('Import complete. Results:', allResults.length, 'Errors:', allErrors.length);
+    
+    // Show summary of detected types
+    if (detectedTypes.length > 0) {
+      const summary = detectedTypes.map(d => `${d.file}: ${d.vendor}`).join(', ');
+      console.log('Auto-Know Summary:', summary);
+    }
+    
+    if (allResults.length > 0) {
+      // Show success message with detection summary
+      if (detectedTypes.length > 0) {
+        const vendorSummary = detectedTypes.map(d => d.vendor).filter((v, i, arr) => arr.indexOf(v) === i).join(', ');
+        importStatus.innerHTML = `<div style="color:#10b981">
+          <div>✅ Auto-Know: Detected ${vendorSummary} format(s)</div>
+          <div style="font-size:12px;margin-top:4px;opacity:0.8">Found ${allResults.length} items ready to import</div>
+        </div>`;
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Show message briefly
+      }
+      
+      pendingImport = allResults;
+      showImportPreview(allResults, allErrors);
+    } else {
+      // Show detailed error messages
+      let errorMsg = '';
+      if (allErrors.length > 0) {
+        errorMsg = allErrors.map(e => {
+          const fileName = e.file || 'Unknown file';
+          const error = e.error || 'Unknown error';
+          return `<strong>${fileName}</strong>: ${error}`;
+        }).join('<br>');
+      } else {
+        errorMsg = 'Invalid file format or no data found';
+      }
+      
+      importStatus.innerHTML = `<div style="color:#f05a78">
+        <strong>❌ No items imported</strong><br>
+        <div style="margin-top:8px;font-size:13px">${errorMsg}</div>
+      </div>`;
+      setTimeout(() => { importStatus.style.display = 'none'; }, 10000);
+    }
+  } catch (e) {
+    console.error('Fatal error in handleFiles:', e);
+    importStatus.innerHTML = `<div style="color:#f05a78">❌ Error: ${e.message}</div>`;
+    setTimeout(() => { importStatus.style.display = 'none'; }, 5000);
+  }
+}
+
+// Show import preview
+function showImportPreview(results, errors) {
+  importCount.textContent = results.length;
+  
+  let html = '';
+  
+  if (errors.length > 0) {
+    html += `<div style="background:color-mix(in srgb, #f05a78 20%, transparent);border:1px solid #f05a78;border-radius:8px;padding:12px;margin-bottom:16px">
+      <strong>⚠️ ${errors.length} error(s) found</strong>
+      <div style="margin-top:8px;font-size:13px;max-height:100px;overflow:auto">
+        ${errors.slice(0, 5).map(e => `<div>• ${e.row ? `Row ${e.row}: ` : ''}${e.error || JSON.stringify(e.errors)}</div>`).join('')}
+        ${errors.length > 5 ? `<div>... and ${errors.length - 5} more</div>` : ''}
+      </div>
+    </div>`;
+  }
+  
+  html += `<div style="max-height:400px;overflow:auto">
+    <table style="width:100%;font-size:13px;border-collapse:separate;border-spacing:0;table-layout:fixed">
+      <colgroup>
+        <col style="width:30%">
+        <col style="width:12%">
+        <col style="width:20%">
+        <col style="width:10%">
+        <col style="width:28%">
+      </colgroup>
+      <thead style="position:sticky;top:0;background:var(--card);z-index:1">
+        <tr style="border-bottom:1px solid var(--line)">
+          <th style="text-align:left;padding:8px;white-space:nowrap">Title</th>
+          <th style="text-align:left;padding:8px;white-space:nowrap">Category</th>
+          <th style="text-align:left;padding:8px;white-space:nowrap">Brand/Model</th>
+          <th style="text-align:left;padding:8px;white-space:nowrap">Price</th>
+          <th style="text-align:left;padding:8px;white-space:nowrap">Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${results.slice(0, 50).map(r => `
+          <tr style="border-bottom:1px solid var(--line)">
+            <td style="padding:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${(r.title || '').replace(/"/g, '&quot;')}"><strong>${r.title || 'Untitled'}</strong></td>
+            <td style="padding:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.category || 'other'}</td>
+            <td style="padding:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${((r.meta?.brand || '') + ' ' + (r.meta?.model || '')).trim().replace(/"/g, '&quot;')}">${(r.meta?.brand || '')} ${r.meta?.model || ''}</td>
+            <td style="padding:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.meta?.purchasePrice ? '$' + r.meta.purchasePrice.toFixed(2) : ''}</td>
+            <td style="padding:8px;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${(r.purpose || '').replace(/"/g, '&quot;')}">${(r.purpose || '').substring(0, 60)}${(r.purpose || '').length > 60 ? '...' : ''}</td>
+          </tr>
+        `).join('')}
+        ${results.length > 50 ? `<tr><td colspan="5" style="padding:8px;text-align:center;color:var(--muted)">... and ${results.length - 50} more items</td></tr>` : ''}
+      </tbody>
+    </table>
+  </div>`;
+  
+  previewContent.innerHTML = html;
+  importPreview.style.display = 'flex';
+}
+
+// Confirm import
+confirmImport.addEventListener('click', () => {
+  if (pendingImport && pendingImport.length > 0) {
+    // Convert new schema format to new inventory format
+    const converted = pendingImport.map(r => {
+      // Detect vendor from source file or metadata
+      let vendor = r.meta?.vendor || '';
+      if (!vendor && r._sourceFile) {
+        const filename = r._sourceFile.toLowerCase();
+        if (filename.includes('amazon')) vendor = 'Amazon';
+        else if (filename.includes('ebay')) vendor = 'eBay';
+        else if (filename.includes('home depot') || filename.includes('homedepot')) vendor = 'Home Depot';
+        else if (filename.includes('lowes')) vendor = 'Lowe\'s';
+        else if (filename.includes('b&h') || filename.includes('bh')) vendor = 'B&H';
+      }
+      
+      // Extract transaction ID from various possible fields
+      let transactionId = r.meta?.transactionId || r.meta?.orderId || r.meta?.orderNumber || r.meta?.transactionNumber || '';
+      
+      // Check for duplicate transaction ID
+      if (transactionId && transactionId.trim() !== '') {
+        const duplicate = data.find(item => 
+          item.transactionId && 
+          item.transactionId.trim() !== '' && 
+          item.transactionId.toLowerCase() === transactionId.toLowerCase()
+        );
+        if (duplicate) {
+          console.warn(`⚠️ Duplicate transaction ID "${transactionId}" found. Skipping "${r.title}" (already exists for "${duplicate.name}")`);
+          return null; // Skip this item
+        }
+      }
+      
+      return {
+        type: mapCategoryToType(r.category),
+        name: r.title,
+        brand: r.meta?.brand || '',
+        vendor: vendor,
+        transactionId: transactionId,
+        pricePaid: r.meta?.purchasePrice ? (typeof r.meta.purchasePrice === 'number' ? r.meta.purchasePrice : parseFloat(r.meta.purchasePrice) || '') : '',
+        lastUsed: 'N/A',
+        notes: [
+          r.purpose,
+          r.meta?.model ? `Model: ${r.meta.model}` : '',
+          r.notes || ''
+        ].filter(Boolean).join(' • '),
+        // Store full original vendor data for "View More Details"
+        _resourceData: r, // For resource card generation
+        _vendorData: r, // Full vendor-provided data
+        _originalData: JSON.parse(JSON.stringify(r)) // Deep copy of original data
+      };
+    });
+    
+    // Filter out nulls (duplicates that were skipped)
+    const validConverted = converted.filter(item => item !== null);
+    data = validConverted.concat(data);
+    // Add import metadata
+    data.forEach(item => {
+      if (!item._importedAt) {
+        item._importedAt = new Date().toISOString();
+      }
+    });
+    save();
+    
+    // Auto-Born: Create resource cards for imported resources
+    if (window.ResourceCardGenerator) {
+      const generator = new ResourceCardGenerator();
+      // Try to generate cards via API (server mode)
+      generator.generateAllCards()
+        .then(result => {
+          if (result.success && result.generated > 0) {
+            importStatus.innerHTML = `<div style="color:#10b981">✅ Imported ${converted.length} items and generated ${result.generated} resource card files!</div>`;
+          } else {
+            importStatus.innerHTML = `<div style="color:#10b981">✅ Imported ${converted.length} items successfully!</div>`;
+          }
+        })
+        .catch(() => {
+          // Fallback: use localStorage method
+          if (window.createResourceCards) {
+            const cardsCreated = createResourceCards(pendingImport);
+            if (cardsCreated > 0) {
+              importStatus.innerHTML = `<div style="color:#10b981">✅ Imported ${converted.length} items and created ${cardsCreated} resource cards!</div>`;
+            } else {
+              importStatus.innerHTML = `<div style="color:#10b981">✅ Imported ${converted.length} items successfully!</div>`;
+            }
+          } else {
+            importStatus.innerHTML = `<div style="color:#10b981">✅ Imported ${converted.length} items successfully!</div>`;
+          }
+        });
+    } else {
+      importStatus.innerHTML = `<div style="color:#10b981">✅ Imported ${converted.length} items successfully!</div>`;
+    }
+    
+    draw();
+    importPreview.style.display = 'none';
+    pendingImport = null;
+    setTimeout(() => { importStatus.style.display = 'none'; }, 5000);
+  }
+});
+
+// Cancel import
+cancelImport.addEventListener('click', () => {
+  importPreview.style.display = 'none';
+  pendingImport = null;
+  importStatus.style.display = 'none';
+});
+
+closePreview.addEventListener('click', () => {
+  importPreview.style.display = 'none';
+  pendingImport = null;
+  importStatus.style.display = 'none';
+});
+
+// Vendor Details Modal Functions
+window.showVendorDetails = function showVendorDetails(index) {
+  const item = data[index];
+  if (!item) {
+    console.warn('Item not found at index', index);
+    return;
+  }
+  
+  // Get full vendor data from any of the stored fields
+  const fullData = item._originalData || item._vendorData || item._resourceData || item;
+  
+  if (!fullData) {
+    alert('No vendor data available for this item');
+    return;
+  }
+  
+  // Format as readable JSON
+  const formatted = JSON.stringify(fullData, null, 2);
+  vendorDetailsContent.textContent = formatted;
+  vendorDetailsModal.style.display = 'flex';
+};
+
+closeVendorDetails.addEventListener('click', () => {
+  vendorDetailsModal.style.display = 'none';
+});
+
+// Close modal on background click
+vendorDetailsModal.addEventListener('click', (e) => {
+  if (e.target === vendorDetailsModal) {
+    vendorDetailsModal.style.display = 'none';
+  }
+});
+
+// Helper: Map category to old type format
+function mapCategoryToType(category) {
+  const map = {
+    'tool': 'Hand Tool',
+    'equipment': 'Equipment',
+    'hardware': 'Hardware',
+    'material': 'Material',
+    'consumable': 'Consumable',
+    'software': 'Software',
+    'documentation': 'Documentation',
+    'other': 'Other'
+  };
+  return map[category] || 'Other';
+}
+
+// Helper: Map condition to old state format
+function mapConditionToState(condition) {
+  const map = {
+    'new': 'New',
+    'excellent': 'Great',
+    'good': 'Good',
+    'fair': 'Good',
+    'poor': 'Repair',
+    'needs-repair': 'Repair'
+  };
+  return map[condition] || 'Good';
+}
+
+// Smarter type mapping
+function mapToTool(row){
+  const name=(row.name||"").toString();
+  const t=name.toLowerCase();
+  function has(...keys){ return keys.some(k=>t.includes(k)); }
+  let type="Hand Tool";
+  if(has("impact driver","impact","drill driver","drill/driver","drill-driver","drill")) type="Drill / Driver";
+  else if(has("miter","mitre","chop saw","sliding")) type="Miter Saw";
+  else if(has("circular saw","circular-saw","7-1/4","worm drive","track saw")) type="Circular Saw";
+  else if(has("jig saw","jigsaw","scroll saw")) type="Jig Saw";
+  else if(has("recip","sawzall","reciprocating")) type="Recip Saw";
+  else if(has("sander","orbital","random orbit","sheet sander","belt sander")) type="Sander";
+  else if(has("rotary tool","engraver","flex shaft","polisher","router")) type="Rotary Tool";
+  else if(has("3d printer","printer 3d","snapmaker","snap-maker","ender","prusa")) type="3D Printer";
+  else if(has("hole saw","holesaw","arbor","bi-metal","bimetal","dozer")) type="Hole Saw";
+  else if(has("hammer","mallet","dead blow","nail set","vise","grip","locking pliers","pliers","wrench","socket")) type="Hand Tool";
+  else if(has("obd","scanner","nt1009","diagnostic")) type="Scanner";
+  else if(has("router","mesh","ethernet","switch","access point","modem","patch panel","cat6","cat5e")) type="Network";
+  else if(has("solar","power station","powerstation","ecoflow","ups","inverter","panel","battery")) type="Solar / Power";
+  else if(has("planter","compost","soil","pond","irrigation","drip","mulch","garden")) type="Garden";
+  else if(has("camera","lens","blackmagic","canon","dslr","mirrorless","tripod","gimbal","lighting","softbox")) type="Photo / Video";
+
+  return { type, name: row.name||"", power: row.power||"", state: row.state||"Good", spot: row.spot||"", notes: row.notes||"" };
+}
+
+// Auto “Spot” bin rules
+function autoBin(r){
+  const n=(r.name||"").toLowerCase();
+  function set(v){ r.spot = r.spot && r.spot.trim() ? r.spot : v; }
+  if(/blade|hole saw|holesaw|arbor|bit set|bits/i.test(r.name||"")) set("Bin 6");
+  if(/router|mesh|ethernet|switch|access point|modem|patch|cat6|cat5e/i.test(n)) set("Net bin");
+  if(/camera|lens|tripod|gimbal|lighting|softbox|blackmagic|canon|dslr/i.test(n)) set("Case");
+  if(/sander|finish|paper|disc|pad/i.test(n)) set("Bench");
+  if(/drill|driver|jig saw|recip|circular|miter/i.test(n)) set("Bin 1");
+  if(/eco|solar|panel|power station|ups|inverter|battery/i.test(n)) set("Power cart");
+  if(/pond|compost|soil|planter|garden|mulch|irrigation|drip/i.test(n)) set("Yard");
+  if(/snapmaker|3d printer|filament|nozzle|laser/i.test(n)) set("Main desk");
+  return r;
+}
+
+(async function init(){ 
+  await load(); 
+  draw(); 
+  // Also try to load resources from JSON files and merge
+  try {
+    // Get API base URL - ensure it's a valid absolute URL
+    let resourcesUrl;
+    const apiBase = window.CONFIG?.api?.baseUrl || '';
+    
+    if (!apiBase || apiBase === '' || apiBase === '/api') {
+      // Use current origin with /api path
+      resourcesUrl = `${window.location.origin}/api/resources`;
+    } else if (apiBase.startsWith('http://') || apiBase.startsWith('https://')) {
+      // Absolute URL - use as-is and append /resources
+      resourcesUrl = apiBase.endsWith('/') ? `${apiBase}api/resources` : `${apiBase}/api/resources`;
+    } else {
+      // Relative path - make it absolute
+      const base = apiBase.startsWith('/') ? window.location.origin + apiBase : window.location.origin + '/' + apiBase;
+      resourcesUrl = base.endsWith('/api') ? `${base}/resources` : `${base}/api/resources`;
+    }
+    
+    // Validate URL before fetching
+    try {
+      new URL(resourcesUrl); // This will throw if URL is invalid
+      console.log('🔍 Fetching resources from:', resourcesUrl);
+      const resourcesResponse = await fetch(resourcesUrl);
+      if (resourcesResponse.ok) {
+        const resources = await resourcesResponse.json();
+        if (resources && resources.length > 0) {
+          console.log(`📦 Found ${resources.length} resources from JSON files`);
+          // Merge resources that aren't already in inventory
+          resources.forEach(resource => {
+            const exists = data.find(item => 
+              item.name === resource.title || 
+              item.name === resource.name ||
+              (resource.id && item.id === resource.id)
+            );
+            if (!exists && resource.title) {
+              // Add resource to inventory
+              // Check for duplicate transaction ID
+              const transactionId = resource.meta?.transactionId || resource.meta?.orderId || resource.meta?.orderNumber || '';
+              if (transactionId && transactionId.trim() !== '') {
+                const duplicate = data.find(item => 
+                  item.transactionId && 
+                  item.transactionId.trim() !== '' && 
+                  item.transactionId.toLowerCase() === transactionId.toLowerCase()
+                );
+                if (duplicate) {
+                  console.warn(`⚠️ Duplicate transaction ID "${transactionId}" found. Skipping "${resource.title || resource.name}"`);
+                  return; // Skip this item
+                }
+              }
+              
+              data.push({
+                type: resource.type || resource.category || 'Other',
+                name: resource.title || resource.name || '',
+                brand: resource.meta?.brand || '',
+                vendor: '',
+                transactionId: transactionId,
+                pricePaid: resource.meta?.purchasePrice || '',
+                lastUsed: 'N/A',
+                notes: resource.description || resource.purpose || '',
+                // Store full original vendor data
+                _resourceData: resource,
+                _vendorData: resource,
+                _originalData: JSON.parse(JSON.stringify(resource))
+              });
+            }
+          });
+          save();
+          draw();
+          console.log(`✅ Merged ${resources.length} resources into inventory`);
+        }
+      }
+    } catch (urlError) {
+      console.log('Invalid resources URL, skipping...', urlError.message);
+    }
+  } catch (e) {
+    console.log('Could not load resources from JSON files:', e);
+  }
+})();
+
+// --- Filters & totals ---
+/* v7.3 debounce & clear */
+function debounce(fn,ms){let t;return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn.apply(null,a),ms);} }
+// Get filter elements - wait for DOM to be ready
+let typeSel, vendorSel, searchInp;
+
+function initFilters() {
+  typeSel = document.getElementById("fType");
+  vendorSel = document.getElementById("fVendor");
+  searchInp = document.getElementById("fSearch");
+  
+  // Only add event listeners if elements exist
+  if (typeSel && vendorSel && searchInp) {
+    [typeSel, vendorSel, searchInp].forEach(el => {
+      if (el) {
+        el.addEventListener("input", debounce(draw, 200));
+      }
+    });
+  }
+  
+  const clearBtn = document.getElementById("clearFilters");
+  if (clearBtn && typeSel && vendorSel && searchInp) {
+    clearBtn.addEventListener("click", () => {
+      typeSel.value = "";
+      vendorSel.value = "";
+      searchInp.value = "";
+      draw();
+    });
+  }
+}
+
+// Initialize filters when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initFilters);
+} else {
+  initFilters();
+}
+function uniq(vals){ return Array.from(new Set(vals.filter(Boolean))).sort(); }
+function refreshTypeList(){
+  if (!typeSel) return; // Skip if element not found
+  const types = uniq(data.map(r=>r.type||""));
+  typeSel.innerHTML = '<option value="">All types</option>' + types.map(t=>`<option>${t}</option>`).join("");
+}
+// Format timestamp helper
+function formatTimestamp(timestamp) {
+  if (!timestamp || timestamp === 'N/A') return 'N/A';
+  try {
+    const date = new Date(timestamp);
+    if (isNaN(date.getTime())) return timestamp; // Return as-is if invalid
+    return date.toLocaleString('en-US', { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  } catch (e) {
+    return timestamp;
+  }
+}
+
+function applyFilters(rows){
+  const t = (typeSel && typeSel.value ? typeSel.value : "").toLowerCase();
+  const v = (vendorSel && vendorSel.value ? vendorSel.value : "").toLowerCase();
+  const q = (searchInp && searchInp.value ? searchInp.value : "").toLowerCase();
+  return rows.filter(r=>{
+    const okT = !t || (r.type||"").toLowerCase()===t;
+    const okV = !v || (r.vendor||"").toLowerCase().includes(v);
+    const okQ = !q || ((r.name||"").toLowerCase().includes(q) || (r.notes||"").toLowerCase().includes(q) || (r.brand||"").toLowerCase().includes(q) || (r.vendor||"").toLowerCase().includes(q));
+    return okT && okV && okQ;
+  });
+}
+function totals(rows){
+  const byType = {};
+  rows.forEach(r=>{ const k=r.type||"Other"; byType[k]=(byType[k]||0)+1; });
+  return { count: rows.length, byType };
+}
+function drawTotals(rows){
+  let el = document.getElementById("totalsBar");
+  if(!el){
+    el = document.createElement("div");
+    el.id = "totalsBar";
+    el.className = "note";
+    el.style.marginTop = "10px";
+    document.querySelector("#inventory").appendChild(el);
+  }
+  const t = totals(rows);
+  const parts = Object.entries(t.byType).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([k,v])=>`${k}: ${v}`);
+  el.innerHTML = `<b>Total:</b> ${t.count} items &nbsp; | &nbsp; ${parts.join(" · ")}`;
+}
+const _draw = draw;
+draw = function(){
+  tbody.innerHTML="";
+  const rows = applyFilters(data);
+  rows.forEach((r,i)=>{
+    const tr=document.createElement("tr");
+    // Format price paid
+    const priceDisplay = r.pricePaid ? (typeof r.pricePaid === 'number' ? '$' + r.pricePaid.toFixed(2) : r.pricePaid) : '';
+    // Format last used timestamp
+    const lastUsedDisplay = r.lastUsed && r.lastUsed !== 'N/A' ? formatTimestamp(r.lastUsed) : (r.lastUsed || 'N/A');
+    // Check if has transaction ID (proof of purchase)
+    const hasTransactionId = r.transactionId && r.transactionId.trim() !== '';
+    const badgeIcon = hasTransactionId ? '' : '<span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#f05a78;color:#fff;font-size:12px;line-height:20px;text-align:center;font-weight:bold;cursor:help" title="⚠️ Missing transaction ID / proof of purchase">⚠</span>';
+    
+    // Check if item has full vendor data
+    const hasFullData = r._resourceData || r._vendorData || r._originalData;
+    const detailsBtn = hasFullData ? 
+      `<button class="btn" style="padding:4px 8px;font-size:11px;margin-left:4px" onclick="event.stopPropagation();showVendorDetails(${i})" title="View full vendor data">📋 Details</button>` : 
+      '';
+    
+    tr.innerHTML=`<td style="text-align:center;padding:4px">${badgeIcon}</td><td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.type||""}</td><td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${(r.name||"").replace(/"/g, '&quot;')}">${r.name||""}${detailsBtn}</td><td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.brand||""}</td><td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.vendor||""}</td><td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:monospace;font-size:11px" title="${(r.transactionId||"").replace(/"/g, '&quot;')}">${r.transactionId||""}</td><td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${priceDisplay}</td><td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${lastUsedDisplay}">${lastUsedDisplay}</td><td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${(r.notes||"").replace(/"/g, '&quot;')}">${r.notes||""}</td>`;
+    tr.addEventListener("click",()=>edit(i));
+    tbody.appendChild(tr);
+  });
+  refreshTypeList();
+  drawTotals(rows);
+}
+// Filter event listeners are now set up in initFilters() function above
+
+// Export current view to PDF (print window)
+document.getElementById("pdfBtn")?.addEventListener("click", ()=>{
+  const rows = applyFilters(data);
+  const html = `<!doctype html><html><head><meta charset="utf-8">
+  <title>LearnMappers — Inventory Export</title>
+  <style>
+    body{{font-family: Inter, Arial, sans-serif; padding:20px}}
+    h1{{font-size:20px;margin:0 0 8px}}
+    .muted{{color:#555;margin-bottom:12px}}
+    table{{width:100%;border-collapse:collapse;font-size:12px}}
+    th,td{{border:1px solid #aaa;padding:6px 8px;text-align:left}}
+    tfoot td{{font-weight:bold}}
+    @media print{{ @page{{size: auto; margin: 12mm}} }}
+  </style></head><body>
+  <h1>LearnMappers — Inventory Export</h1>
+  <div class="muted">Filtered view • ${new Date().toLocaleString()}</div>
+  <table><thead><tr><th></th><th>Type</th><th>Name</th><th>Brand</th><th>Vendor</th><th>Transaction ID</th><th>Price Paid</th><th>Last Used</th><th>Notes</th></tr></thead><tbody>
+  ${rows.map(r=>{
+    const hasTransactionId = r.transactionId && r.transactionId.trim() !== '';
+    const badgeIcon = hasTransactionId ? '' : '⚠️';
+    const priceDisplay = r.pricePaid ? (typeof r.pricePaid === 'number' ? '$' + r.pricePaid.toFixed(2) : r.pricePaid) : '';
+    const lastUsedDisplay = r.lastUsed && r.lastUsed !== 'N/A' ? formatTimestamp(r.lastUsed) : (r.lastUsed || 'N/A');
+    return `<tr><td>${badgeIcon}</td><td>${r.type||""}</td><td>${r.name||""}</td><td>${r.brand||""}</td><td>${r.vendor||""}</td><td>${r.transactionId||""}</td><td>${priceDisplay}</td><td>${lastUsedDisplay}</td><td>${r.notes||""}</td></tr>`;
+  }).join("")}
+  </tbody></table>
+  <div class="brandFoot"><span>LearnMappers — Resources & Inventory</span><span>2025-11-08</span></div>
+  </body></html>`;
+  const w = window.open("", "_blank");
+  w.document.open(); w.document.write(html); w.document.close();
+  w.focus(); w.print();
+});
+
+
+/* v7.2.1 update toast */
+(function(){ if(!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.getRegistration().then(reg=>{
+    if(!reg) return;
+    function showToast(){ var el=document.getElementById('toastUpdate'); if(el) el.classList.add('show'); }
+    if(reg.waiting) showToast();
+    reg.addEventListener('updatefound', ()=>{
+      const sw = reg.installing;
+      if(!sw) return;
+      sw.addEventListener('statechange', ()=>{ if(sw.state==='installed' && navigator.serviceWorker.controller) showToast(); });
+    });
+    navigator.serviceWorker.addEventListener('controllerchange', showToast);
+  });
+})();
+
+
+/* v7.3 net pill */
+(function(){
+  const el = document.getElementById('netPill'); if(!el) return;
+  function setStatus(){
+    const on = navigator.onLine;
+    el.textContent = (on ? '● online' : '● offline');
+    el.classList.toggle('online', on);
+    el.classList.toggle('offline', !on);
+  }
+  window.addEventListener('online', setStatus);
+  window.addEventListener('offline', setStatus);
+  setStatus();
+})();
+
+</script>
+<script src="../../schemas/validator.js"></script>
+<!-- Load dedicated vendor mappers first -->
+<script src="../../js/vendor-mappers/amazon-mapper.js"></script>
+<script src="../../js/vendor-mappers/ebay-mapper.js"></script>
+<script src="../../js/vendor-mappers/homedepot-mapper.js"></script>
+<!-- Then load the main vendor importer -->
+<script src="../../js/vendor-importer.js" onload="if (typeof window.startImporterInit === 'function') window.startImporterInit();"></script>
+<script src="../../js/resource-card-generator.js"></script>
+<script>
+/**
+ * Auto-Born: Create resource cards for imported resources
+ * This function automatically generates HTML card pages for each imported resource
+ */
+function createResourceCards(resources) {
+  if (!resources || resources.length === 0) return 0;
+  
+  let cardsCreated = 0;
+  
+  resources.forEach(resource => {
+    if (!resource.id || !resource.title) return;
+    
+    // Check if card already exists
+    const cardPath = `resource-cards/${resource.id}.html`;
+    // We can't check file existence in browser, so we'll create/update it
+    
+    // Load template
+    fetch('resource-cards/template.html')
+      .then(response => response.text())
+      .then(template => {
+        // Replace template with actual resource data
+        // Note: This is a simplified version - in production, you'd want to
+        // use a proper templating system or server-side generation
+        
+        // For now, we'll just store the resource data in localStorage
+        // and the card page will load it dynamically
+        const storageKey = 'lm_resource_cards';
+        let cards = {};
+        try {
+          const stored = localStorage.getItem(storageKey);
+          if (stored) cards = JSON.parse(stored);
+        } catch (e) {}
+        
+        cards[resource.id] = resource;
+        localStorage.setItem(storageKey, JSON.stringify(cards));
+        cardsCreated++;
+      })
+      .catch(e => {
+        console.warn('Could not load template for card generation:', e);
+        // Fallback: just store resource data
+        const storageKey = 'lm_resource_cards';
+        let cards = {};
+        try {
+          const stored = localStorage.getItem(storageKey);
+          if (stored) cards = JSON.parse(stored);
+        } catch (e) {}
+        
+        cards[resource.id] = resource;
+        localStorage.setItem(storageKey, JSON.stringify(cards));
+        cardsCreated++;
+      });
+  });
+  
+  return cardsCreated;
+}
+
+// Make function globally available
+window.createResourceCards = createResourceCards;
+
+// Generate all cards button
+document.getElementById('generateCardsBtn')?.addEventListener('click', async () => {
+  const btn = document.getElementById('generateCardsBtn');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳ Generating...';
+  
+  try {
+    if (window.ResourceCardGenerator) {
+      const generator = new ResourceCardGenerator();
+      const result = await generator.generateAllCards();
+      
+      if (result.success) {
+        alert(`✅ Generated ${result.generated} resource card files!\n\nYou can now browse them in:\n${window.location.origin}/pages/resource-cards/\n\nOr in Finder/Files at:\nsites/learnmappers/pages/resource-cards/`);
+        btn.textContent = `✅ ${result.generated} Cards Generated`;
+      } else {
+        alert(`⚠️ Generated ${result.generated} cards, but ${result.errors} errors occurred.`);
+        btn.textContent = originalText;
+      }
+    } else {
+      alert('Resource card generator not available. Make sure you\'re using the server version.');
+      btn.textContent = originalText;
+    }
+  } catch (error) {
+    console.error('Error generating cards:', error);
+    alert(`❌ Error: ${error.message}`);
+    btn.textContent = originalText;
+  } finally {
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }, 3000);
+  }
+});
+</script>
+<script src="../../scripts.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('../../service-worker.js').catch(()=>{});}</script>
+<script>
+// Populate navigation from config
+function populateNavigation() {
+  const config = window.CONFIG;
+  if (!config) {
+    console.log('Config not loaded yet, retrying navigation...');
+    setTimeout(populateNavigation, 100);
+    return;
+  }
+  
+  // Update logo
+  const logo = document.querySelector('.logo');
+  if (logo && config.navigation?.logo) {
+    logo.innerHTML = `
+      ${config.navigation.logo.showDot ? '<span class="dot"></span>' : ''}
+      <span>${config.navigation.logo.text || 'LearnMappers'}</span>
+    `;
+    if (config.navigation.logo.href) {
+      logo.href = config.navigation.logo.href;
+    }
+  }
+  
+  // Update navigation links
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks && config.navigation?.links) {
+    console.log('🔍 Updating navigation links:', config.navigation.links);
+    navLinks.innerHTML = config.navigation.links.map(link => 
+      `<a href="${link.href}" data-nav>${link.icon ? link.icon + ' ' : ''}${link.label}</a>`
+    ).join('');
+    console.log('✅ Navigation links updated');
+  } else {
+    console.error('❌ Navigation links not found!', {
+      navLinks: !!navLinks,
+      hasConfig: !!config,
+      hasNavigation: !!config?.navigation,
+      hasLinks: !!config?.navigation?.links
+    });
+  }
+}
+
+// Listen for config loaded event
+window.addEventListener('configLoaded', populateNavigation);
+// Also try immediately
+setTimeout(populateNavigation, 100);
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(populateNavigation, 200);
+});
+</script>
+</body>
+</html>

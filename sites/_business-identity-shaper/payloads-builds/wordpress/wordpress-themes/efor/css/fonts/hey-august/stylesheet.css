@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Hey August';
+    src: url('HeyAugust.woff2') format('woff2'),
+        url('HeyAugust.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+

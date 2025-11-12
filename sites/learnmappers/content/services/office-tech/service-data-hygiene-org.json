@@ -1,0 +1,34 @@
+{
+  "id": "data-hygiene-org",
+  "title": "Data Hygiene & Organization",
+  "description": "Declutter, de-duplicate, and map storage the simple way.",
+  "purpose": "Make files easy to find and safe to keep.",
+  "icon": "\ud83d\uddc2\ufe0f",
+  "category": "office-tech",
+  "pricing": {
+    "type": "hourly",
+    "rate": 95,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Folder maps and naming rules",
+    "Backups with restore checks",
+    "Light training as we go"
+  ],
+  "tools": [
+    "network-system-mesh-router-kit-smart",
+    "ups-ecoflow-power-unit-compact"
+  ],
+  "outcomes": [
+    "Faster work with less drift",
+    "Safer, cleaner storage",
+    "Simple habits that stick"
+  ],
+  "whatYouCanBuild": [
+    "Shared team drive, photo library, docs hub"
+  ],
+  "whyNeed": "Save time every day with clear structure.",
+  "categoryId": "office-tech",
+  "categoryTitle": "Office & Computer"
+}

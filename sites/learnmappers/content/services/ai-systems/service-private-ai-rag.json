@@ -1,0 +1,35 @@
+{
+  "id": "private-ai-rag",
+  "title": "Private AI + RAG",
+  "description": "Local servers, safe data, and fast search over your files.",
+  "purpose": "Bring AI close to your data with control and privacy.",
+  "icon": "\ud83e\udde0",
+  "category": "ai-systems",
+  "pricing": {
+    "type": "hourly",
+    "rate": 125,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "RAG pipelines and embeddings",
+    "Indexing docs and media",
+    "Simple admin panel and notes"
+  ],
+  "tools": [
+    "network-system-mesh-router-kit-smart",
+    "ups-ecoflow-power-unit-compact",
+    "snapmaker-3d-printer-fdm-laser-cnc"
+  ],
+  "outcomes": [
+    "Smart find across docs",
+    "Private, local control",
+    "Clear runbooks for upkeep"
+  ],
+  "whatYouCanBuild": [
+    "Search portal, chat over docs, automation hooks"
+  ],
+  "whyNeed": "Own your stack and keep data close.",
+  "categoryId": "ai-systems",
+  "categoryTitle": "AI & Private Servers"
+}

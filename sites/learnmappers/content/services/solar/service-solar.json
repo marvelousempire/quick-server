@@ -1,0 +1,59 @@
+{
+  "id": "solar",
+  "title": "Solar & Off\u2011Grid",
+  "description": "Power your life with clean energy. Build solar systems, battery storage, and off-grid solutions that reduce bills, increase independence, and prepare you for anything.",
+  "purpose": "Create sustainable power systems that reduce energy costs, increase independence, and provide backup power. Build solar installations, battery storage, and off-grid solutions that work for your lifestyle.",
+  "icon": "\u2600\ufe0f",
+  "category": "solar",
+  "pricing": "Starting at $200/hr",
+  "features": [
+    "Solar panel system design",
+    "Battery storage integration",
+    "Off-grid power solutions",
+    "Grid-tied with backup",
+    "Energy monitoring systems",
+    "Mobile & RV installations",
+    "Emergency backup power",
+    "Code-compliant installation"
+  ],
+  "tools": [
+    "Solar panels",
+    "Batteries",
+    "Inverters",
+    "Monitoring",
+    "Charge controllers",
+    "Wiring and safety equipment"
+  ],
+  "outcomes": [
+    "Save $100-500/month on electricity bills",
+    "Eliminate power outages with battery backup",
+    "Achieve energy independence",
+    "Increase property value by 3-5%",
+    "Reduce carbon footprint significantly",
+    "Enable off-grid living or remote work",
+    "Prepare for emergencies and disasters"
+  ],
+  "whatYouCanBuild": [
+    "Grid-tied solar systems with battery backup",
+    "Off-grid solar power systems",
+    "RV and van solar installations",
+    "Portable solar generators",
+    "Battery storage systems (Powerwall alternatives)",
+    "Mobile internet and Starlink setups",
+    "Energy monitoring and management systems",
+    "Hybrid systems (solar + generator backup)"
+  ],
+  "whyNeed": "You need this if you want to slash energy bills, if you want backup power during outages, if you want energy independence, if you're going off-grid, or if you want to reduce your carbon footprint while saving money.",
+  "whatYouGet": [
+    "Reduced or eliminated electricity bills",
+    "Backup power during outages (never lose power)",
+    "Energy independence and self-sufficiency",
+    "Mobile power for RVs, vans, or remote locations",
+    "Clean energy that helps the planet",
+    "Increased property value",
+    "Peace of mind during emergencies",
+    "Off-grid capability for remote living"
+  ],
+  "categoryId": "solar",
+  "categoryTitle": "Solar & Off\u2011Grid"
+}

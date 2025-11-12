@@ -1,0 +1,32 @@
+{
+  "id": "enforcement-chain-mapping",
+  "title": "Enforcement Chain & Governance Mapping",
+  "description": "Map regulators, license ladders, appeals, and oversight channels.",
+  "purpose": "Know who regulates whom and where review paths run (education-only).",
+  "icon": "\ud83c\udfdb\ufe0f",
+  "category": "learnmappers-education",
+  "pricing": {
+    "type": "hourly",
+    "rate": 110,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Local\u2192State\u2192Federal ladder",
+    "Appeal overview"
+  ],
+  "tools": [
+    "learnmapverse-master-table",
+    "source-register"
+  ],
+  "outcomes": [
+    "Clear escalation paths"
+  ],
+  "whatYouCanBuild": [
+    "Governance ladder diagram",
+    "Contacts index"
+  ],
+  "whyNeed": "To orient before engaging any process.",
+  "categoryId": "learnmappers-education",
+  "categoryTitle": "LearnMappers \u2014 Research & Education"
+}

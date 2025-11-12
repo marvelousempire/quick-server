@@ -1,0 +1,58 @@
+{
+  "id": "apple-linux",
+  "title": "Apple & Linux Systems",
+  "description": "Get your Mac and Linux systems running smoothly with automated backups, smart workflows, and optimized configurations that save you time every day.",
+  "purpose": "Set up, optimize, and maintain Apple and Linux systems with automated backups, smart workflows, and configurations that make your tech work for you instead of against you.",
+  "icon": "\ud83d\udcbb",
+  "category": "apple-linux",
+  "pricing": "Starting at $100/hr",
+  "features": [
+    "System optimization & tuning",
+    "Automated backup solutions",
+    "Time-saving automation scripts",
+    "Network & VPN configuration",
+    "Security hardening & firewalls",
+    "Development environment setup",
+    "Remote access & SSH setup",
+    "Complete system documentation"
+  ],
+  "tools": [
+    "Terminal",
+    "SSH",
+    "Backup tools",
+    "Network tools",
+    "Automation scripts",
+    "Monitoring tools"
+  ],
+  "outcomes": [
+    "Save 5-10 hours per week with automation",
+    "Protect data with automated backups",
+    "Increase system performance by 20-40%",
+    "Reduce tech support headaches",
+    "Enable remote work capabilities",
+    "Build professional development environments",
+    "Achieve enterprise-grade security"
+  ],
+  "whatYouCanBuild": [
+    "Automated Time Machine and backup systems",
+    "macOS optimization and performance tuning",
+    "Linux server configurations (web, database, apps)",
+    "Automation scripts (backups, file organization, tasks)",
+    "Network configurations (VPN, file sharing, remote access)",
+    "Development environments and toolchains",
+    "Security hardening and firewall setup",
+    "Docker and container orchestration"
+  ],
+  "whyNeed": "You need this if you're tired of manual backups, if you want automation that saves hours weekly, if you need systems that just work, or if you want professional-grade setup without the learning curve.",
+  "whatYouGet": [
+    "Automated backup systems that protect your data",
+    "Optimized systems that run faster and smoother",
+    "Automation workflows that save hours weekly",
+    "Professional configuration and security",
+    "Documentation of your entire setup",
+    "Ongoing support and maintenance guidance",
+    "Peace of mind knowing your data is safe"
+  ],
+  "categoryId": "apple-linux",
+  "categoryTitle": "Apple & Linux Systems"
+}

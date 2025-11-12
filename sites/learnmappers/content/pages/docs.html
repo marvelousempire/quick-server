@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../../config.js"></script>
+<script>
+  document.title = window.CONFIG?.site?.title ? `${window.CONFIG.site.name} — Documentation (v${window.CONFIG.site.version})` : 'LearnMappers — Documentation';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', window.CONFIG?.site?.themeColor || '#0b0c10');
+</script>
+<title>LearnMappers — Documentation</title>
+<link rel="manifest" href="../../manifest.webmanifest"><meta name="theme-color" content="#0b0c10">
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; }
+*{box-sizing:border-box} html,body{background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6}
+a{color:var(--brand);text-decoration:none}
+main[data-page]{padding:0}
+.wrap{max-width:1440px;margin:0 auto;padding:clamp(18px,4vw,60px)}
+nav.stick{position:sticky;top:0;z-index:90;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter: blur(10px);border-bottom:1px solid var(--line)}
+nav .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900}
+.logo .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+nav .links{display:flex;gap:12px;flex-wrap:wrap}
+nav .links a{padding:10px 12px;border-radius:12px}
+nav .links a:hover{background:color-mix(in srgb, var(--brand) 18%, transparent)}
+.pill{display:inline-flex;align-items:center;gap:6px;margin-right:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 90%, transparent), color-mix(in srgb, var(--card) 96%, transparent));font-size:12px}
+.pill.online{color:#073b18;border-color:#0ea35a;background:linear-gradient(180deg,#d6ffe9,#f1fff7)}
+.pill.offline{color:#4b1a1a;border-color:#cc5151;background:linear-gradient(180deg,#ffe3e3,#fff7f7)}
+
+/* Documentation Layout */
+.docs-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;min-height:calc(100vh - 200px);margin-top:24px}
+.docs-sidebar{position:sticky;top:80px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:16px}
+.docs-sidebar::-webkit-scrollbar{width:6px}
+.docs-sidebar::-webkit-scrollbar-track{background:transparent}
+.docs-sidebar::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+.docs-content{max-width:800px;padding-bottom:80px}
+.docs-nav-group{margin-bottom:32px}
+.docs-nav-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-bottom:12px;padding:0 12px}
+.docs-nav-link{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;color:var(--muted);font-size:14px;transition:all 0.15s;margin-bottom:4px}
+.docs-nav-link:hover{background:color-mix(in srgb, var(--brand) 12%, transparent);color:var(--ink)}
+.docs-nav-link.active{background:color-mix(in srgb, var(--brand) 20%, transparent);color:var(--brand);font-weight:700}
+.docs-nav-link .icon{width:16px;height:16px;opacity:0.6}
+.docs-hero{margin-bottom:48px;padding-bottom:32px;border-bottom:1px solid var(--line)}
+.docs-hero h1{font-size:clamp(42px,5vw,64px);font-weight:900;margin:0 0 16px;line-height:1.1;background:linear-gradient(135deg,var(--ink) 0%,var(--brand) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.docs-hero .lead{font-size:20px;color:var(--muted);max-width:600px;line-height:1.5}
+.docs-section{margin-bottom:48px}
+.docs-section h2{font-size:32px;font-weight:900;margin:0 0 16px;padding-top:16px;border-top:1px solid var(--line);margin-top:32px}
+.docs-section h2:first-child{border-top:none;margin-top:0;padding-top:0}
+.docs-section h3{font-size:24px;font-weight:800;margin:32px 0 16px}
+.docs-section h4{font-size:18px;font-weight:700;margin:24px 0 12px;color:var(--brand)}
+.docs-section p{margin:16px 0;font-size:16px;line-height:1.7;color:var(--ink)}
+.docs-section ul,.docs-section ol{margin:16px 0;padding-left:24px}
+.docs-section li{margin:8px 0;line-height:1.6}
+.docs-section code{background:color-mix(in srgb, var(--card) 95%, transparent);padding:3px 8px;border-radius:6px;font-size:14px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;border:1px solid var(--line);color:var(--brand)}
+.docs-section pre{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;overflow-x:auto;margin:24px 0;position:relative}
+.docs-section pre code{background:none;padding:0;border:none;font-size:13px;line-height:1.6;color:var(--ink)}
+.docs-section blockquote{border-left:3px solid var(--brand);padding-left:20px;margin:24px 0;color:var(--muted);font-style:italic;font-size:15px}
+.docs-section strong{font-weight:800;color:var(--ink)}
+.docs-section a{color:var(--brand);text-decoration:underline;text-underline-offset:3px}
+.docs-section a:hover{color:var(--brand2)}
+.docs-card{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:12px;padding:20px;margin:24px 0}
+.docs-card h3{margin-top:0}
+.docs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:32px 0}
+.docs-feature-card{background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:12px;padding:20px;transition:all 0.2s}
+.docs-feature-card:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:0 8px 24px -12px var(--shadow)}
+.docs-feature-card h4{margin:0 0 8px;font-size:16px;font-weight:800}
+.docs-feature-card p{margin:0;font-size:14px;color:var(--muted)}
+.docs-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:color-mix(in srgb, var(--brand) 20%, transparent);color:var(--brand);font-size:11px;font-weight:700;text-transform:uppercase;margin-left:8px}
+.docs-search{position:relative;margin-bottom:24px}
+.docs-search input{width:100%;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:10px;color:var(--ink);font-size:14px}
+.docs-search input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb, var(--brand) 15%, transparent)}
+@media (max-width: 1024px){ .docs-layout{grid-template-columns:1fr} .docs-sidebar{position:static;max-height:none;border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:24px} }
+</style>
+</head>
+<body>
+<nav class="stick wrap">
+  <div class="row">
+    <div class="logo"><span class="dot"></span><span>LearnMappers</span></div>
+    <div class="links"><span id="netPill" class="pill" title="Connection status">● offline</span>
+      <a href="index.html" data-nav>Home</a>
+      <a href="docs.html" data-nav>Docs</a>
+      <a href="inventory.html" data-nav>Resources</a>
+      <a href="service-menu.html" data-nav>Services</a>
+    </div>
+  </div>
+</nav>
+
+<main data-page>
+  <section class="wrap">
+    <div class="docs-layout">
+      <aside class="docs-sidebar">
+        <div class="docs-search">
+          <input type="search" placeholder="Search docs..." id="docSearch">
+        </div>
+        
+        <nav class="docs-nav-group">
+          <div class="docs-nav-title">Getting Started</div>
+          <a href="docs.html#overview" class="docs-nav-link active" data-doc-link>
+            <span class="icon">📖</span>
+            <span>Overview</span>
+          </a>
+          <a href="docs.html#quick-start" class="docs-nav-link" data-doc-link>
+            <span class="icon">🚀</span>
+            <span>Quick Start</span>
+          </a>
+          <a href="docs.html#features" class="docs-nav-link" data-doc-link>
+            <span class="icon">✨</span>
+            <span>Features</span>
+          </a>
+        </nav>
+
+        <nav class="docs-nav-group">
+          <div class="docs-nav-title">Configuration</div>
+          <a href="docs-config.html" class="docs-nav-link" data-nav>
+            <span class="icon">⚙️</span>
+            <span>Config System</span>
+          </a>
+          <a href="docs-schemas.html" class="docs-nav-link" data-nav>
+            <span class="icon">📋</span>
+            <span>JSON Schemas</span>
+          </a>
+        </nav>
+
+        <nav class="docs-nav-group">
+          <div class="docs-nav-title">Data & Import</div>
+          <a href="docs-vendor-import.html" class="docs-nav-link" data-nav>
+            <span class="icon">📦</span>
+            <span>Vendor Import</span>
+          </a>
+          <a href="docs-relationship-mapping.html" class="docs-nav-link" data-nav>
+            <span class="icon">🔗</span>
+            <span>Relationships</span>
+          </a>
+        </nav>
+
+        <nav class="docs-nav-group">
+          <div class="docs-nav-title">Deployment</div>
+          <a href="docs.html#standalone" class="docs-nav-link" data-doc-link>
+            <span class="icon">📱</span>
+            <span>Standalone</span>
+          </a>
+          <a href="docs.html#server" class="docs-nav-link" data-doc-link>
+            <span class="icon">🖥️</span>
+            <span>With Server</span>
+          </a>
+        </nav>
+      </aside>
+
+      <article class="docs-content" id="docsContent">
+        <div class="docs-hero">
+          <h1>LearnMappers Documentation</h1>
+          <p class="lead">Complete guide to managing tools, inventory, and services with LearnMappers PWA.</p>
+        </div>
+
+        <section id="overview" class="docs-section">
+          <h2>Overview</h2>
+          <p>LearnMappers is a Progressive Web App (PWA) that bridges hands-on craft and systems thinking. It empowers home, tech, and small-office owners to manage smart homes, digital workflows, and eco builds.</p>
+          
+          <div class="docs-grid">
+            <div class="docs-feature-card">
+              <h4>📱 Progressive Web App</h4>
+              <p>Installable, works offline, works on any device</p>
+            </div>
+            <div class="docs-feature-card">
+              <h4>🚀 Standalone Operation</h4>
+              <p>Works without any server, uses browser localStorage</p>
+            </div>
+            <div class="docs-feature-card">
+              <h4>🗄️ Optional Database</h4>
+              <p>Node.js server adds SQLite and REST API features</p>
+            </div>
+            <div class="docs-feature-card">
+              <h4>📦 Vendor Imports</h4>
+              <p>Import from Amazon, eBay, Home Depot, and more</p>
+            </div>
+            <div class="docs-feature-card">
+              <h4>🔗 Relationship Mapping</h4>
+              <p>Visualize connections and project capabilities</p>
+            </div>
+            <div class="docs-feature-card">
+              <h4>📋 JSON Schemas</h4>
+              <p>Structured data validation and consistency</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="quick-start" class="docs-section">
+          <h2>Quick Start</h2>
+          
+          <h3>Standalone (No Server Required)</h3>
+          <p>The simplest way to use LearnMappers is standalone - just open the HTML files directly:</p>
+          <pre><code># Open directly in browser
+open sites/default/pages/index.html
+
+# Or use any static server
+cd sites/default
+python3 -m http.server 8000
+# Then visit http://localhost:8000/pages/index.html</code></pre>
+          <p>All data is stored in browser localStorage - no server needed!</p>
+
+          <h3>With Server (Optional)</h3>
+          <p>For network access, database features, and REST API:</p>
+          <pre><code># Auto-start (recommended)
+./go.sh        # macOS/Linux
+go.bat         # Windows
+
+# Manual start
+pnpm install
+pnpm start</code></pre>
+          <p>The server adds optional features but is not required.</p>
+        </section>
+
+        <section id="features" class="docs-section">
+          <h2>Features</h2>
+
+          <h3>Core Features</h3>
+          <ul>
+            <li><strong>Progressive Web App</strong> - Installable, offline-capable, works on any device</li>
+            <li><strong>Standalone Operation</strong> - Works completely independently without any server (uses localStorage)</li>
+            <li><strong>Optional Server</strong> - Node.js server adds REST API and SQLite database (optional enhancement)</li>
+            <li><strong>Master Config System</strong> - `config.json` (JSON format) + `config.js` loader manage all site settings dynamically</li>
+            <li><strong>JSON Schema System</strong> - Structured schemas for resources, services, persons, and companies ensure consistent imports</li>
+            <li><strong>Relationship Mapping</strong> - Complex data relationship system for visualizing connections and projecting capabilities</li>
+            <li><strong>Vendor Import System</strong> - Intelligent vendor file import (Amazon, eBay, Home Depot, etc.) with schema validation and rich data extraction</li>
+          </ul>
+
+          <h3>Server Features (Optional)</h3>
+          <ul>
+            <li><strong>Auto-Fit, Auto-Born, Auto-Heal</strong> - The `go.sh`/`go.bat` scripts handle everything automatically</li>
+            <li><strong>UV-First</strong> - Uses UV (universal package manager) when available for faster installs</li>
+            <li><strong>SQLite Backend</strong> - Full REST API for inventory management</li>
+            <li><strong>Network Ready</strong> - Auto-detects IP, serves on network</li>
+            <li><strong>HTTPS Support</strong> - Service workers work over network</li>
+          </ul>
+        </section>
+
+        <section id="standalone" class="docs-section">
+          <h2>Standalone Operation</h2>
+          <p>The site works <strong>completely independently</strong> without any server. All data is stored in browser localStorage.</p>
+
+          <div class="docs-card">
+            <h3>How It Works</h3>
+            <ul>
+              <li>✅ <strong>No server needed</strong> - Open HTML files directly</li>
+              <li>✅ <strong>localStorage storage</strong> - All data in browser</li>
+              <li>✅ <strong>Offline support</strong> - Service worker caches files</li>
+              <li>✅ <strong>Portable</strong> - Copy folder anywhere, it works</li>
+              <li>✅ <strong>Private</strong> - All data stays in browser</li>
+            </ul>
+          </div>
+
+          <h3>Running Standalone</h3>
+          <pre><code># Option 1: Direct file access
+open sites/default/pages/index.html
+
+# Option 2: Simple static server
+cd sites/default
+python3 -m http.server 8000
+
+# Option 3: Deploy to static hosting
+# Upload sites/default/ to Netlify, Vercel, GitHub Pages, etc.</code></pre>
+
+          <p>See <a href="docs-standalone.html" data-nav>Standalone Guide</a> for complete details.</p>
+        </section>
+
+        <section id="server" class="docs-section">
+          <h2>Server Operation</h2>
+          <p>The Node.js server adds <strong>optional enhancements</strong> but is not required for the site to work.</p>
+
+          <div class="docs-card">
+            <h3>What the Server Adds</h3>
+            <ul>
+              <li>✅ <strong>REST API</strong> - `/api/inventory`, `/api/stats` endpoints</li>
+              <li>✅ <strong>SQLite Database</strong> - Persistent storage across devices</li>
+              <li>✅ <strong>Network Access</strong> - Share on local network</li>
+              <li>✅ <strong>HTTPS</strong> - Secure connections for service workers</li>
+            </ul>
+          </div>
+
+          <h3>Starting the Server</h3>
+          <pre><code># Auto-start (recommended)
+./go.sh
+
+# Manual start
+pnpm install
+pnpm start</code></pre>
+
+          <p>See <a href="../docs/README-SERVER.md" target="_blank">Server Guide</a> for complete setup instructions.</p>
+        </section>
+
+        <section id="architecture" class="docs-section">
+          <h2>Architecture</h2>
+          
+          <h3>Site & Server Independence</h3>
+          <p>The site and server work <strong>completely independently</strong>:</p>
+          <ul>
+            <li>✅ <strong>Site works standalone</strong> - No server needed, uses localStorage</li>
+            <li>✅ <strong>Server is optional</strong> - Adds API and database features</li>
+            <li>✅ <strong>Both can run together</strong> - Server enhances standalone site</li>
+            <li>✅ <strong>No breaking changes</strong> - Site works the same either way</li>
+          </ul>
+
+          <h3>Data Storage</h3>
+          <div class="docs-card">
+            <h4>Standalone (localStorage)</h4>
+            <ul>
+              <li>Data stored in browser</li>
+              <li>Persists across sessions</li>
+              <li>Not shared between devices</li>
+              <li>Cleared if browser data is cleared</li>
+            </ul>
+          </div>
+
+          <div class="docs-card">
+            <h4>With Server (SQLite)</h4>
+            <ul>
+              <li>Data stored in database file</li>
+              <li>Shared across devices on same network</li>
+              <li>Persistent and backed up</li>
+              <li>Can be exported/imported</li>
+            </ul>
+          </div>
+        </section>
+
+        <section id="documentation" class="docs-section">
+          <h2>Documentation</h2>
+          <p>Complete guides are available for all features:</p>
+
+          <div class="docs-grid">
+            <a href="docs-config.html" class="docs-feature-card" data-nav>
+              <h4>⚙️ Configuration System</h4>
+              <p>Master config system using JSON format</p>
+            </a>
+            <a href="docs-vendor-import.html" class="docs-feature-card" data-nav>
+              <h4>📦 Vendor Import</h4>
+              <p>Import vendor files with validation</p>
+            </a>
+            <a href="docs-relationship-mapping.html" class="docs-feature-card" data-nav>
+              <h4>🔗 Relationship Mapping</h4>
+              <p>Visualize connections and projections</p>
+            </a>
+            <a href="docs-schemas.html" class="docs-feature-card" data-nav>
+              <h4>📋 JSON Schemas</h4>
+              <p>Data structure and validation</p>
+            </a>
+          </div>
+        </section>
+      </article>
+    </div>
+  </section>
+</main>
+
+<script>
+// Smooth scroll for anchor links
+document.querySelectorAll('[data-doc-link]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const href = link.getAttribute('href');
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Update active state
+        document.querySelectorAll('[data-doc-link]').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    }
+  });
+});
+
+// Update active nav on scroll
+const sections = document.querySelectorAll('.docs-section');
+const navLinks = document.querySelectorAll('[data-doc-link]');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${id}`) {
+          link.classList.add('active');
+        }
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(section => observer.observe(section));
+
+// Search functionality
+const searchInput = document.getElementById('docSearch');
+searchInput.addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase();
+  if (query.length < 2) {
+    sections.forEach(s => s.style.display = '');
+    return;
+  }
+  
+  sections.forEach(section => {
+    const text = section.textContent.toLowerCase();
+    section.style.display = text.includes(query) ? '' : 'none';
+  });
+});
+
+/* v7.3 net pill */
+(function(){
+  const el = document.getElementById('netPill'); if(!el) return;
+  function setStatus(){
+    const on = navigator.onLine;
+    el.textContent = (on ? '● online' : '● offline');
+    el.classList.toggle('online', on);
+    el.classList.toggle('offline', !on);
+  }
+  window.addEventListener('online', setStatus);
+  window.addEventListener('offline', setStatus);
+  setStatus();
+})();
+</script>
+<script src="../../scripts.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('../service-worker.js').catch(()=>{});}</script>
+</body>
+</html>

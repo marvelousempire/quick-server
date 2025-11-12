@@ -1,0 +1,254 @@
+/*
+	Class: "TGM Plugin Activation"
+*/
+
+body.appearance_page_efor-install-update-theme-plugins #wpbody-content > .update-nag,
+body.appearance_page_efor-install-update-theme-plugins #wpbody-content .wrap > .notice {
+	display: none;
+}
+
+body.appearance_page_efor-install-update-theme-plugins #wpbody-content .wrap > .pixelwars-tgmpa-notice {
+	display: block;
+}
+
+.pixelwars-tgmpa-notice ul {
+	list-style: square;
+	padding-left: 30px;
+}
+
+.tgmpa .tablenav,
+.tgmpa .check-column,
+.tgmpa .column-source,
+.tgmpa .column-type,
+.tgmpa tfoot {
+	display: none;
+}
+
+.tgmpa h1 {
+	display: block !important;
+	text-align: center;
+    font-weight: 600;
+    padding: 20px;
+	margin-bottom: 10px;
+}
+
+.tgmpa .notice,
+.tgmpa #message.updated {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+	margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+	max-width: 1280px;
+}
+
+.tgmpa .subsubsub {
+	float: none;
+	margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+	max-width: 1300px;
+}
+
+.tgmpa .subsubsub a {
+	font-weight: 600;
+}
+
+.tgmpa .subsubsub a .count {
+	font-weight: 600;
+}
+
+.tgmpa #tgmpa-plugins {
+	text-align: left;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 1300px;
+}
+
+.tgmpa th {
+	padding: 15px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.tgmpa tbody td {
+	padding: 15px;
+	border-bottom: 1px solid #dddddd;
+	border-right: 1px solid #dddddd;
+}
+
+.tgmpa tbody td:last-child {
+	border-right: none;
+}
+
+.tgmpa thead tr th {
+	text-align: center;
+	font-weight: 600;
+	color: initial;
+	background-color: #e6e6e6;
+}
+
+.tgmpa .plugin strong,
+.tgmpa .plugin strong a.thickbox {
+	font-size: 14px;
+	color: inherit;
+	cursor: text;
+	box-shadow: none;
+}
+
+.tgmpa .plugin .row-actions span {
+	display: inline-block;
+	color: transparent;
+}
+
+.tgmpa .plugin .row-actions span a {
+	display: inline-block;
+	font-weight: 500;
+	background-color: rgba(34, 113, 177, 0.1);
+	border: 1px solid #2271b1;
+    border-radius: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+	transition: all 0.1s ease-out;
+}
+
+.tgmpa .plugin .row-actions span a:hover {
+	background-color: rgba(34, 113, 177, 0.2);
+}
+
+.tgmpa .column-status {
+	font-style: italic;
+	text-transform: lowercase;
+}
+
+.tgmpa .column-status::first-letter {
+	text-transform: capitalize;
+}
+
+.tgmpa thead .column-status {
+	font-style: normal;
+}
+
+.tgmpa .column-version p {
+	max-width: 200px;
+}
+
+.tgmpa .column-version p:first-child {
+	margin-top: 0px;
+}
+
+.tgmpa .column-version p:last-child {
+	margin-bottom: 0px;
+}
+
+.tgmpa .column-version p:nth-child(2) {
+	display: none;
+}
+
+.tgmpa .column-version p span {
+	font-size: 12px;
+	font-weight: 400 !important;
+}
+
+.tgmpa .column-version p:nth-child(1) span {
+	color: inherit !important;
+}
+
+/* Class: "TGM Plugin Activation" */
+
+
+/* ============================================================================= */
+
+
+/* Class: "TGM Plugin Activation" --> Notice */
+
+#setting-error-tgmpa {
+	position: relative;
+	padding: 20px;
+	border-radius: 5px;
+}
+
+#setting-error-tgmpa p {
+    padding: 0px;
+	margin: 0px;
+}
+
+#setting-error-tgmpa button.notice-dismiss {
+	display: none;
+}
+
+.tgmpa-custom--content-part {
+	display: block;
+	margin-bottom: 15px;
+}
+
+.tgmpa-custom--content-part:last-child {
+	margin-bottom: 0px;
+}
+
+.tgmpa-custom--description {
+	font-size: 14px;
+	color: #000000;
+}
+
+.tgmpa-custom--plugin-name {
+	display: list-item;
+	line-height: 1;
+    margin-left: 30px;
+	margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.tgmpa-custom--plugin-name span {
+	display: inline-block;
+	line-height: 1;
+	background-color: #eeeeee;
+    padding: 5px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius: 3px;
+}
+
+.tgmpa-custom--plugin-name a {
+	line-height: 1;
+	text-decoration: none;
+	cursor: text;
+}
+
+.tgmpa-custom--plugin-name span,
+.tgmpa-custom--plugin-name a {
+	font-style: normal;
+	color: #3c434a;
+}
+
+.tgmpa-custom--action-buttons {
+	margin-right: 5px !important;
+	margin-top: 10px !important;
+}
+
+.tgmpa-custom--link-dismiss {
+	position: absolute;
+    top: 0px;
+    right: 0px;
+    font-weight: 400;
+    line-height: 1;
+    color: #666666;
+    text-decoration: none;
+	border-bottom: 1px solid transparent;
+	padding-bottom: 1px;
+    margin-top: 20px;
+    margin-right: 25px;
+	transition: all 0.3s ease-out;
+}
+
+.tgmpa-custom--link-dismiss:hover {
+    color: #666666;
+	border-bottom-color: #666666;
+}
+
+.tgmpa-custom--version {
+	display: none;
+}
+
+/* Class: "TGM Plugin Activation" --> Notice */
+

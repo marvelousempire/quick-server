@@ -1,0 +1,34 @@
+{
+  "id": "smart-home-setup",
+  "title": "Smart Home Setup",
+  "description": "Mesh Wi-Fi, hubs, and scenes aligned with your space.",
+  "purpose": "Stable network and helpful automations for daily use.",
+  "icon": "\ud83d\udcf6",
+  "category": "smart-home",
+  "pricing": {
+    "type": "hourly",
+    "rate": 95,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Router and AP placement",
+    "Safe device onboarding",
+    "Scene design and quick notes"
+  ],
+  "tools": [
+    "network-system-mesh-router-kit-smart",
+    "power-meters-voltage-testers-cable-checkers"
+  ],
+  "outcomes": [
+    "Better coverage and speed",
+    "Calm device behavior",
+    "Scenes that make sense"
+  ],
+  "whatYouCanBuild": [
+    "Wi-Fi mesh, voice scenes, home dashboard"
+  ],
+  "whyNeed": "Enjoy a stable home network and devices that behave.",
+  "categoryId": "smart-home",
+  "categoryTitle": "Smart Home & Network"
+}

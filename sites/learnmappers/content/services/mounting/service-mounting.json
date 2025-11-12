@@ -1,0 +1,57 @@
+{
+  "id": "mounting",
+  "title": "TV & General Mounting",
+  "description": "Mount your TV safely and beautifully. Professional installation that finds studs, ensures level mounting, and hides cables for a clean, professional look.",
+  "purpose": "Safely mount TVs, soundbars, and displays at the perfect height and angle while hiding cables and ensuring structural integrity. Create a clean, professional entertainment setup.",
+  "icon": "\ud83d\udcfa",
+  "category": "mounting",
+  "pricing": "Starting at $75",
+  "features": [
+    "Professional stud finding",
+    "Perfect level installation",
+    "Hidden cable management",
+    "Secure mounting hardware",
+    "Optimal viewing height",
+    "Wall-safe installation",
+    "Clean professional finish",
+    "Multi-device coordination"
+  ],
+  "tools": [
+    "Stud finder",
+    "Level",
+    "Drill",
+    "Cable management",
+    "Wall anchors",
+    "Measuring tools"
+  ],
+  "outcomes": [
+    "Save 3-5 hours of installation time",
+    "Avoid costly wall repairs from mistakes",
+    "Create a clean, professional look",
+    "Maximize viewing comfort with proper height",
+    "Increase room space and organization",
+    "Prevent accidents from improper mounting"
+  ],
+  "whatYouCanBuild": [
+    "TV wall mounts (fixed, tilt, or full-motion)",
+    "Soundbar mounting below or above TV",
+    "Surround sound speaker installation",
+    "Art and picture hanging",
+    "Mirror mounting",
+    "Shelving and floating shelves",
+    "Projector screen mounting",
+    "Security camera installation"
+  ],
+  "whyNeed": "You need this if you want to avoid hitting electrical wires or pipes, if you want it level (not crooked), if you want cables hidden (not a mess), or if you want it secure (not falling off the wall).",
+  "whatYouGet": [
+    "TV mounted at perfect viewing height and angle",
+    "Hidden cables for clean, professional look",
+    "Secure mounting that won't fall",
+    "Proper stud finding (no drywall damage)",
+    "Level installation (no crooked screens)",
+    "Space saved in your room",
+    "Professional finish that looks great"
+  ],
+  "categoryId": "mounting",
+  "categoryTitle": "TV & General Mounting"
+}

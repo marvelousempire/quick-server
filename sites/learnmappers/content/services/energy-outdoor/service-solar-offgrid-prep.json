@@ -1,0 +1,35 @@
+{
+  "id": "solar-offgrid-prep",
+  "title": "Solar & Off-Grid Prep",
+  "description": "Power stations, panels, and field setups.",
+  "purpose": "Reliable power at home, in studio, or on the go.",
+  "icon": "\u2600\ufe0f",
+  "category": "energy-outdoor",
+  "pricing": {
+    "type": "hourly",
+    "rate": 105,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Panel placement and cable runs",
+    "Load planning and safety",
+    "Quick guide for use"
+  ],
+  "tools": [
+    "ups-ecoflow-power-unit-compact",
+    "solar-kit-foldable",
+    "power-meters-voltage-testers-cable-checkers"
+  ],
+  "outcomes": [
+    "Clean, mobile power",
+    "Safe charge cycles",
+    "Clear usage notes"
+  ],
+  "whatYouCanBuild": [
+    "Backup station, field kit, cabin setup"
+  ],
+  "whyNeed": "Keep work going when outlets are not near.",
+  "categoryId": "energy-outdoor",
+  "categoryTitle": "Energy & Outdoors"
+}

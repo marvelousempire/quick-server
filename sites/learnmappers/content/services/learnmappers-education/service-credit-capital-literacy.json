@@ -1,0 +1,34 @@
+{
+  "id": "credit-capital-literacy",
+  "title": "Credit & Capital Literacy",
+  "description": "Understand credit reports, scores, public lending guides, and IUL mechanics (education-only).",
+  "purpose": "Teach systems \u2014 not recommend actions.",
+  "icon": "\ud83d\udcb3",
+  "category": "learnmappers-education",
+  "pricing": {
+    "type": "hourly",
+    "rate": 105,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Credit report anatomy",
+    "Issuer disclosures",
+    "IUL definitions & diagrams"
+  ],
+  "tools": [
+    "learnmapverse-master-table",
+    "source-register"
+  ],
+  "outcomes": [
+    "System literacy",
+    "Safer decisions with pros"
+  ],
+  "whatYouCanBuild": [
+    "Zero-to-Hero study map",
+    "Issuer terms comparison sheet"
+  ],
+  "whyNeed": "To learn how credit and policy cash values are described in public sources.",
+  "categoryId": "learnmappers-education",
+  "categoryTitle": "LearnMappers \u2014 Research & Education"
+}

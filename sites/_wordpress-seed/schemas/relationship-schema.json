@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Relationship Schema",
+  "description": "Schema for mapping relationships between resources, services, persons, and companies",
+  "type": "object",
+  "required": ["from", "to", "type", "purpose"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the relationship",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "from": {
+      "type": "object",
+      "description": "Source entity in the relationship",
+      "required": ["type", "id"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["resource", "service", "person", "company"],
+          "description": "Type of source entity"
+        },
+        "id": {
+          "type": "string",
+          "description": "ID of source entity"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name/title of source entity (for display)"
+        }
+      }
+    },
+    "to": {
+      "type": "object",
+      "description": "Target entity in the relationship",
+      "required": ["type", "id"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["resource", "service", "person", "company"],
+          "description": "Type of target entity"
+        },
+        "id": {
+          "type": "string",
+          "description": "ID of target entity"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name/title of target entity (for display)"
+        }
+      }
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of relationship",
+      "enum": [
+        "enables",
+        "requires",
+        "produces",
+        "uses",
+        "provides",
+        "partners-with",
+        "depends-on",
+        "complements",
+        "replaces",
+        "supports",
+        "manages",
+        "owns",
+        "other"
+      ]
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Why this relationship exists and what it enables",
+      "minLength": 10,
+      "maxLength": 500
+    },
+    "strength": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "optional"],
+      "description": "How important/strong this relationship is",
+      "default": "medium"
+    },
+    "bidirectional": {
+      "type": "boolean",
+      "description": "Whether the relationship works both ways",
+      "default": false
+    },
+    "capabilities": {
+      "type": "array",
+      "description": "What capabilities this relationship enables",
+      "items": {
+        "type": "object",
+        "properties": {
+          "capability": {
+            "type": "string",
+            "description": "What can be done"
+          },
+          "description": {
+            "type": "string",
+            "description": "How this relationship enables it"
+          }
+        },
+        "required": ["capability"]
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "description": "Conditions or requirements for this relationship",
+      "items": {
+        "type": "string",
+        "description": "A condition that must be met"
+      }
+    },
+    "examples": {
+      "type": "array",
+      "description": "Real-world examples of this relationship in action",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scenario": {
+            "type": "string",
+            "description": "Description of the scenario"
+          },
+          "outcome": {
+            "type": "string",
+            "description": "What was accomplished"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "When this happened (YYYY-MM-DD)"
+          }
+        },
+        "required": ["scenario"]
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "inactive", "potential", "archived"],
+      "description": "Current status of the relationship",
+      "default": "active"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about the relationship",
+      "maxLength": 2000
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this relationship was created (ISO 8601)"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this relationship was last updated (ISO 8601)"
+    }
+  }
+}
+

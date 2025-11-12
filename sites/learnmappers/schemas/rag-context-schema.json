@@ -1,0 +1,152 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RAG Context Schema Extension",
+  "description": "RAG (Retrieval-Augmented Generation) context fields that should be added to all entity schemas (Resources, Services, Persons, Companies) to make them immediately learnable and fully encompassing",
+  "type": "object",
+  "properties": {
+    "rag": {
+      "type": "object",
+      "description": "RAG-specific context fields for immediate learnability and comprehensive understanding",
+      "properties": {
+        "semanticContext": {
+          "type": "string",
+          "description": "Rich, comprehensive text description optimized for semantic embeddings. This should contain all key information: what it is, what it does, how it's used, what it produces, and its relationships. This is the primary field for RAG retrieval.",
+          "minLength": 100,
+          "maxLength": 2000
+        },
+        "learnableSummary": {
+          "type": "string",
+          "description": "Immediately learnable summary - a concise but complete description that allows instant understanding. Should be self-contained and comprehensive enough to understand the entity without additional context.",
+          "minLength": 50,
+          "maxLength": 500
+        },
+        "keyConcepts": {
+          "type": "array",
+          "description": "Key concepts, keywords, and terms that help with retrieval and understanding",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 3,
+          "maxItems": 20
+        },
+        "queryPatterns": {
+          "type": "array",
+          "description": "Common query patterns or questions this entity answers",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 3
+        },
+        "relatedEntities": {
+          "type": "array",
+          "description": "IDs of related entities (resources, services, persons, companies) with relationship context",
+          "items": {
+            "type": "object",
+            "properties": {
+              "entityType": {
+                "type": "string",
+                "enum": ["resource", "service", "person", "company"]
+              },
+              "entityId": {
+                "type": "string"
+              },
+              "relationship": {
+                "type": "string",
+                "description": "How they're related (enables, requires, uses, produces, etc.)"
+              },
+              "context": {
+                "type": "string",
+                "description": "Brief context about the relationship"
+              }
+            },
+            "required": ["entityType", "entityId", "relationship"]
+          }
+        },
+        "embeddingText": {
+          "type": "string",
+          "description": "Optimized text for embedding generation. Combines title, purpose, capabilities, outcomes, and key relationships in a structured format.",
+          "minLength": 200,
+          "maxLength": 3000
+        },
+        "retrievalTags": {
+          "type": "array",
+          "description": "Tags optimized for retrieval - include synonyms, alternative names, use cases, and related terms",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 5,
+          "maxItems": 30
+        },
+        "contextualExamples": {
+          "type": "array",
+          "description": "Real-world examples that demonstrate the entity in context",
+          "items": {
+            "type": "object",
+            "properties": {
+              "scenario": {
+                "type": "string",
+                "description": "The scenario or situation"
+              },
+              "application": {
+                "type": "string",
+                "description": "How the entity is applied"
+              },
+              "outcome": {
+                "type": "string",
+                "description": "What was achieved"
+              }
+            },
+            "required": ["scenario", "application", "outcome"]
+          },
+          "minItems": 2
+        },
+        "knowledgeGraph": {
+          "type": "object",
+          "description": "Knowledge graph representation of this entity and its relationships",
+          "properties": {
+            "nodeId": {
+              "type": "string",
+              "description": "Unique node identifier in the knowledge graph"
+            },
+            "nodeType": {
+              "type": "string",
+              "enum": ["resource", "service", "person", "company"]
+            },
+            "edges": {
+              "type": "array",
+              "description": "Connections to other entities in the graph",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "targetNodeId": {
+                    "type": "string"
+                  },
+                  "edgeType": {
+                    "type": "string",
+                    "enum": ["enables", "requires", "produces", "uses", "provides", "partners-with", "depends-on", "complements", "supports"]
+                  },
+                  "weight": {
+                    "type": "number",
+                    "description": "Relationship strength (0-1)"
+                  }
+                },
+                "required": ["targetNodeId", "edgeType"]
+              }
+            }
+          }
+        },
+        "lastEmbeddingUpdate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When embeddings were last generated/updated"
+        },
+        "embeddingVersion": {
+          "type": "string",
+          "description": "Version identifier for the embedding model used"
+        }
+      },
+      "required": ["semanticContext", "learnableSummary", "keyConcepts", "embeddingText"]
+    }
+  }
+}
+

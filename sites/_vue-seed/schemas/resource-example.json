@@ -1,0 +1,77 @@
+{
+  "id": "drill-bosch-gsb18v-21",
+  "title": "Bosch GSB18V-21 Cordless Drill",
+  "meta": {
+    "brand": "Bosch",
+    "model": "GSB18V-21",
+    "serialNumber": "BOS-2023-847392",
+    "purchaseDate": "2023-06-15",
+    "purchasePrice": 89.99,
+    "location": "Tool Shed - Wall Rack A",
+    "condition": "excellent",
+    "tags": ["power-tool", "cordless", "drilling", "driving"]
+  },
+  "category": "tool",
+  "purpose": "Cordless drill/driver for drilling holes and driving screws in wood, metal, and other materials. Ideal for assembly work, mounting, and general construction tasks.",
+  "useCases": [
+    {
+      "scenario": "Furniture assembly - drilling pilot holes and driving screws",
+      "frequency": "weekly"
+    },
+    {
+      "scenario": "TV and monitor mounting - drilling into studs",
+      "frequency": "monthly"
+    },
+    {
+      "scenario": "Smart home device installation - mounting brackets",
+      "frequency": "occasional"
+    }
+  ],
+  "canProduceWith": [
+    {
+      "output": "Assembled furniture",
+      "description": "Enables fast and secure assembly of flat-pack furniture",
+      "requires": ["screws", "wood", "furniture pieces"]
+    },
+    {
+      "output": "Mounted displays",
+      "description": "Creates secure mounting points for TVs and monitors",
+      "requires": ["mounting brackets", "wall anchors", "screws"]
+    },
+    {
+      "output": "Installed smart home devices",
+      "description": "Provides mounting holes for smart switches, sensors, and hubs",
+      "requires": ["mounting hardware", "wire management"]
+    }
+  ],
+  "specifications": {
+    "dimensions": "8.5x3.2x9.1 inches",
+    "weight": "3.1 lbs",
+    "power": "18V Lithium-Ion Battery",
+    "capacity": "1/2 inch chuck, 0-2000 RPM",
+    "compatibility": ["Bosch 18V batteries", "Standard drill bits", "Driver bits"]
+  },
+  "maintenance": {
+    "schedule": "as-needed",
+    "lastMaintenance": "2024-10-01",
+    "nextMaintenance": "2025-04-01",
+    "notes": "Clean chuck regularly, check battery contacts"
+  },
+  "status": "available",
+  "notes": "Excellent drill for most tasks. Battery life is good. Keep spare battery charged.",
+  "links": [
+    {
+      "label": "User Manual",
+      "url": "https://www.boschtools.com/manuals/GSB18V-21",
+      "type": "manual"
+    },
+    {
+      "label": "Product Page",
+      "url": "https://www.boschtools.com/products/GSB18V-21",
+      "type": "website"
+    }
+  ],
+  "createdAt": "2023-06-20T10:30:00Z",
+  "updatedAt": "2024-11-08T14:22:00Z"
+}
+

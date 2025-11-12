@@ -1,0 +1,1432 @@
+{
+  "site": {
+    "name": "LearnMappers",
+    "title": "LearnMappers \u2014 Business Identity Shaper",
+    "description": "Unified LearnMappers platform combining Headquarters Development (HQDEV) and Family Office Administration (FOADMIN) services, resources, and capabilities.",
+    "version": "7.3.0",
+    "author": "LearnMappers",
+    "themeColor": "#0b0c10",
+    "language": "en",
+    "charset": "UTF-8",
+    "tagline": "Headquarters Development \u2022 Family Office Administration \u2014 done right",
+    "mission": "LearnMappers maps your setup so you can keep it working. Unified platform combining HQDEV (homesteading, handyman, carpentry, electrical, gardening) and FOADMIN (family office administration, tech services, systems, education).",
+    "type": "BIS"
+  },
+  "seo": {
+    "metaTitle": "LearnMappers \u2014 Headquarters Development & Homesteading Services",
+    "metaDescription": "LearnMappers: Headquarters Development (homesteading, handyman, carpentry, electrical, gardening) and Family Office Administration (administrative services, tech support, systems management, education, compliance). Complete solutions for home, office, and business operations.",
+    "metaKeywords": "headquarters development, family office administration, homesteading, handyman, carpentry, electrical work, gardening, administrative services, tech support, systems management, compliance, education, home improvement, business operations",
+    "ogTitle": "LearnMappers \u2014 Headquarters Development",
+    "ogDescription": "LearnMappers: Headquarters Development and Family Office Administration. Complete solutions for homesteading, handyman services, administrative work, tech support, systems management, and business operations.",
+    "ogImage": "/og-image.jpg",
+    "ogType": "website",
+    "twitterCard": "summary_large_image",
+    "twitterSite": "@learnmappers",
+    "canonicalUrl": "https://learnmappers.com"
+  },
+  "navigation": {
+    "logo": {
+      "text": "LearnMappers",
+      "showDot": true,
+      "href": "/",
+      "image": null
+    },
+    "links": [
+      {
+        "label": "Home",
+        "href": "index.html",
+        "page": "index",
+        "icon": "\ud83c\udfe0"
+      },
+      {
+        "label": "About",
+        "href": "about.html",
+        "page": "about",
+        "icon": "\ud83d\udcbc"
+      },
+      {
+        "label": "Resources",
+        "href": "inventory.html",
+        "page": "inventory",
+        "icon": "\ud83d\udce6"
+      },
+      {
+        "label": "Services",
+        "href": "service-menu.html",
+        "page": "service-menu",
+        "icon": "\u2699\ufe0f"
+      },
+      {
+        "label": "Settings",
+        "href": "settings.html",
+        "page": "settings",
+        "icon": "\u2699\ufe0f"
+      },
+      {
+        "label": "Server",
+        "href": "/",
+        "page": "server",
+        "icon": "\ud83d\udda5\ufe0f"
+      }
+    ],
+    "sticky": true,
+    "transparent": false,
+    "showMobileMenu": true,
+    "mobileMenuIcon": "\u2630"
+  },
+  "theme": {
+    "mode": "auto",
+    "colors": {
+      "bg": "#0b0c10",
+      "card": "#0f131c",
+      "ink": "#e9f3ff",
+      "muted": "#9bb1c7",
+      "brand": "#7ce3ff",
+      "brand2": "#60ffa8",
+      "accent": "#f59e0b",
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "error": "#ef4444",
+      "info": "#3b82f6",
+      "line": "#1e2636",
+      "shadow": "rgba(3,8,18,.5)",
+      "overlay": "rgba(0,0,0,0.5)"
+    },
+    "colorsLight": {
+      "bg": "#ffffff",
+      "card": "#f8fafc",
+      "ink": "#0f172a",
+      "muted": "#64748b",
+      "brand": "#0ea5e9",
+      "brand2": "#10b981",
+      "accent": "#f59e0b",
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "error": "#ef4444",
+      "info": "#3b82f6",
+      "line": "#e2e8f0",
+      "shadow": "rgba(15,23,42,.1)",
+      "overlay": "rgba(0,0,0,0.3)"
+    },
+    "spacing": {
+      "radius": "16px",
+      "gap": "16px",
+      "wide": "1200px",
+      "sectionPadding": "80px",
+      "cardPadding": "18px"
+    },
+    "typography": {
+      "fontFamily": "Inter, ui-sans-serif, -apple-system, Segoe UI, Roboto, Ubuntu, Arial, sans-serif",
+      "headingFont": "Inter, ui-sans-serif, -apple-system, Segoe UI, Roboto, sans-serif",
+      "bodyFont": "Inter, ui-sans-serif, -apple-system, Segoe UI, Roboto, sans-serif",
+      "monoFont": "ui-monospace, 'SF Mono', Monaco, Consolas, monospace",
+      "baseSize": "16px",
+      "headingScale": 1.25,
+      "lineHeight": 1.6,
+      "letterSpacing": "normal"
+    },
+    "animations": {
+      "enabled": true,
+      "duration": "0.18s",
+      "easing": "ease",
+      "hoverScale": 1.02,
+      "hoverTranslate": "-2px"
+    },
+    "shadows": {
+      "small": "0 2px 4px rgba(3,8,18,.2)",
+      "medium": "0 14px 40px -20px rgba(3,8,18,.5)",
+      "large": "0 14px 44px -28px rgba(3,8,18,.5)",
+      "glow": "0 0 20px rgba(124,227,255,.2)"
+    }
+  },
+  "layout": {
+    "maxWidth": "1440px",
+    "padding": "clamp(18px,4vw,60px)",
+    "heroPadding": {
+      "top": "54px",
+      "bottom": "24px",
+      "sides": "clamp(18px,4vw,60px)"
+    },
+    "containerPadding": "clamp(18px,4vw,60px)",
+    "sectionSpacing": "60px",
+    "gridColumns": {
+      "default": 3,
+      "tablet": 2,
+      "mobile": 1
+    }
+  },
+  "content": {
+    "hero": {
+      "title": "Headquarters Development \u2022 Family Office Administration \u2014 Complete Solutions",
+      "subtitle": "From homesteading to administrative excellence. Systems, services, and support that keep everything working.",
+      "description": "LearnMappers provides comprehensive Headquarters Development (homesteading, handyman, carpentry, electrical, gardening) and Family Office Administration (administrative services, tech support, systems management, compliance, education). We map your setup so you can keep it working\u2014at home, in the office, and across your operations.",
+      "backgroundImage": null,
+      "backgroundVideo": null,
+      "overlay": false,
+      "alignment": "center",
+      "chips": [
+        "Headquarters Development",
+        "Family Office Administration",
+        "Homesteading",
+        "Administrative Services",
+        "Tech Support",
+        "Systems Management",
+        "Compliance & Education"
+      ],
+      "cta": {
+        "primary": {
+          "text": "Book now",
+          "href": "https://www.taskrabbit.com/profile/marvin-h--14?utm_source=learnmappers_site&utm_medium=btn&utm_campaign=v7_0",
+          "style": "brand",
+          "icon": "\ud83d\udcc5",
+          "external": true
+        }
+      },
+      "showScrollIndicator": false
+    },
+    "services": {
+      "categories": [
+        {
+          "id": "assembly",
+          "title": "Furniture Assembly",
+          "description": "Get your furniture built right the first time. Professional assembly that saves you hours of frustration and ensures everything is level, secure, and ready to use.",
+          "icon": "\ud83d\udd28",
+          "services": [
+            {
+              "id": "assembly",
+              "title": "Furniture Assembly",
+              "description": "Get your furniture built right the first time. Professional assembly that saves you hours of frustration and ensures everything is level, secure, and ready to use.",
+              "purpose": "Transform flat-pack boxes into functional, stable furniture that lasts. Save time, avoid mistakes, and ensure proper assembly with professional tools and techniques.",
+              "icon": "\ud83d\udd28",
+              "category": "assembly",
+              "pricing": "Starting at $50",
+              "features": [
+                "Expert assembly techniques",
+                "Proper tool usage & safety",
+                "Level & stable results",
+                "Quality assurance check",
+                "Clean workspace cleanup",
+                "Assembly documentation",
+                "Warranty on workmanship",
+                "Time-saving efficiency"
+              ],
+              "tools": [
+                "Drill",
+                "Screwdrivers",
+                "Level",
+                "Measuring tape",
+                "Impact driver",
+                "Clamps"
+              ],
+              "outcomes": [
+                "Save 2-6 hours of your time per piece",
+                "Avoid costly mistakes and damaged parts",
+                "Get furniture that's actually level and stable",
+                "Extend furniture lifespan with proper assembly",
+                "Reduce stress and frustration",
+                "Have documentation for future moves or repairs"
+              ],
+              "whatYouCanBuild": [
+                "IKEA furniture (beds, desks, cabinets, shelving)",
+                "Office furniture (desks, chairs, filing cabinets)",
+                "Exercise equipment (treadmills, weight benches, racks)",
+                "Outdoor furniture (patio sets, gazebos, pergolas)",
+                "Kitchen islands and carts",
+                "TV stands and entertainment centers",
+                "Wardrobes and closet systems",
+                "Playground equipment and playsets"
+              ],
+              "whyNeed": "You need this if you've ever spent hours on assembly only to find it wobbly, if you lack the right tools, if you want it done right the first time, or if your time is worth more than the frustration of DIY assembly.",
+              "whatYouGet": [
+                "Properly assembled furniture that's level and stable",
+                "Time saved (hours of your life back)",
+                "No stripped screws or broken parts",
+                "Professional finish with proper tooling",
+                "Documentation of assembly for future reference",
+                "Warranty on workmanship",
+                "Peace of mind knowing it's done right"
+              ]
+            },
+            {
+              "id": "furniture-assembly",
+              "title": "Furniture Assembly",
+              "description": "Flat-pack and custom sets built square, level, and secure.",
+              "purpose": "Deliver ready-to-use furniture without stress or rework.",
+              "icon": "\ud83e\uddf0",
+              "category": "assembly",
+              "pricing": {
+                "type": "hourly",
+                "rate": 75,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Prepped parts and fasteners",
+                "Level, square, and stud-safe methods",
+                "Clean work area and tidy finish"
+              ],
+              "tools": [
+                "drill-driver-impact-combo-compact",
+                "circular-7-1-4",
+                "random-orbit-detail-sanders-5",
+                "stud-finder-laser-level-bubble-level",
+                "rubber-mallet"
+              ],
+              "outcomes": [
+                "Strong, clean builds that last",
+                "No missing parts or loose joints",
+                "Ready to use the same day"
+              ],
+              "whatYouCanBuild": [
+                "Beds, frames, dressers, desks, tables, shelving"
+              ],
+              "whyNeed": "Get a pro build with the right tools and a neat finish."
+            },
+            {
+              "id": "mounting-installs",
+              "title": "Mounting & Installations",
+              "description": "TVs, shelves, blinds, and art\u2014mounted clean and secure.",
+              "purpose": "Protect walls and devices with correct anchors and layout.",
+              "icon": "\ud83d\uddbc\ufe0f",
+              "category": "assembly",
+              "pricing": {
+                "type": "hourly",
+                "rate": 85,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Stud/anchor selection by material",
+                "Cable routing options",
+                "Precise leveling and spacing"
+              ],
+              "tools": [
+                "stud-finder-laser-level-bubble-level",
+                "drill-driver-impact-combo-compact"
+              ],
+              "outcomes": [
+                "Safe loads and clean lines",
+                "No wobble or sag",
+                "Damage-minimized fasteners"
+              ],
+              "whatYouCanBuild": [
+                "TV mounts, floating shelves, curtain rods, blinds, art walls"
+              ],
+              "whyNeed": "Achieve a safe, aligned look with correct hardware."
+            }
+          ]
+        },
+        {
+          "id": "mounting",
+          "title": "TV & General Mounting",
+          "description": "Mount your TV safely and beautifully. Professional installation that finds studs, ensures level mounting, and hides cables for a clean, professional look.",
+          "icon": "\ud83d\udcfa",
+          "services": [
+            {
+              "id": "mounting",
+              "title": "TV & General Mounting",
+              "description": "Mount your TV safely and beautifully. Professional installation that finds studs, ensures level mounting, and hides cables for a clean, professional look.",
+              "purpose": "Safely mount TVs, soundbars, and displays at the perfect height and angle while hiding cables and ensuring structural integrity. Create a clean, professional entertainment setup.",
+              "icon": "\ud83d\udcfa",
+              "category": "mounting",
+              "pricing": "Starting at $75",
+              "features": [
+                "Professional stud finding",
+                "Perfect level installation",
+                "Hidden cable management",
+                "Secure mounting hardware",
+                "Optimal viewing height",
+                "Wall-safe installation",
+                "Clean professional finish",
+                "Multi-device coordination"
+              ],
+              "tools": [
+                "Stud finder",
+                "Level",
+                "Drill",
+                "Cable management",
+                "Wall anchors",
+                "Measuring tools"
+              ],
+              "outcomes": [
+                "Save 3-5 hours of installation time",
+                "Avoid costly wall repairs from mistakes",
+                "Create a clean, professional look",
+                "Maximize viewing comfort with proper height",
+                "Increase room space and organization",
+                "Prevent accidents from improper mounting"
+              ],
+              "whatYouCanBuild": [
+                "TV wall mounts (fixed, tilt, or full-motion)",
+                "Soundbar mounting below or above TV",
+                "Surround sound speaker installation",
+                "Art and picture hanging",
+                "Mirror mounting",
+                "Shelving and floating shelves",
+                "Projector screen mounting",
+                "Security camera installation"
+              ],
+              "whyNeed": "You need this if you want to avoid hitting electrical wires or pipes, if you want it level (not crooked), if you want cables hidden (not a mess), or if you want it secure (not falling off the wall).",
+              "whatYouGet": [
+                "TV mounted at perfect viewing height and angle",
+                "Hidden cables for clean, professional look",
+                "Secure mounting that won't fall",
+                "Proper stud finding (no drywall damage)",
+                "Level installation (no crooked screens)",
+                "Space saved in your room",
+                "Professional finish that looks great"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "apple-linux",
+          "title": "Apple & Linux Systems",
+          "description": "Get your Mac and Linux systems running smoothly with automated backups, smart workflows, and optimized configurations that save you time every day.",
+          "icon": "\ud83d\udcbb",
+          "services": [
+            {
+              "id": "apple-linux",
+              "title": "Apple & Linux Systems",
+              "description": "Get your Mac and Linux systems running smoothly with automated backups, smart workflows, and optimized configurations that save you time every day.",
+              "purpose": "Set up, optimize, and maintain Apple and Linux systems with automated backups, smart workflows, and configurations that make your tech work for you instead of against you.",
+              "icon": "\ud83d\udcbb",
+              "category": "apple-linux",
+              "pricing": "Starting at $100/hr",
+              "features": [
+                "System optimization & tuning",
+                "Automated backup solutions",
+                "Time-saving automation scripts",
+                "Network & VPN configuration",
+                "Security hardening & firewalls",
+                "Development environment setup",
+                "Remote access & SSH setup",
+                "Complete system documentation"
+              ],
+              "tools": [
+                "Terminal",
+                "SSH",
+                "Backup tools",
+                "Network tools",
+                "Automation scripts",
+                "Monitoring tools"
+              ],
+              "outcomes": [
+                "Save 5-10 hours per week with automation",
+                "Protect data with automated backups",
+                "Increase system performance by 20-40%",
+                "Reduce tech support headaches",
+                "Enable remote work capabilities",
+                "Build professional development environments",
+                "Achieve enterprise-grade security"
+              ],
+              "whatYouCanBuild": [
+                "Automated Time Machine and backup systems",
+                "macOS optimization and performance tuning",
+                "Linux server configurations (web, database, apps)",
+                "Automation scripts (backups, file organization, tasks)",
+                "Network configurations (VPN, file sharing, remote access)",
+                "Development environments and toolchains",
+                "Security hardening and firewall setup",
+                "Docker and container orchestration"
+              ],
+              "whyNeed": "You need this if you're tired of manual backups, if you want automation that saves hours weekly, if you need systems that just work, or if you want professional-grade setup without the learning curve.",
+              "whatYouGet": [
+                "Automated backup systems that protect your data",
+                "Optimized systems that run faster and smoother",
+                "Automation workflows that save hours weekly",
+                "Professional configuration and security",
+                "Documentation of your entire setup",
+                "Ongoing support and maintenance guidance",
+                "Peace of mind knowing your data is safe"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ai-rag",
+          "title": "AI & RAG",
+          "description": "Build private AI systems that understand your data. Deploy RAG (Retrieval-Augmented Generation) systems that give you AI assistants trained on your own documents, knowledge base, and information.",
+          "icon": "\ud83e\udd16",
+          "services": [
+            {
+              "id": "ai-rag",
+              "title": "AI & RAG",
+              "description": "Build private AI systems that understand your data. Deploy RAG (Retrieval-Augmented Generation) systems that give you AI assistants trained on your own documents, knowledge base, and information.",
+              "purpose": "Create private, secure AI systems that understand your specific data and knowledge. Build RAG systems that let you query your documents, get intelligent answers, and automate knowledge work without sending data to third parties.",
+              "icon": "\ud83e\udd16",
+              "category": "ai-rag",
+              "pricing": "Starting at $150/hr",
+              "features": [
+                "Private AI server deployment",
+                "RAG system architecture",
+                "Vector database optimization",
+                "Document processing automation",
+                "Custom AI workflow design",
+                "Knowledge base integration",
+                "API & endpoint setup",
+                "Model fine-tuning & deployment"
+              ],
+              "tools": [
+                "Docker",
+                "Python",
+                "LLM APIs",
+                "Vector DBs",
+                "Embedding models",
+                "API frameworks"
+              ],
+              "outcomes": [
+                "Save 10-20 hours per week on document research",
+                "Get instant answers from thousands of documents",
+                "Keep sensitive data private (no third-party AI)",
+                "Automate knowledge work and research",
+                "Build competitive advantage with AI",
+                "Create custom AI solutions for your business",
+                "Reduce costs vs. API-based AI services"
+              ],
+              "whatYouCanBuild": [
+                "Private LLM servers (Ollama, vLLM, or cloud)",
+                "RAG systems with vector databases (Pinecone, Weaviate, Qdrant)",
+                "Document Q&A systems for your knowledge base",
+                "AI-powered search across your documents",
+                "Automated document summarization and analysis",
+                "Custom AI chatbots for your business",
+                "Knowledge graph systems",
+                "AI automation workflows"
+              ],
+              "whyNeed": "You need this if you want AI that knows YOUR business, if you need private AI (no data leaves your control), if you want to query thousands of documents instantly, or if you want to automate knowledge work with AI trained on your data.",
+              "whatYouGet": [
+                "Private AI server that keeps your data secure",
+                "RAG system that understands your documents",
+                "Ability to query thousands of files instantly",
+                "AI assistant trained on YOUR knowledge base",
+                "Automated document processing and insights",
+                "Custom AI workflows for your business",
+                "No data sent to third-party AI services"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "solar",
+          "title": "Solar & Off\u2011Grid",
+          "description": "Power your life with clean energy. Build solar systems, battery storage, and off-grid solutions that reduce bills, increase independence, and prepare you for anything.",
+          "icon": "\u2600\ufe0f",
+          "services": [
+            {
+              "id": "solar",
+              "title": "Solar & Off\u2011Grid",
+              "description": "Power your life with clean energy. Build solar systems, battery storage, and off-grid solutions that reduce bills, increase independence, and prepare you for anything.",
+              "purpose": "Create sustainable power systems that reduce energy costs, increase independence, and provide backup power. Build solar installations, battery storage, and off-grid solutions that work for your lifestyle.",
+              "icon": "\u2600\ufe0f",
+              "category": "solar",
+              "pricing": "Starting at $200/hr",
+              "features": [
+                "Solar panel system design",
+                "Battery storage integration",
+                "Off-grid power solutions",
+                "Grid-tied with backup",
+                "Energy monitoring systems",
+                "Mobile & RV installations",
+                "Emergency backup power",
+                "Code-compliant installation"
+              ],
+              "tools": [
+                "Solar panels",
+                "Batteries",
+                "Inverters",
+                "Monitoring",
+                "Charge controllers",
+                "Wiring and safety equipment"
+              ],
+              "outcomes": [
+                "Save $100-500/month on electricity bills",
+                "Eliminate power outages with battery backup",
+                "Achieve energy independence",
+                "Increase property value by 3-5%",
+                "Reduce carbon footprint significantly",
+                "Enable off-grid living or remote work",
+                "Prepare for emergencies and disasters"
+              ],
+              "whatYouCanBuild": [
+                "Grid-tied solar systems with battery backup",
+                "Off-grid solar power systems",
+                "RV and van solar installations",
+                "Portable solar generators",
+                "Battery storage systems (Powerwall alternatives)",
+                "Mobile internet and Starlink setups",
+                "Energy monitoring and management systems",
+                "Hybrid systems (solar + generator backup)"
+              ],
+              "whyNeed": "You need this if you want to slash energy bills, if you want backup power during outages, if you want energy independence, if you're going off-grid, or if you want to reduce your carbon footprint while saving money.",
+              "whatYouGet": [
+                "Reduced or eliminated electricity bills",
+                "Backup power during outages (never lose power)",
+                "Energy independence and self-sufficiency",
+                "Mobile power for RVs, vans, or remote locations",
+                "Clean energy that helps the planet",
+                "Increased property value",
+                "Peace of mind during emergencies",
+                "Off-grid capability for remote living"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "garden",
+          "title": "Garden & Eco Builds",
+          "description": "Transform your space into a thriving, sustainable ecosystem. Build raised beds, compost systems, ponds, and irrigation that work together to create a self-sustaining garden paradise.",
+          "icon": "\ud83c\udf31",
+          "services": [
+            {
+              "id": "garden",
+              "title": "Garden & Eco Builds",
+              "description": "Transform your space into a thriving, sustainable ecosystem. Build raised beds, compost systems, ponds, and irrigation that work together to create a self-sustaining garden paradise.",
+              "purpose": "Create sustainable, productive garden spaces that reduce waste, grow food, and enhance your quality of life through eco-friendly design and smart water management.",
+              "icon": "\ud83c\udf31",
+              "category": "garden",
+              "pricing": "Starting at $80/hr",
+              "features": [
+                "Raised bed construction",
+                "Compost system setup",
+                "Water-efficient irrigation",
+                "Eco-friendly materials",
+                "Soil preparation & amendment",
+                "Plant selection guidance",
+                "Sustainable design",
+                "Maintenance documentation"
+              ],
+              "tools": [
+                "Garden tools",
+                "Irrigation supplies",
+                "Compost bins",
+                "Soil amendments",
+                "Measuring tools"
+              ],
+              "outcomes": [
+                "Save $50-200/month on groceries with homegrown produce",
+                "Reduce waste by 30-50% through composting",
+                "Increase property value by 5-15% with landscaping",
+                "Save 20-40% on water bills with efficient irrigation",
+                "Improve mental health through gardening activities",
+                "Create a sustainable food source for your family",
+                "Build skills in permaculture and sustainable living"
+              ],
+              "whatYouCanBuild": [
+                "Raised garden beds for vegetables, herbs, and flowers",
+                "Compost systems that turn kitchen scraps into rich soil",
+                "Koi ponds or water features for relaxation",
+                "Drip irrigation systems that save water and time",
+                "Vertical gardens for small spaces",
+                "Greenhouse or cold frame for year-round growing",
+                "Rainwater collection systems",
+                "Permaculture food forests"
+              ],
+              "whyNeed": "You need this if you want fresh produce, reduced grocery bills, a beautiful outdoor space, waste reduction through composting, and a sustainable lifestyle that benefits both you and the environment.",
+              "whatYouGet": [
+                "Fresh vegetables and herbs year-round",
+                "Reduced grocery bills and food waste",
+                "Beautiful, productive outdoor space",
+                "Compost system that turns waste into soil",
+                "Water-efficient irrigation that saves money",
+                "Increased property value",
+                "Stress relief and connection to nature",
+                "Sustainable lifestyle that helps the planet"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "office-tech",
+          "title": "Office & Computer",
+          "description": "Apple & Linux setups, data care, and smooth day-to-day ops.",
+          "icon": "\ud83d\udcbb",
+          "services": [
+            {
+              "id": "apple-linux-setup",
+              "title": "Apple & Linux Setup",
+              "description": "Clean installs, updates, backup plans, and secure logins.",
+              "purpose": "Give your home office stable, safe, and fast systems.",
+              "icon": "\ud83c\udf4e",
+              "category": "office-tech",
+              "pricing": {
+                "type": "hourly",
+                "rate": 95,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Accounts, keys, and backups",
+                "File and photo structure that makes sense",
+                "Peripheral and printer setup"
+              ],
+              "tools": [
+                "network-system-mesh-router-kit-smart",
+                "ups-ecoflow-power-unit-compact",
+                "power-meters-voltage-testers-cable-checkers"
+              ],
+              "outcomes": [
+                "Stable daily workflow",
+                "Safer data and faster find",
+                "Clear steps for upkeep"
+              ],
+              "whatYouCanBuild": [
+                "Home office suite, shared drives, backup plan"
+              ],
+              "whyNeed": "Start with a clean, tested setup that lasts."
+            },
+            {
+              "id": "data-hygiene-org",
+              "title": "Data Hygiene & Organization",
+              "description": "Declutter, de-duplicate, and map storage the simple way.",
+              "purpose": "Make files easy to find and safe to keep.",
+              "icon": "\ud83d\uddc2\ufe0f",
+              "category": "office-tech",
+              "pricing": {
+                "type": "hourly",
+                "rate": 95,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Folder maps and naming rules",
+                "Backups with restore checks",
+                "Light training as we go"
+              ],
+              "tools": [
+                "network-system-mesh-router-kit-smart",
+                "ups-ecoflow-power-unit-compact"
+              ],
+              "outcomes": [
+                "Faster work with less drift",
+                "Safer, cleaner storage",
+                "Simple habits that stick"
+              ],
+              "whatYouCanBuild": [
+                "Shared team drive, photo library, docs hub"
+              ],
+              "whyNeed": "Save time every day with clear structure."
+            }
+          ]
+        },
+        {
+          "id": "ai-systems",
+          "title": "AI & Private Servers",
+          "description": "On-prem/private AI and retrieval (RAG) for search and workflows.",
+          "icon": "\ud83e\udd16",
+          "services": [
+            {
+              "id": "private-ai-rag",
+              "title": "Private AI + RAG",
+              "description": "Local servers, safe data, and fast search over your files.",
+              "purpose": "Bring AI close to your data with control and privacy.",
+              "icon": "\ud83e\udde0",
+              "category": "ai-systems",
+              "pricing": {
+                "type": "hourly",
+                "rate": 125,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "RAG pipelines and embeddings",
+                "Indexing docs and media",
+                "Simple admin panel and notes"
+              ],
+              "tools": [
+                "network-system-mesh-router-kit-smart",
+                "ups-ecoflow-power-unit-compact",
+                "snapmaker-3d-printer-fdm-laser-cnc"
+              ],
+              "outcomes": [
+                "Smart find across docs",
+                "Private, local control",
+                "Clear runbooks for upkeep"
+              ],
+              "whatYouCanBuild": [
+                "Search portal, chat over docs, automation hooks"
+              ],
+              "whyNeed": "Own your stack and keep data close."
+            },
+            {
+              "id": "web-apps-private-servers",
+              "title": "Web Apps & Private Servers",
+              "description": "Lightweight sites and tools with private backends.",
+              "purpose": "Publish fast and keep control of data and uptime.",
+              "icon": "\ud83c\udf10",
+              "category": "ai-systems",
+              "pricing": {
+                "type": "hourly",
+                "rate": 115,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Static/PWA builds",
+                "DB setup and backups",
+                "Docs and handoff"
+              ],
+              "tools": [
+                "network-system-mesh-router-kit-smart",
+                "ups-ecoflow-power-unit-compact"
+              ],
+              "outcomes": [
+                "Simple, fast deploys",
+                "Private data paths",
+                "Easy care and updates"
+              ],
+              "whatYouCanBuild": [
+                "Client portals, task tools, knowledge sites"
+              ],
+              "whyNeed": "Ship tools that match your exact needs."
+            }
+          ]
+        },
+        {
+          "id": "smart-home",
+          "title": "Smart Home & Network",
+          "description": "Wi-Fi mesh, hubs, scenes, and helpful automations.",
+          "icon": "\ud83c\udfe1",
+          "services": [
+            {
+              "id": "smart-home-setup",
+              "title": "Smart Home Setup",
+              "description": "Mesh Wi-Fi, hubs, and scenes aligned with your space.",
+              "purpose": "Stable network and helpful automations for daily use.",
+              "icon": "\ud83d\udcf6",
+              "category": "smart-home",
+              "pricing": {
+                "type": "hourly",
+                "rate": 95,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Router and AP placement",
+                "Safe device onboarding",
+                "Scene design and quick notes"
+              ],
+              "tools": [
+                "network-system-mesh-router-kit-smart",
+                "power-meters-voltage-testers-cable-checkers"
+              ],
+              "outcomes": [
+                "Better coverage and speed",
+                "Calm device behavior",
+                "Scenes that make sense"
+              ],
+              "whatYouCanBuild": [
+                "Wi-Fi mesh, voice scenes, home dashboard"
+              ],
+              "whyNeed": "Enjoy a stable home network and devices that behave."
+            }
+          ]
+        },
+        {
+          "id": "energy-outdoor",
+          "title": "Energy & Outdoors",
+          "description": "Solar prep, mobile power, and sustainable garden systems.",
+          "icon": "\ud83d\udd0b",
+          "services": [
+            {
+              "id": "solar-offgrid-prep",
+              "title": "Solar & Off-Grid Prep",
+              "description": "Power stations, panels, and field setups.",
+              "purpose": "Reliable power at home, in studio, or on the go.",
+              "icon": "\u2600\ufe0f",
+              "category": "energy-outdoor",
+              "pricing": {
+                "type": "hourly",
+                "rate": 105,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Panel placement and cable runs",
+                "Load planning and safety",
+                "Quick guide for use"
+              ],
+              "tools": [
+                "ups-ecoflow-power-unit-compact",
+                "solar-kit-foldable",
+                "power-meters-voltage-testers-cable-checkers"
+              ],
+              "outcomes": [
+                "Clean, mobile power",
+                "Safe charge cycles",
+                "Clear usage notes"
+              ],
+              "whatYouCanBuild": [
+                "Backup station, field kit, cabin setup"
+              ],
+              "whyNeed": "Keep work going when outlets are not near."
+            },
+            {
+              "id": "gardens-eco-builds",
+              "title": "Gardens & Eco Builds",
+              "description": "Beds, compost, ponds, and drip irrigation.",
+              "purpose": "Low-care systems that stay healthy.",
+              "icon": "\ud83c\udf31",
+              "category": "energy-outdoor",
+              "pricing": {
+                "type": "hourly",
+                "rate": 85,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Soil prep and layout",
+                "Self-watering and drip",
+                "Simple care notes"
+              ],
+              "tools": [
+                "compost-bins",
+                "planters-self-watering",
+                "drip-systems-rain-barrels"
+              ],
+              "outcomes": [
+                "Steady growth with less work",
+                "Cleaner beds and paths",
+                "Clear plan for upkeep"
+              ],
+              "whatYouCanBuild": [
+                "Kitchen beds, pollinator zones, microgreens"
+              ],
+              "whyNeed": "Grow more with less daily work."
+            }
+          ]
+        },
+        {
+          "id": "media",
+          "title": "Photo & Media",
+          "description": "Clean, sharp images for listings, spaces, and products.",
+          "icon": "\ud83d\udcf7",
+          "services": [
+            {
+              "id": "real-estate-photo",
+              "title": "Real Estate & Space Photography",
+              "description": "Wide, bright, and true-to-life images of your space.",
+              "purpose": "Help listings and docs look their best.",
+              "icon": "\ud83c\udfe0",
+              "category": "media",
+              "pricing": {
+                "type": "fixed",
+                "rate": 250,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "On-site plan and staging tips",
+                "Pro lighting and lens kit",
+                "Prompt edits and delivery"
+              ],
+              "tools": [
+                "photography-equipment-4k-cinema-camera-dslr-kit",
+                "meters-tripods-led-panels-light"
+              ],
+              "outcomes": [
+                "Crisp photos that show value",
+                "Consistent color and light",
+                "Fast turnaround"
+              ],
+              "whatYouCanBuild": [
+                "Listing sets, before/after docs, product shots"
+              ],
+              "whyNeed": "Share your space with clarity and trust."
+            }
+          ]
+        },
+        {
+          "id": "learnmappers-research",
+          "title": "LearnMappers Research & Systems",
+          "description": "Educational sessions, workflow mapping, and system reports.",
+          "icon": "\ud83e\udded",
+          "services": [
+            {
+              "id": "learnmappers-sessions",
+              "title": "Research & Systems Support",
+              "description": "Map how your home, tools, and tech work together.",
+              "purpose": "Teach and document your systems for easy upkeep.",
+              "icon": "\ud83d\udcd8",
+              "category": "learnmappers-research",
+              "pricing": {
+                "type": "hourly",
+                "rate": 65,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Light training while we work",
+                "Diagrams and notes",
+                "Optional one-page system report (+$20\u2013$50)"
+              ],
+              "tools": [
+                "snapmaker-3d-printer-fdm-laser-cnc",
+                "network-system-mesh-router-kit-smart",
+                "ups-ecoflow-power-unit-compact"
+              ],
+              "outcomes": [
+                "Clarity on how things run",
+                "Simple steps you can keep",
+                "Better choices next time"
+              ],
+              "whatYouCanBuild": [
+                "System maps, quick SOPs, asset lists"
+              ],
+              "whyNeed": "Learn and improve while tasks get done."
+            }
+          ]
+        },
+        {
+          "id": "learnmappers-education",
+          "title": "LearnMappers \u2014 Research & Education",
+          "description": "Educational research, mapping, and documentation (no advice, no drafting, no representation).",
+          "icon": "\ud83e\udded",
+          "services": [
+            {
+              "id": "legal-compliance-literacy",
+              "title": "Legal & Compliance Literacy",
+              "description": "Learn what statutes and rules say, side-by-side with definitions and plain-language maps.",
+              "purpose": "Teach the boundary between education and advice and show verified sources.",
+              "icon": "\u2696\ufe0f",
+              "category": "learnmappers-education",
+              "pricing": {
+                "type": "hourly",
+                "rate": 95,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "UPL boundary explainer",
+                "Pro Se / Pro Bono literacy",
+                "Communications Policy practice"
+              ],
+              "tools": [
+                "learnmapverse-master-table",
+                "boundary-matrix",
+                "source-register"
+              ],
+              "outcomes": [
+                "Clarity on process",
+                "Verified citations",
+                "Visual maps"
+              ],
+              "whatYouCanBuild": [
+                "Personal study binder",
+                "Court/agency process map",
+                "Glossary of terms"
+              ],
+              "whyNeed": "To understand the system safely before speaking with licensed counsel."
+            },
+            {
+              "id": "ucc-articles-3-and-9-studies",
+              "title": "UCC Articles 3 & 9 Studies",
+              "description": "Educational study of negotiable instruments and secured transactions.",
+              "purpose": "Show elements, timelines, and interactions of Articles 3 and 9 with diagrams.",
+              "icon": "\ud83d\udcdc",
+              "category": "learnmappers-education",
+              "pricing": {
+                "type": "hourly",
+                "rate": 115,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Negotiability checklist",
+                "Attachment/Perfection flow",
+                "Priority ladder"
+              ],
+              "tools": [
+                "learnmapverse-master-table",
+                "source-register"
+              ],
+              "outcomes": [
+                "Correct article mapping",
+                "Risk awareness",
+                "Better questions for counsel"
+              ],
+              "whatYouCanBuild": [
+                "Instrument elements grid",
+                "Filing-name accuracy checklist"
+              ],
+              "whyNeed": "To classify 'paper' and collateral correctly in learning contexts."
+            },
+            {
+              "id": "credit-capital-literacy",
+              "title": "Credit & Capital Literacy",
+              "description": "Understand credit reports, scores, public lending guides, and IUL mechanics (education-only).",
+              "purpose": "Teach systems \u2014 not recommend actions.",
+              "icon": "\ud83d\udcb3",
+              "category": "learnmappers-education",
+              "pricing": {
+                "type": "hourly",
+                "rate": 105,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Credit report anatomy",
+                "Issuer disclosures",
+                "IUL definitions & diagrams"
+              ],
+              "tools": [
+                "learnmapverse-master-table",
+                "source-register"
+              ],
+              "outcomes": [
+                "System literacy",
+                "Safer decisions with pros"
+              ],
+              "whatYouCanBuild": [
+                "Zero-to-Hero study map",
+                "Issuer terms comparison sheet"
+              ],
+              "whyNeed": "To learn how credit and policy cash values are described in public sources."
+            },
+            {
+              "id": "privacy-entity-jurisdiction-literacy",
+              "title": "Privacy, Entities & Jurisdictions (Education)",
+              "description": "Why privacy matters, public vs. private capacity, and how jurisdictions differ (education-only).",
+              "purpose": "Teach concepts used in family-office-style literacy.",
+              "icon": "\ud83d\udee1\ufe0f",
+              "category": "learnmappers-education",
+              "pricing": {
+                "type": "hourly",
+                "rate": 125,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Jurisdiction overview",
+                "Privacy considerations memo",
+                "Entity comparison"
+              ],
+              "tools": [
+                "learnmapverse-master-table",
+                "boundary-matrix",
+                "source-register"
+              ],
+              "outcomes": [
+                "Privacy literacy",
+                "Org clarity"
+              ],
+              "whatYouCanBuild": [
+                "Family-office learning syllabus",
+                "Public-vs-private matrix"
+              ],
+              "whyNeed": "To understand design choices before speaking with licensed counsel."
+            },
+            {
+              "id": "enforcement-chain-mapping",
+              "title": "Enforcement Chain & Governance Mapping",
+              "description": "Map regulators, license ladders, appeals, and oversight channels.",
+              "purpose": "Know who regulates whom and where review paths run (education-only).",
+              "icon": "\ud83c\udfdb\ufe0f",
+              "category": "learnmappers-education",
+              "pricing": {
+                "type": "hourly",
+                "rate": 110,
+                "minimum": 1,
+                "currency": "USD"
+              },
+              "features": [
+                "Local\u2192State\u2192Federal ladder",
+                "Appeal overview"
+              ],
+              "tools": [
+                "learnmapverse-master-table",
+                "source-register"
+              ],
+              "outcomes": [
+                "Clear escalation paths"
+              ],
+              "whatYouCanBuild": [
+                "Governance ladder diagram",
+                "Contacts index"
+              ],
+              "whyNeed": "To orient before engaging any process."
+            }
+          ]
+        }
+      ],
+      "showPricing": true,
+      "showDuration": true,
+      "showTools": true
+    },
+    "features": [],
+    "sections": [],
+    "testimonials": [],
+    "stats": [],
+    "faq": [
+      {
+        "question": "What areas do you serve?",
+        "answer": "We serve the San Francisco Bay Area, including Oakland, Berkeley, and surrounding areas."
+      },
+      {
+        "question": "How do I book a service?",
+        "answer": "Book through TaskRabbit using the 'Book now' button, or contact us directly."
+      },
+      {
+        "question": "Do you provide documentation?",
+        "answer": "Yes! All work is documented in the LearnMappers system for future reference."
+      },
+      {
+        "question": "What tools do you bring?",
+        "answer": "We bring all necessary tools for the job. You don't need to provide anything."
+      },
+      {
+        "question": "Do you offer warranties?",
+        "answer": "Yes, we stand behind our work. Contact us if you have any issues."
+      }
+    ],
+    "disclaimers": [
+      {
+        "id": "learnmappers-non-practice",
+        "text": "LearnMappers provides educational research and logistical documentation only. We do not provide legal, tax, or financial advice; we do not draft, file, or represent. All service names are written in full for clarity; abbreviations are not used in client-facing materials."
+      }
+    ]
+  },
+  "contact": {
+    "enabled": true,
+    "email": "contact@learnmappers.com",
+    "phone": null,
+    "address": {
+      "street": null,
+      "city": "San Francisco Bay Area",
+      "state": "CA",
+      "zip": null,
+      "country": "United States"
+    },
+    "form": {
+      "enabled": false,
+      "fields": [],
+      "submitText": "Send Message",
+      "successMessage": "Thank you! We'll get back to you soon.",
+      "errorMessage": "Sorry, there was an error. Please try again."
+    },
+    "map": {
+      "enabled": false,
+      "embedUrl": null,
+      "latitude": null,
+      "longitude": null
+    },
+    "hours": {
+      "enabled": true,
+      "timezone": "America/Los_Angeles",
+      "schedule": [
+        {
+          "day": "Monday - Friday",
+          "hours": "9:00 AM - 6:00 PM"
+        },
+        {
+          "day": "Saturday",
+          "hours": "10:00 AM - 4:00 PM"
+        },
+        {
+          "day": "Sunday",
+          "hours": "By appointment"
+        }
+      ]
+    },
+    "booking": {
+      "enabled": true,
+      "primaryLink": "https://www.taskrabbit.com/profile/marvin-h--14",
+      "primaryText": "Book on TaskRabbit",
+      "secondaryLink": null,
+      "secondaryText": null
+    }
+  },
+  "inventory": {
+    "enabled": true,
+    "categories": [
+      "Tools",
+      "Equipment",
+      "Materials",
+      "Software",
+      "Hardware"
+    ],
+    "fields": {
+      "name": true,
+      "type": true,
+      "power": true,
+      "state": true,
+      "spot": true,
+      "notes": true,
+      "created_at": true,
+      "updated_at": true
+    },
+    "import": {
+      "enabled": true,
+      "vendors": [
+        "Amazon",
+        "eBay",
+        "Home Depot",
+        "Lowe's",
+        "B&H"
+      ],
+      "formats": [
+        "CSV",
+        "JSON",
+        "ZIP"
+      ]
+    }
+  },
+  "relationships": {
+    "enabled": true,
+    "types": [
+      "uses",
+      "produces",
+      "requires",
+      "complements",
+      "replaces"
+    ],
+    "entities": [
+      "resource",
+      "service",
+      "person",
+      "company"
+    ],
+    "visualization": {
+      "enabled": true,
+      "layout": "force",
+      "showLabels": true,
+      "showWeights": true
+    }
+  },
+  "documentation": {
+    "enabled": true,
+    "sections": [
+      {
+        "title": "Getting Started",
+        "pages": [
+          {
+            "title": "Overview",
+            "href": "/docs.html"
+          },
+          {
+            "title": "Quick Start",
+            "href": "/docs.html#quick-start"
+          }
+        ]
+      },
+      {
+        "title": "Configuration",
+        "pages": [
+          {
+            "title": "Config System",
+            "href": "/docs-config.html"
+          },
+          {
+            "title": "Schemas",
+            "href": "/docs-schemas.html"
+          }
+        ]
+      },
+      {
+        "title": "Features",
+        "pages": [
+          {
+            "title": "Vendor Import",
+            "href": "/docs-vendor-import.html"
+          },
+          {
+            "title": "Relationship Mapping",
+            "href": "/docs-relationship-mapping.html"
+          }
+        ]
+      },
+      {
+        "title": "Deployment",
+        "pages": [
+          {
+            "title": "Deployment Options",
+            "href": "/docs-deployment-options.html"
+          },
+          {
+            "title": "Docker",
+            "href": "/docs-docker.html"
+          },
+          {
+            "title": "Server Guide",
+            "href": "/docs-server.html"
+          }
+        ]
+      }
+    ]
+  },
+  "analytics": {
+    "enabled": false,
+    "googleAnalytics": {
+      "trackingId": null
+    },
+    "facebookPixel": {
+      "pixelId": null
+    },
+    "custom": {
+      "scripts": []
+    }
+  },
+  "pwa": {
+    "enabled": true,
+    "manifest": "/manifest.webmanifest",
+    "serviceWorker": "/service-worker.js",
+    "offlinePage": "/index.html",
+    "cacheName": "learnmappers-v7",
+    "installPrompt": true
+  },
+  "api": {
+    "baseUrl": "",
+    "enabled": true,
+    "endpoints": {
+      "inventory": "/api/inventory",
+      "stats": "/api/stats",
+      "sites": "/api/sites",
+      "health": "/api/health"
+    },
+    "authentication": {
+      "enabled": false,
+      "method": "none"
+    }
+  },
+  "integrations": {
+    "taskrabbit": {
+      "enabled": true,
+      "profileUrl": "https://www.taskrabbit.com/profile/marvin-h--14",
+      "utmSource": "learnmappers_site",
+      "utmMedium": "btn",
+      "utmCampaign": "v7_0"
+    },
+    "mailchimp": {
+      "enabled": false,
+      "listId": null,
+      "apiKey": null
+    },
+    "stripe": {
+      "enabled": false,
+      "publishableKey": null
+    }
+  },
+  "schemas": {
+    "resource": {
+      "path": "/schemas/resource-schema.json",
+      "example": "/schemas/resource-example.json"
+    },
+    "service": {
+      "path": "/schemas/service-schema.json",
+      "example": "/schemas/service-example.json"
+    },
+    "person": {
+      "path": "/schemas/person-schema.json",
+      "example": "/schemas/person-example.json"
+    },
+    "company": {
+      "path": "/schemas/company-schema.json",
+      "example": "/schemas/company-example.json"
+    },
+    "relationship": {
+      "path": "/schemas/relationship-schema.json",
+      "example": "/schemas/relationship-example.json"
+    },
+    "validator": "/schemas/validator.js"
+  }
+}

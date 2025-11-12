@@ -1,0 +1,82 @@
+/*
+Theme Name:        BookCard
+Text Domain:       bookcard
+Version:           4.9.8
+Description:       3D Folded vCard WordPress Theme
+Requires at least: 6.0
+Requires PHP:      7.0
+Tags:              portfolio
+Author:            Pixelwars
+Author URI:        https://themeforest.net/user/pixelwars
+Theme URI:         https://themeforest.net/user/pixelwars/portfolio
+License:           ThemeForest License
+License URI:       https://themeforest.net/licenses
+Domain Path:       /languages
+*/
+
+
+/*
+    Do not remove any of the commented text above as it is used by the theme for proper function!
+*/
+
+
+/* WordPress Core -------------------------------------------------------------- */
+
+/* CONTENT ALIGNMENT */
+.aligncenter,
+.alignnone,
+.alignright,
+.alignleft {
+    display: block;
+	margin: 1.6em auto;
+	clear: both;
+}
+
+.wp-caption {
+	color:#555;
+}
+
+.wp-caption img {
+	border: 0 none;
+	height: auto;
+	margin: 0;
+	padding: 0;
+}
+
+.wp-caption-text {
+    font-size: 14px;
+	margin: 0;
+	padding: .6em .1em 0;
+	color: #C0C0C0;
+}
+
+.wp-caption.aligncenter { 
+	text-align: center; 
+}
+
+/* TABLETS */
+@media screen and (min-width: 768px) {
+	.alignnone {
+		margin: 3em 0; 
+	}
+	
+	.aligncenter {
+		margin: 2.2em auto; 
+	}
+	
+	.alignleft,
+	.alignright {
+		max-width: 50%; 
+	}
+	
+	.alignright {
+		float:right;
+		margin: .4em 0 1em 2em;
+	}
+	
+	.alignleft {
+		float: left;
+		margin: .4em 2em 1em 0;
+	}
+}
+

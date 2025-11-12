@@ -1,0 +1,35 @@
+{
+  "id": "privacy-entity-jurisdiction-literacy",
+  "title": "Privacy, Entities & Jurisdictions (Education)",
+  "description": "Why privacy matters, public vs. private capacity, and how jurisdictions differ (education-only).",
+  "purpose": "Teach concepts used in family-office-style literacy.",
+  "icon": "\ud83d\udee1\ufe0f",
+  "category": "learnmappers-education",
+  "pricing": {
+    "type": "hourly",
+    "rate": 125,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Jurisdiction overview",
+    "Privacy considerations memo",
+    "Entity comparison"
+  ],
+  "tools": [
+    "learnmapverse-master-table",
+    "boundary-matrix",
+    "source-register"
+  ],
+  "outcomes": [
+    "Privacy literacy",
+    "Org clarity"
+  ],
+  "whatYouCanBuild": [
+    "Family-office learning syllabus",
+    "Public-vs-private matrix"
+  ],
+  "whyNeed": "To understand design choices before speaking with licensed counsel.",
+  "categoryId": "learnmappers-education",
+  "categoryTitle": "LearnMappers \u2014 Research & Education"
+}

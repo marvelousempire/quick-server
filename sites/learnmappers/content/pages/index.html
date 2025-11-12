@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!--
+  LearnMappers PWA — Configuration
+  =================================
+  Master Config: config.js (single source of truth)
+  Site: sites/default/
+  Version: 7.3.0
+  
+  All settings are managed in config.js. Update that file to change:
+  - Site name, title, description
+  - Navigation links
+  - Theme colors
+  - Layout settings
+  - PWA settings
+  - API endpoints
+  - Feature flags
+-->
+<script src="../../config.js"></script>
+<script>
+  // Apply config to page (SEO, theme, etc.)
+  document.addEventListener('DOMContentLoaded', function() {
+    const config = window.CONFIG;
+    if (config) {
+      // Title
+      document.title = config.seo?.metaTitle || config.site?.title || 'LearnMappers — Task Suite v7.0';
+      // Theme color
+      const themeColor = config.site?.themeColor || '#0b0c10';
+      let metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) metaTheme.setAttribute('content', themeColor);
+      // SEO meta tags
+      if (config.seo) {
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (!metaDesc) {
+          metaDesc = document.createElement('meta');
+          metaDesc.name = 'description';
+          document.head.appendChild(metaDesc);
+        }
+        metaDesc.setAttribute('content', config.seo.metaDescription || config.site?.description || '');
+      }
+    }
+  });
+</script>
+<title>LearnMappers — Task Suite v7.0</title>
+<link rel="manifest" href="../../manifest.webmanifest"><meta name="theme-color" content="#0b0c10">
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; --wide:1200px; }
+*{box-sizing:border-box} html,body{background:radial-gradient(1400px 600px at 15% -8%, rgba(124,227,255,.16), transparent 48%), radial-gradient(1100px 500px at 88% -8%, rgba(96,255,168,.12), transparent 58%), radial-gradient(800px 400px at 50% 100%, rgba(124,227,255,.08), transparent 70%), var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6;min-height:100vh}
+a{color:var(--brand);text-decoration:none}
+main[data-page]{padding:0}
+.wrap{max-width:1440px;margin:0 auto;padding:clamp(20px,4.5vw,64px)}
+nav.stick{position:sticky;top:0;z-index:90;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter: blur(10px);border-bottom:1px solid var(--line)}
+nav .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900}
+.logo .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+nav .links{display:flex;gap:12px;flex-wrap:wrap}
+nav .links a{padding:10px 12px;border-radius:12px}
+nav .links a:hover{background:color-mix(in srgb, var(--brand) 18%, transparent)}
+header.hero{position:relative;isolation:isolate;padding:40px 0 32px;margin-bottom:8px}
+header.hero.wrap{padding-top:40px;padding-bottom:32px;padding-left:clamp(18px,4vw,60px);padding-right:clamp(18px,4vw,60px)}
+.glow{position:absolute;inset:-15% -15% auto -15%;height:70vh;background:radial-gradient(1400px 500px at 20% 0%,rgba(124,227,255,.25),transparent 55%),radial-gradient(1100px 450px at 80% 0%,rgba(96,255,168,.18),transparent 65%);filter:blur(24px);z-index:-1;opacity:0.9}
+h1{font-size:clamp(28px,4vw,38px);margin:0 0 16px;font-weight:800;line-height:1.2;letter-spacing:-0.02em}
+.lead{font-size:clamp(15px,1.8vw,17px);color:var(--muted);max-width:68ch;margin:0 0 12px;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;margin-bottom:8px}
+.chip{padding:6px 14px;border-radius:999px;background:linear-gradient(135deg, color-mix(in srgb, var(--brand) 15%, transparent), color-mix(in srgb, var(--brand2) 12%, transparent));border:1px solid color-mix(in srgb, var(--brand) 30%, transparent);color:var(--ink);font-weight:600;font-size:11px;letter-spacing:0.3px;transition:all 0.2s ease}
+.chip:hover{background:linear-gradient(135deg, color-mix(in srgb, var(--brand) 22%, transparent), color-mix(in srgb, var(--brand2) 18%, transparent));transform:translateY(-1px);box-shadow:0 4px 12px -4px rgba(124,227,255,0.3)}
+.btn{padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 85%, transparent), color-mix(in srgb, var(--card) 95%, transparent));color:var(--ink);font-weight:800;cursor:pointer;transition:.18s ease;box-shadow:0 14px 40px -20px var(--shadow)}
+.btn:hover{transform:translateY(-2px)}
+.btn.brand{background:linear-gradient(135deg,var(--brand),#c9f5ff);color:#041018;border:none}
+.card{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:0 14px 44px -28px var(--shadow);transition:all 0.3s ease;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg, var(--brand), var(--brand2));opacity:0;transition:opacity 0.3s ease}
+.card:hover{transform:translateY(-4px);box-shadow:0 20px 60px -24px var(--shadow);border-color:color-mix(in srgb, var(--brand) 40%, transparent)}
+.card:hover::before{opacity:1}
+.grid{display:grid;gap:var(--gap)}
+.cols-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.tiny{font-size:12px;color:#9bb1c7}
+.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.list li{list-style:none}
+.list a.block{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));}
+.doc{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:start}
+.toc{position:sticky;top:70px;background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:12px;padding:14px;max-height:70vh;overflow:auto}
+.toc-title{font-weight:900;margin-bottom:8px}
+.badge{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 30% 30%, var(--brand2), var(--brand));color:#041018;font-weight:900;font-size:12px}
+#tocNav a{display:flex;align-items:center;gap:6px;padding:6px 8px;border-radius:8px;color:var(--muted)}
+#tocNav a.active,#tocNav a:hover{background:color-mix(in srgb, var(--brand) 16%, transparent);color:var(--ink)}
+@media (max-width: 860px){ .doc{grid-template-columns:1fr;} .toc{position:static; max-height:none;} }
+@media print{ body *{visibility:hidden} main[data-page], main[data-page] *{visibility:visible} main[data-page]{position:static; margin:0;} }
+
+/* v7.2.1 layout & table polish */
+.section{margin-block:24px}
+.toolbar{margin-top:14px}
+table thead th{position:sticky; top:0; background:color-mix(in srgb, var(--card) 96%, transparent); z-index:2; backdrop-filter: blur(4px)}
+tbody tr:nth-child(odd){background:color-mix(in srgb, var(--card) 94%, transparent)}
+tbody tr:hover{outline:1px solid var(--line)}
+/* Toast */
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);color:var(--ink);padding:10px 14px;border-radius:12px;box-shadow:0 10px 30px -20px var(--shadow);z-index:999;display:none}
+.toast.show{display:block}
+
+/* v7.3 connection pill */
+.pill{display:inline-flex;align-items:center;gap:6px;margin-right:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);
+background:linear-gradient(180deg, color-mix(in srgb, var(--card) 90%, transparent), color-mix(in srgb, var(--card) 96%, transparent));font-size:12px}
+.pill.online{color:#073b18;border-color:#0ea35a;background:linear-gradient(180deg,#d6ffe9,#f1fff7)}
+.pill.offline{color:#4b1a1a;border-color:#cc5151;background:linear-gradient(180deg,#ffe3e3,#fff7f7)}
+
+/* Tabs */
+.tabs-container{margin-top:20px}
+.tabs-header{display:flex;gap:8px;margin-bottom:24px;border-bottom:1px solid var(--line)}
+.tab-btn{padding:12px 20px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-weight:600;cursor:pointer;transition:all 0.2s;font-size:14px}
+.tab-btn:hover{color:var(--ink);background:color-mix(in srgb, var(--brand) 10%, transparent)}
+.tab-btn.active{color:var(--brand);border-bottom-color:var(--brand)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.remote-status{padding:24px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:var(--radius);text-align:center;color:var(--muted)}
+.remote-status a{color:var(--brand);text-decoration:underline}
+.remote-loading{padding:24px;text-align:center;color:var(--muted)}
+.remote-error{padding:24px;background:color-mix(in srgb, var(--error) 10%, transparent);border:1px solid var(--error);border-radius:var(--radius);color:var(--error);text-align:center}
+</style>
+</head>
+<body>
+<nav class="stick wrap">
+  <div class="row">
+    <a href="/" class="logo" id="logo">
+      <span class="dot"></span>
+      <span>LearnMappers</span>
+    </a>
+    <div class="links">
+      <span id="netPill" class="pill" title="Connection status">● offline</span>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div id="navLinks">
+          <a href="index.html" data-nav>Home</a>
+          <a href="docs-index.html" data-nav>Docs</a>
+          <a href="inventory.html" data-nav>Resources</a>
+          <a href="service-menu.html" data-nav>Services</a>
+        </div>
+        <button data-theme-toggle onclick="toggleTheme()" style="background: transparent; border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; cursor: pointer; font-size: 18px; transition: all 0.2s ease;" title="Theme: auto (click to toggle)">🔄</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main data-page>
+  <header class="hero wrap" id="hero">
+    <div class="glow"></div>
+    <div class="chips" id="heroChips"></div>
+    <h1 id="heroTitle">Home • Tech • Systems — done right</h1>
+    <p class="lead" id="heroSubtitle">Skilled hands. Smart tools. Clean work.</p>
+    <p class="lead" id="heroDescription" style="margin-top: 10px;">LearnMappers maps your setup so you can keep it working.</p>
+    <div class="cta" id="heroCta"></div>
+  </header>
+
+  <!-- Stats Section with Local/Remote Tabs -->
+  <section class="wrap" id="statsSection" style="display: none;">
+    <div class="tabs-container" id="statsTabsContainer">
+      <div class="tabs-header">
+        <button class="tab-btn active" data-tab="local">🏠 Local</button>
+        <button class="tab-btn" data-tab="remote" id="remoteTabBtn">🌐 Remote</button>
+      </div>
+      <div class="tab-content active" id="tab-local">
+        <div class="grid cols-3" id="stats"></div>
+      </div>
+      <div class="tab-content" id="tab-remote">
+        <div id="remoteStatsContainer">
+          <div class="remote-status" id="remoteStatus">
+            <p>Configure remote deployment in <a href="settings.html" onclick="navigateToSettings(event)">Settings → Deployment</a> to view remote stats.</p>
+          </div>
+          <div class="grid cols-3" id="remoteStats" style="display: none;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="wrap" id="featuresSection" style="display: none;">
+    <h2>Features</h2>
+    <div class="grid cols-3" id="features"></div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="wrap" id="services" style="display: block; margin-top: 48px;">
+    <div style="margin-bottom: 24px;">
+      <h2 style="font-size: clamp(24px, 3.5vw, 32px); font-weight: 800; margin: 0 0 8px; letter-spacing: -0.01em;">Services</h2>
+      <p class="lead" style="margin: 0; font-size: clamp(14px, 1.6vw, 16px); max-width: 60ch;">Explore our comprehensive range of services designed to meet your needs.</p>
+    </div>
+    <div class="grid cols-3" id="servicesGrid">
+    </div>
+  </section>
+
+  <!-- Content Sections -->
+  <section class="wrap" id="sectionsContainer"></section>
+
+  <!-- Testimonials Section -->
+  <section class="wrap" id="testimonialsSection" style="margin-top: 64px; padding-top: 48px; border-top: 1px solid var(--line);">
+    <div style="margin-bottom: 24px;">
+      <h2 style="font-size: clamp(24px, 3.5vw, 32px); font-weight: 800; margin: 0 0 8px; letter-spacing: -0.01em;">What Our Clients Say</h2>
+      <p class="lead" style="margin: 0; font-size: clamp(14px, 1.6vw, 16px); max-width: 60ch;">Hear from those who have worked with us.</p>
+    </div>
+    <div class="grid cols-3" id="testimonials"></div>
+  </section>
+
+  <!-- Docs Section -->
+  <section class="wrap" style="margin-top: 64px; padding-top: 48px; border-top: 1px solid var(--line);">
+    <div style="margin-bottom: 24px;">
+      <h2 style="font-size: clamp(24px, 3.5vw, 32px); font-weight: 800; margin: 0 0 8px; letter-spacing: -0.01em;">Documentation</h2>
+      <p class="lead" style="margin: 0 0 16px; font-size: clamp(14px, 1.6vw, 16px); max-width: 60ch;">Read the full Whitepaper & PWA Care Guide in the <a href="docs.html" data-nav style="color: var(--brand); text-decoration: underline;">Documentation</a>, or browse all guides in <a href="docs-index.html" data-nav style="color: var(--brand); text-decoration: underline;">Documentation Index</a>.</p>
+    </div>
+  </section>
+</main>
+<div id="toastUpdate" class="toast">App updated. <a href="#" onclick="location.reload()">Reload</a></div>
+
+<script src="../../scripts.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('../../service-worker.js').catch(()=>{});}</script>
+<script>
+// Populate content from config
+function populateContent() {
+  const config = window.CONFIG;
+  if (!config) {
+    console.log('⚠️ Config not loaded yet, retrying...');
+    setTimeout(populateContent, 100);
+    return;
+  }
+  
+  console.log('✅ Config loaded:', config);
+  console.log('✅ Has content:', !!config.content);
+  console.log('✅ Has services:', !!config.content?.services);
+  console.log('✅ Services categories:', config.content?.services?.categories);
+  console.log('✅ Services categories length:', config.content?.services?.categories?.length);
+  
+  // Force populate even if config seems incomplete
+  if (!config.content) {
+    console.error('❌ Config has no content object!', config);
+    return;
+  }
+
+  // Update logo
+  const logo = document.getElementById('logo');
+  if (logo && config.navigation?.logo) {
+    logo.innerHTML = `
+      ${config.navigation.logo.showDot ? '<span class="dot"></span>' : ''}
+      <span>${config.navigation.logo.text || 'LearnMappers'}</span>
+    `;
+    if (config.navigation.logo.href) {
+      logo.href = config.navigation.logo.href;
+    }
+  }
+
+  // Update navigation links
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks && config.navigation?.links) {
+    console.log('🔍 Updating navigation links:', config.navigation.links);
+    navLinks.innerHTML = config.navigation.links.map(link => 
+      `<a href="${link.href}" data-nav>${link.icon ? link.icon + ' ' : ''}${link.label}</a>`
+    ).join('');
+    console.log('✅ Navigation links updated');
+  } else {
+    console.error('❌ Navigation links not found!', {
+      navLinks: !!navLinks,
+      hasConfig: !!config,
+      hasNavigation: !!config?.navigation,
+      hasLinks: !!config?.navigation?.links
+    });
+  }
+  
+  // Update theme toggle button
+  const toggleBtn = document.querySelector('[data-theme-toggle]');
+  if (toggleBtn) {
+    const mode = config.theme?.mode || 'dark';
+    const icons = { dark: '🌙', light: '☀️', auto: '🔄' };
+    toggleBtn.textContent = icons[mode] || '🌙';
+    toggleBtn.title = `Theme: ${mode} (click to toggle)`;
+  }
+
+  // Update hero section
+  const hero = config.content?.hero;
+  if (hero) {
+    const heroTitle = document.getElementById('heroTitle');
+    const heroSubtitle = document.getElementById('heroSubtitle');
+    const heroDescription = document.getElementById('heroDescription');
+    const heroChips = document.getElementById('heroChips');
+    const heroCta = document.getElementById('heroCta');
+    
+    if (heroTitle && hero.title) heroTitle.textContent = hero.title;
+    if (heroSubtitle && hero.subtitle) heroSubtitle.textContent = hero.subtitle;
+    if (heroDescription && hero.description) heroDescription.textContent = hero.description;
+    
+    if (heroChips && hero.chips && hero.chips.length > 0) {
+      heroChips.innerHTML = hero.chips.map(chip => `<span class="chip">${chip}</span>`).join('');
+    }
+    
+    if (heroCta && hero.cta) {
+      let buttons = '';
+      if (hero.cta.primary) {
+        const attrs = hero.cta.primary.external ? 'target="_blank" rel="noopener"' : '';
+        buttons += `<a class="btn ${hero.cta.primary.style || 'brand'}" href="${hero.cta.primary.href}" ${attrs}>${hero.cta.primary.icon ? hero.cta.primary.icon + ' ' : ''}${hero.cta.primary.text}</a>`;
+      }
+      if (hero.cta.secondary) {
+        const attrs = hero.cta.secondary.external ? 'target="_blank" rel="noopener"' : '';
+        buttons += `<a class="btn" href="${hero.cta.secondary.href}" ${attrs}>${hero.cta.secondary.icon ? hero.cta.secondary.icon + ' ' : ''}${hero.cta.secondary.text}</a>`;
+      }
+      heroCta.innerHTML = buttons;
+    }
+  }
+
+  // Populate stats
+  const statsSection = document.getElementById('statsSection');
+  const statsContainer = document.getElementById('stats');
+  if (statsContainer && config.content?.stats && config.content.stats.length > 0) {
+    statsSection.style.display = 'block';
+    statsContainer.innerHTML = config.content.stats.map(stat => `
+      <div class="card" style="text-align: center;">
+        <div style="font-size: 36px; margin-bottom: 8px;">${stat.icon || '📊'}</div>
+        <div style="font-size: 32px; font-weight: 900; color: var(--brand); margin-bottom: 4px;">${stat.value}</div>
+        <div class="tiny">${stat.label}</div>
+      </div>
+    `).join('');
+    
+    // Setup tabs
+    setupStatsTabs();
+    
+    // Load remote stats if deployment is configured
+    if (config.deployment?.enabled) {
+      loadRemoteStats();
+    }
+  } else {
+    // Hide stats section if no stats
+    if (statsSection) {
+      statsSection.style.display = 'none';
+    }
+  }
+
+  // Populate features
+  const featuresSection = document.getElementById('featuresSection');
+  const featuresContainer = document.getElementById('features');
+  if (featuresContainer && config.content?.features && config.content.features.length > 0) {
+    featuresSection.style.display = 'block';
+    featuresContainer.innerHTML = config.content.features.map(feature => `
+      <div class="card">
+        <div style="font-size: 32px; margin-bottom: 12px;">${feature.icon || '✨'}</div>
+        <h3>${feature.title}</h3>
+        <p class="tiny">${feature.description}</p>
+      </div>
+    `).join('');
+  } else {
+    // Hide features section if no features
+    if (featuresSection) {
+      featuresSection.style.display = 'none';
+    }
+  }
+
+  // Populate services (only if on home page)
+  const servicesGrid = document.getElementById('servicesGrid');
+  const servicesSection = document.getElementById('services');
+  
+  // Only populate services if we're on the home page
+  if (!servicesGrid || !servicesSection) {
+    // Not on home page, skip services population
+    return;
+  }
+  
+  console.log('🔍 Populating services...', {
+    servicesGrid: !!servicesGrid,
+    servicesSection: !!servicesSection,
+    hasContent: !!config.content,
+    hasServices: !!config.content?.services,
+    hasCategories: !!config.content?.services?.categories,
+    categoriesLength: config.content?.services?.categories?.length,
+    categories: config.content?.services?.categories
+  });
+  
+  // Always show services section
+  servicesSection.style.display = 'block';
+  
+  // Clear any loading message
+  servicesGrid.innerHTML = '';
+  
+  if (config.content?.services?.categories && config.content.services.categories.length > 0) {
+    // Flatten nested structure: categories can contain either services array or be services themselves
+    const allServices = [];
+    config.content.services.categories.forEach(category => {
+      if (category.services && Array.isArray(category.services)) {
+        // Category has nested services array
+        category.services.forEach(service => {
+          allServices.push({
+            ...service,
+            categoryTitle: category.title,
+            categoryIcon: category.icon
+          });
+        });
+      } else {
+        // Category is itself a service (legacy format)
+        allServices.push(category);
+      }
+    });
+    
+    console.log('✅ Rendering', allServices.length, 'services from', config.content.services.categories.length, 'categories');
+    
+    if (allServices.length > 0) {
+      servicesGrid.innerHTML = allServices.map(service => {
+        // Link to service card page instead of service menu
+        // Path: from content/pages/ to pages/service-cards/ = ../../pages/service-cards/
+        // Use absolute path to ensure routing works correctly
+        const serviceHref = service.id ? `/sites/learnmappers/pages/service-cards/${service.id}.html` : 'service-menu.html';
+        const pricing = service.pricing?.rate ? `$${service.pricing.rate}/${service.pricing.type === 'hourly' ? 'hr' : 'fixed'}` : service.pricing;
+        return `
+        <div class="card">
+          <h3>${service.icon ? service.icon + ' ' : ''}${service.title}</h3>
+          <p class="tiny">${service.description || service.purpose || ''}</p>
+          ${pricing ? `<p class="tiny" style="margin-top: 8px; color: var(--brand); font-weight: 700;">${pricing}</p>` : ''}
+          ${service.duration ? `<p class="tiny" style="margin-top: 4px;">⏱ ${service.duration}</p>` : ''}
+          ${service.categoryTitle ? `<p class="tiny" style="margin-top: 4px; opacity: 0.7;">${service.categoryIcon || ''} ${service.categoryTitle}</p>` : ''}
+          <a href="${serviceHref}" class="btn" style="margin-top: 12px; display: inline-block;" data-nav>Learn More →</a>
+        </div>
+      `;
+      }).join('');
+    }
+  } else {
+    console.error('❌ Services not found or empty!', {
+      hasConfig: !!config,
+      hasContent: !!config?.content,
+      hasServices: !!config?.content?.services,
+      hasCategories: !!config?.content?.services?.categories,
+      categoriesLength: config?.content?.services?.categories?.length,
+      categories: config?.content?.services?.categories,
+      fullContent: config?.content,
+      fullConfig: config
+    });
+    // Show a message instead of hiding
+    if (servicesGrid) {
+      servicesGrid.innerHTML = '<div class="card" style="text-align: center; padding: 40px;"><p style="color: var(--muted);">Loading services...</p></div>';
+    }
+  }
+  
+  // If services grid is still empty after processing, show message
+  if (servicesGrid && servicesGrid.innerHTML.trim() === '') {
+    servicesGrid.innerHTML = '<div class="card" style="text-align: center; padding: 40px;"><p style="color: var(--muted);">No services available at this time.</p></div>';
+  }
+
+  // Populate sections
+  const sectionsContainer = document.getElementById('sectionsContainer');
+  if (sectionsContainer && config.content?.sections) {
+    sectionsContainer.innerHTML = config.content.sections.map(section => `
+      <section class="wrap section" id="${section.id}" style="${section.backgroundColor ? `background: ${section.backgroundColor};` : ''} ${section.textColor ? `color: ${section.textColor};` : ''}">
+        <h2>${section.title}</h2>
+        ${section.subtitle ? `<p class="lead">${section.subtitle}</p>` : ''}
+        <p>${section.content}</p>
+      </section>
+    `).join('');
+  }
+
+  // Populate testimonials
+  const testimonialsSection = document.getElementById('testimonialsSection');
+  const testimonialsContainer = document.getElementById('testimonials');
+  if (testimonialsContainer && config.content?.testimonials && config.content.testimonials.length > 0) {
+    testimonialsSection.style.display = 'block';
+    testimonialsContainer.innerHTML = config.content.testimonials.map(testimonial => `
+      <div class="card">
+        <p style="font-style: italic; margin-bottom: 16px;">"${testimonial.quote}"</p>
+        <div style="border-top: 1px solid var(--line); padding-top: 12px;">
+          <div style="font-weight: 700; margin-bottom: 4px;">${testimonial.name}</div>
+          <div class="tiny">${testimonial.role}</div>
+          ${testimonial.service ? `<div class="tiny" style="margin-top: 4px; color: var(--brand);">${testimonial.service}</div>` : ''}
+          ${testimonial.rating ? `<div style="margin-top: 8px; color: var(--accent);">${'⭐'.repeat(testimonial.rating)}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+// Setup stats tabs
+function setupStatsTabs() {
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.dataset.tab;
+      
+      // Update buttons
+      tabButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Update content
+      tabContents.forEach(content => {
+        content.classList.remove('active');
+        if (content.id === `tab-${targetTab}`) {
+          content.classList.add('active');
+        }
+      });
+      
+      // Load remote stats when remote tab is clicked
+      if (targetTab === 'remote' && window.CONFIG?.deployment?.enabled) {
+        loadRemoteStats();
+      }
+    });
+  });
+}
+
+// Load remote stats
+async function loadRemoteStats() {
+  const remoteStatsContainer = document.getElementById('remoteStats');
+  const remoteStatus = document.getElementById('remoteStatus');
+  const config = window.CONFIG;
+  
+  if (!config?.deployment?.enabled) {
+    return;
+  }
+  
+  // Show loading
+  remoteStatus.innerHTML = '<div class="remote-loading">🔄 Loading remote stats...</div>';
+  remoteStatsContainer.style.display = 'none';
+  
+  try {
+    // Try to fetch from remote API
+    const apiUrl = config.deployment?.environment?.production?.apiUrl || 
+                   config.deployment?.environment?.staging?.apiUrl;
+    
+    if (apiUrl) {
+      const response = await fetch(`${apiUrl}/api/stats`);
+      if (response.ok) {
+        const remoteStats = await response.json();
+        displayRemoteStats(remoteStats);
+        remoteStatus.style.display = 'none';
+        remoteStatsContainer.style.display = 'grid';
+        return;
+      }
+    }
+    
+    // Fallback: Use deployment API endpoint
+    const response = await fetch('/api/deployment/stats', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config.deployment)
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      if (result.success && result.stats) {
+        displayRemoteStats(result.stats);
+        remoteStatus.style.display = 'none';
+        remoteStatsContainer.style.display = 'grid';
+        return;
+      }
+    }
+    
+    // No remote stats available
+    remoteStatus.innerHTML = `
+      <p>🌐 Remote deployment is configured, but stats are not available.</p>
+      <p style="margin-top: 8px; font-size: 14px;">Make sure your remote server is running and accessible.</p>
+    `;
+    remoteStatsContainer.style.display = 'none';
+  } catch (error) {
+    console.error('Error loading remote stats:', error);
+    remoteStatus.innerHTML = `
+      <div class="remote-error">
+        <p>❌ Failed to load remote stats</p>
+        <p style="margin-top: 8px; font-size: 14px;">${error.message}</p>
+        <p style="margin-top: 8px; font-size: 12px;">Check your deployment configuration in Settings → Deployment</p>
+      </div>
+    `;
+    remoteStatsContainer.style.display = 'none';
+  }
+}
+
+// Display remote stats
+function displayRemoteStats(stats) {
+  const remoteStatsContainer = document.getElementById('remoteStats');
+  
+  // Format stats similar to local stats
+  const statsToShow = [
+    { label: 'Total Items', value: stats.total || '0', icon: '📦' },
+    { label: 'Active', value: stats.active || '0', icon: '✅' },
+    { label: 'In Use', value: stats.inUse || '0', icon: '🔧' },
+    { label: 'Available', value: stats.available || '0', icon: '📋' }
+  ];
+  
+  remoteStatsContainer.innerHTML = statsToShow.map(stat => `
+    <div class="card" style="text-align: center;">
+      <div style="font-size: 36px; margin-bottom: 8px;">${stat.icon}</div>
+      <div style="font-size: 32px; font-weight: 900; color: var(--brand); margin-bottom: 4px;">${stat.value}</div>
+      <div class="tiny">${stat.label}</div>
+    </div>
+  `).join('');
+}
+
+// Function to initialize content (can be called multiple times)
+function initializeContent() {
+  // Wait for config to be available
+  if (!window.CONFIG) {
+    console.log('⏳ Waiting for config...');
+    setTimeout(initializeContent, 100);
+    return;
+  }
+  
+  // Only populate content if we're on the home page (has servicesGrid)
+  const isHomePage = document.getElementById('servicesGrid') !== null;
+  
+  if (isHomePage) {
+    console.log('✅ Initializing content (home page)...');
+    populateContent();
+  } else {
+    // For other pages, just populate navigation if needed
+    const navLinks = document.getElementById('navLinks');
+    if (navLinks && window.CONFIG?.navigation?.links) {
+      navLinks.innerHTML = window.CONFIG.navigation.links.map(link => 
+        `<a href="${link.href}" data-nav>${link.icon ? link.icon + ' ' : ''}${link.label}</a>`
+      ).join('');
+    }
+  }
+}
+
+// Listen for config loaded event
+window.addEventListener('configLoaded', () => {
+  console.log('✅ configLoaded event fired, populating content...');
+  setTimeout(initializeContent, 50);
+});
+
+// Suppress WebSocket errors from development tools (like Cursor)
+window.addEventListener('error', (e) => {
+  if (e.message && e.message.includes('WebSocket') && e.message.includes('3001')) {
+    e.preventDefault();
+    console.warn('⚠️  WebSocket connection to dev tools failed (this is harmless)');
+    return false;
+  }
+}, true);
+
+// Listen for route changes (client-side navigation)
+window.afterRouteChange = function() {
+  console.log('🔄 Route changed, re-populating content...');
+  setTimeout(initializeContent, 100);
+};
+
+// Also try immediately (in case config already loaded)
+setTimeout(() => {
+  console.log('⏳ Initial populateContent attempt...');
+  initializeContent();
+}, 150);
+
+// Also try on DOMContentLoaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('⏳ DOMContentLoaded, populating content...');
+    setTimeout(initializeContent, 250);
+  });
+} else {
+  // DOM already loaded
+  console.log('⏳ DOM already loaded, populating content...');
+  setTimeout(initializeContent, 100);
+}
+
+// Listen for popstate (browser back/forward)
+window.addEventListener('popstate', () => {
+  console.log('🔄 Popstate event, re-populating content...');
+  setTimeout(initializeContent, 150);
+});
+
+// Listen for routeChanged event (from router)
+window.addEventListener('routeChanged', (e) => {
+  const href = e.detail?.href || window.location.pathname;
+  console.log('🔄 Route changed event:', href);
+  // Check if we're on the home page by checking the URL path
+  // Home page is index.html or root path, not service-menu.html or other pages
+  const path = href.toLowerCase();
+  // Explicitly check for home page paths
+  const isHomePage = path.endsWith('index.html') || 
+                     path.endsWith('/') || 
+                     path === '' ||
+                     (path.includes('/content/pages/') && path.endsWith('index.html')) ||
+                     (path.includes('/sites/learnmappers/content/pages/') && path.endsWith('index.html'));
+  
+  // Explicitly exclude known non-home pages
+  const isNotHomePage = path.includes('service-menu') || 
+                        path.includes('about') || 
+                        path.includes('inventory') || 
+                        path.includes('settings') || 
+                        path.includes('docs') || 
+                        path.includes('service-cards');
+  
+  if (isHomePage && !isNotHomePage) {
+    console.log('✅ Home page route detected, re-populating content...');
+    setTimeout(initializeContent, 100);
+  } else {
+    console.log('⏭️  Not home page, skipping initializeContent()');
+  }
+});
+
+/* v7.2.1 update toast */
+(function(){ if(!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.getRegistration().then(reg=>{
+    if(!reg) return;
+    function showToast(){ var el=document.getElementById('toastUpdate'); if(el) el.classList.add('show'); }
+    if(reg.waiting) showToast();
+    reg.addEventListener('updatefound', ()=>{
+      const sw = reg.installing;
+      if(!sw) return;
+      sw.addEventListener('statechange', ()=>{ if(sw.state==='installed' && navigator.serviceWorker.controller) showToast(); });
+    });
+    navigator.serviceWorker.addEventListener('controllerchange', showToast);
+  });
+})();
+</script>
+<script>
+/* v7.3 net pill */
+(function(){
+  const el = document.getElementById('netPill'); if(!el) return;
+  function setStatus(){
+    const on = navigator.onLine;
+    el.textContent = (on ? '● online' : '● offline');
+    el.classList.toggle('online', on);
+    el.classList.toggle('offline', !on);
+  }
+  window.addEventListener('online', setStatus);
+  window.addEventListener('offline', setStatus);
+  setStatus();
+})();
+</script>
+<script>
+// Smooth navigation to settings page with return path
+function navigateToSettings(e) {
+  if (e) e.preventDefault();
+  
+  // Store current location for return navigation (pathname only, no origin)
+  const currentUrl = window.location.pathname + window.location.search;
+  
+  console.log('Navigating to settings from:', currentUrl);
+  
+  // Add fade-out animation
+  document.body.style.transition = 'opacity 0.2s ease';
+  document.body.style.opacity = '0';
+  
+  // Navigate after fade with return path
+  setTimeout(() => {
+    // Use relative path to settings.html
+    window.location.href = `settings.html?from=${encodeURIComponent(currentUrl)}`;
+  }, 200);
+}
+</script>
+</body>
+</html>

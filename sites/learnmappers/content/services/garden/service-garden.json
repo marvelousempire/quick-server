@@ -1,0 +1,58 @@
+{
+  "id": "garden",
+  "title": "Garden & Eco Builds",
+  "description": "Transform your space into a thriving, sustainable ecosystem. Build raised beds, compost systems, ponds, and irrigation that work together to create a self-sustaining garden paradise.",
+  "purpose": "Create sustainable, productive garden spaces that reduce waste, grow food, and enhance your quality of life through eco-friendly design and smart water management.",
+  "icon": "\ud83c\udf31",
+  "category": "garden",
+  "pricing": "Starting at $80/hr",
+  "features": [
+    "Raised bed construction",
+    "Compost system setup",
+    "Water-efficient irrigation",
+    "Eco-friendly materials",
+    "Soil preparation & amendment",
+    "Plant selection guidance",
+    "Sustainable design",
+    "Maintenance documentation"
+  ],
+  "tools": [
+    "Garden tools",
+    "Irrigation supplies",
+    "Compost bins",
+    "Soil amendments",
+    "Measuring tools"
+  ],
+  "outcomes": [
+    "Save $50-200/month on groceries with homegrown produce",
+    "Reduce waste by 30-50% through composting",
+    "Increase property value by 5-15% with landscaping",
+    "Save 20-40% on water bills with efficient irrigation",
+    "Improve mental health through gardening activities",
+    "Create a sustainable food source for your family",
+    "Build skills in permaculture and sustainable living"
+  ],
+  "whatYouCanBuild": [
+    "Raised garden beds for vegetables, herbs, and flowers",
+    "Compost systems that turn kitchen scraps into rich soil",
+    "Koi ponds or water features for relaxation",
+    "Drip irrigation systems that save water and time",
+    "Vertical gardens for small spaces",
+    "Greenhouse or cold frame for year-round growing",
+    "Rainwater collection systems",
+    "Permaculture food forests"
+  ],
+  "whyNeed": "You need this if you want fresh produce, reduced grocery bills, a beautiful outdoor space, waste reduction through composting, and a sustainable lifestyle that benefits both you and the environment.",
+  "whatYouGet": [
+    "Fresh vegetables and herbs year-round",
+    "Reduced grocery bills and food waste",
+    "Beautiful, productive outdoor space",
+    "Compost system that turns waste into soil",
+    "Water-efficient irrigation that saves money",
+    "Increased property value",
+    "Stress relief and connection to nature",
+    "Sustainable lifestyle that helps the planet"
+  ],
+  "categoryId": "garden",
+  "categoryTitle": "Garden & Eco Builds"
+}

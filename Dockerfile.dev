@@ -1,0 +1,13 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install dependencies
+RUN npm install -g pnpm
+
+# Expose ports
+EXPOSE 8000 8443
+
+# Start with nodemon for development
+CMD ["sh", "-c", "pnpm install && node server.js"]
+

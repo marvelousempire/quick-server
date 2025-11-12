@@ -1,0 +1,58 @@
+{
+  "id": "ai-rag",
+  "title": "AI & RAG",
+  "description": "Build private AI systems that understand your data. Deploy RAG (Retrieval-Augmented Generation) systems that give you AI assistants trained on your own documents, knowledge base, and information.",
+  "purpose": "Create private, secure AI systems that understand your specific data and knowledge. Build RAG systems that let you query your documents, get intelligent answers, and automate knowledge work without sending data to third parties.",
+  "icon": "\ud83e\udd16",
+  "category": "ai-rag",
+  "pricing": "Starting at $150/hr",
+  "features": [
+    "Private AI server deployment",
+    "RAG system architecture",
+    "Vector database optimization",
+    "Document processing automation",
+    "Custom AI workflow design",
+    "Knowledge base integration",
+    "API & endpoint setup",
+    "Model fine-tuning & deployment"
+  ],
+  "tools": [
+    "Docker",
+    "Python",
+    "LLM APIs",
+    "Vector DBs",
+    "Embedding models",
+    "API frameworks"
+  ],
+  "outcomes": [
+    "Save 10-20 hours per week on document research",
+    "Get instant answers from thousands of documents",
+    "Keep sensitive data private (no third-party AI)",
+    "Automate knowledge work and research",
+    "Build competitive advantage with AI",
+    "Create custom AI solutions for your business",
+    "Reduce costs vs. API-based AI services"
+  ],
+  "whatYouCanBuild": [
+    "Private LLM servers (Ollama, vLLM, or cloud)",
+    "RAG systems with vector databases (Pinecone, Weaviate, Qdrant)",
+    "Document Q&A systems for your knowledge base",
+    "AI-powered search across your documents",
+    "Automated document summarization and analysis",
+    "Custom AI chatbots for your business",
+    "Knowledge graph systems",
+    "AI automation workflows"
+  ],
+  "whyNeed": "You need this if you want AI that knows YOUR business, if you need private AI (no data leaves your control), if you want to query thousands of documents instantly, or if you want to automate knowledge work with AI trained on your data.",
+  "whatYouGet": [
+    "Private AI server that keeps your data secure",
+    "RAG system that understands your documents",
+    "Ability to query thousands of files instantly",
+    "AI assistant trained on YOUR knowledge base",
+    "Automated document processing and insights",
+    "Custom AI workflows for your business",
+    "No data sent to third-party AI services"
+  ],
+  "categoryId": "ai-rag",
+  "categoryTitle": "AI & RAG"
+}

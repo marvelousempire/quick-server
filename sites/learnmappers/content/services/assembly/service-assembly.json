@@ -1,0 +1,57 @@
+{
+  "id": "assembly",
+  "title": "Furniture Assembly",
+  "description": "Get your furniture built right the first time. Professional assembly that saves you hours of frustration and ensures everything is level, secure, and ready to use.",
+  "purpose": "Transform flat-pack boxes into functional, stable furniture that lasts. Save time, avoid mistakes, and ensure proper assembly with professional tools and techniques.",
+  "icon": "\ud83d\udd28",
+  "category": "assembly",
+  "pricing": "Starting at $50",
+  "features": [
+    "Expert assembly techniques",
+    "Proper tool usage & safety",
+    "Level & stable results",
+    "Quality assurance check",
+    "Clean workspace cleanup",
+    "Assembly documentation",
+    "Warranty on workmanship",
+    "Time-saving efficiency"
+  ],
+  "tools": [
+    "Drill",
+    "Screwdrivers",
+    "Level",
+    "Measuring tape",
+    "Impact driver",
+    "Clamps"
+  ],
+  "outcomes": [
+    "Save 2-6 hours of your time per piece",
+    "Avoid costly mistakes and damaged parts",
+    "Get furniture that's actually level and stable",
+    "Extend furniture lifespan with proper assembly",
+    "Reduce stress and frustration",
+    "Have documentation for future moves or repairs"
+  ],
+  "whatYouCanBuild": [
+    "IKEA furniture (beds, desks, cabinets, shelving)",
+    "Office furniture (desks, chairs, filing cabinets)",
+    "Exercise equipment (treadmills, weight benches, racks)",
+    "Outdoor furniture (patio sets, gazebos, pergolas)",
+    "Kitchen islands and carts",
+    "TV stands and entertainment centers",
+    "Wardrobes and closet systems",
+    "Playground equipment and playsets"
+  ],
+  "whyNeed": "You need this if you've ever spent hours on assembly only to find it wobbly, if you lack the right tools, if you want it done right the first time, or if your time is worth more than the frustration of DIY assembly.",
+  "whatYouGet": [
+    "Properly assembled furniture that's level and stable",
+    "Time saved (hours of your life back)",
+    "No stripped screws or broken parts",
+    "Professional finish with proper tooling",
+    "Documentation of assembly for future reference",
+    "Warranty on workmanship",
+    "Peace of mind knowing it's done right"
+  ],
+  "categoryId": "assembly",
+  "categoryTitle": "Furniture Assembly"
+}

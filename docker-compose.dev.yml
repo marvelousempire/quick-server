@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  learnmappers-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: learnmappers-dev
+    ports:
+      - "${HTTP_PORT:-8000}:8000"
+      - "${HTTPS_PORT:-8443}:8443"
+    volumes:
+      - ./sites:/app/sites
+      - ./data:/app/data
+      - ./server.js:/app/server.js
+      - ./package.json:/app/package.json
+      - ./node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=8443
+      - HTTP_PORT=8000
+      - HTTPS=true
+      - SITE_DIR=${SITE_DIR:-sites/default}
+    restart: unless-stopped
+    networks:
+      - learnmappers-network
+    command: sh -c "pnpm install && node server.js"
+
+networks:
+  learnmappers-network:
+    driver: bridge
+

@@ -1,0 +1,2546 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Site Settings — Configuration Editor</title>
+<script src="../../config.js"></script>
+<script>
+// Theme management for Settings page
+(function() {
+  function getThemeMode() {
+    const stored = localStorage.getItem('themeMode');
+    if (stored) return stored;
+    if (window.CONFIG?.theme?.mode) return window.CONFIG.theme.mode;
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  }
+  
+  function applyTheme(mode) {
+    const html = document.documentElement;
+    if (mode === 'auto') {
+      const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      html.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
+    } else {
+      html.setAttribute('data-theme', mode);
+    }
+    localStorage.setItem('themeMode', mode);
+  }
+  
+  // Initialize theme
+  document.addEventListener('DOMContentLoaded', () => {
+    const initialMode = getThemeMode();
+    applyTheme(initialMode);
+    
+    // Listen for system theme changes
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (getThemeMode() === 'auto') {
+          applyTheme('auto');
+        }
+      });
+    }
+  });
+  
+  // Also try immediately (before DOMContentLoaded)
+  const initialMode = getThemeMode();
+  applyTheme(initialMode);
+  
+  function toggleTheme() {
+    const current = getThemeMode();
+    const modes = ['dark', 'light', 'auto'];
+    const currentIndex = modes.indexOf(current);
+    const nextIndex = (currentIndex + 1) % modes.length;
+    const nextMode = modes[nextIndex];
+    applyTheme(nextMode);
+    updateThemeIcon(nextMode);
+  }
+  
+  function updateThemeIcon(mode) {
+    const icon = document.getElementById('themeIcon');
+    if (icon) {
+      const icons = { dark: '🌙', light: '☀️', auto: '🔄' };
+      icon.textContent = icons[mode] || '🌙';
+      icon.parentElement.title = `Theme: ${mode} (click to toggle)`;
+    }
+  }
+  
+  // Update icon on load
+  document.addEventListener('DOMContentLoaded', () => {
+    updateThemeIcon(getThemeMode());
+  });
+  
+  // Expose globally
+  window.toggleTheme = toggleTheme;
+  window.applyTheme = applyTheme;
+})();
+</script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); }
+[data-theme="light"]{ --bg:#ffffff; --card:#f8fafc; --ink:#0f172a; --muted:#64748b; --brand:#0ea5e9; --brand2:#10b981; --line:#e2e8f0; --shadow:rgba(15,23,42,.1); }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg, #0b0c10);
+  color: var(--ink, #e9f3ff);
+  line-height: 1.6;
+  padding: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+header {
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line, #334155);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: var(--brand, #6366f1);
+}
+.subtitle {
+  color: var(--muted, #94a3b8);
+  font-size: 1.1rem;
+}
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--brand, #6366f1);
+  color: white;
+}
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: var(--card, #1e293b);
+  color: var(--ink, #f1f5f9);
+}
+.btn-success {
+  background: var(--success, #10b981);
+}
+.btn-danger {
+  background: var(--error, #ef4444);
+}
+.status {
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: none;
+}
+.status.success {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid var(--success, #10b981);
+  color: var(--success, #10b981);
+  display: block;
+}
+.status.error {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid var(--error, #ef4444);
+  color: var(--error, #ef4444);
+  display: block;
+}
+.config-editor {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 20px;
+}
+.sidebar {
+  background: var(--card, #1e293b);
+  border-radius: 12px;
+  padding: 20px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+.sidebar h3 {
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+  color: var(--brand, #6366f1);
+}
+.nav-link {
+  display: block;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  color: var(--muted, #94a3b8);
+  text-decoration: none;
+  transition: all 0.2s;
+  cursor: pointer;
+  line-height: 1.4;
+}
+.nav-link:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--ink, #f1f5f9);
+}
+.nav-link.active {
+  background: var(--brand, #6366f1);
+  color: white;
+}
+.content {
+  background: var(--card, #1e293b);
+  border-radius: 12px;
+  padding: 30px;
+}
+.section {
+  display: none;
+}
+.section.active {
+  display: block;
+}
+.section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 24px;
+  color: var(--brand, #6366f1);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line, #334155);
+}
+.form-group {
+  margin-bottom: 24px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--ink, #f1f5f9);
+  font-size: 14px;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line, #334155);
+  border-radius: 8px;
+  background: var(--bg, #0f172a);
+  color: var(--ink, #f1f5f9);
+  font-size: 14px;
+  font-family: inherit;
+}
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--brand, #6366f1);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+.form-group small {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted, #94a3b8);
+  font-size: 12px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  cursor: pointer;
+}
+.array-item {
+  background: var(--bg, #0f172a);
+  border: 1px solid var(--line, #334155);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.array-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.array-item-title {
+  font-weight: 600;
+  color: var(--brand, #6366f1);
+}
+.btn-remove {
+  padding: 6px 12px;
+  background: var(--error, #ef4444);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.btn-add {
+  padding: 10px 20px;
+  background: var(--success, #10b981);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 12px;
+}
+.json-viewer {
+  background: var(--bg, #0f172a);
+  border: 1px solid var(--line, #334155);
+  border-radius: 8px;
+  padding: 20px;
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  max-height: 600px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.json-viewer code {
+  color: var(--ink, #f1f5f9);
+}
+@media (max-width: 768px) {
+  .config-editor {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+  <h1 style="margin: 0;">⚙️ Site Settings</h1>
+  <div style="display: flex; align-items: center; gap: 12px;">
+  <button id="themeToggle" class="btn" title="Toggle theme" onclick="toggleTheme()" style="min-width:auto;padding:10px 14px;font-size:18px;background:var(--card);border:1px solid var(--line);color:var(--ink)">
+    <span id="themeIcon">🌙</span>
+  </button>
+        <a href="/" class="btn btn-secondary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+          <span>🖥️</span>
+          <span>Server</span>
+        </a>
+        <a href="/" class="btn btn-secondary" id="back-button" onclick="navigateBack(event)" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+          <span>←</span>
+          <span id="back-button-text">Back</span>
+        </a>
+      </div>
+    </div>
+    <p class="subtitle">Edit your site configuration</p>
+  </header>
+
+  <div class="controls">
+    <button class="btn btn-success" onclick="saveConfig()">💾 Save Changes</button>
+    <button class="btn btn-secondary" onclick="loadConfig()">🔄 Reload</button>
+    <button class="btn btn-secondary" onclick="exportConfig()">📥 Export JSON</button>
+    <button class="btn btn-secondary" onclick="importConfig()">📤 Import JSON</button>
+    <button class="btn btn-danger" onclick="resetConfig()">↩️ Reset to Default</button>
+  </div>
+
+  <div id="status" class="status"></div>
+
+  <div class="config-editor">
+    <div class="sidebar">
+      <h3>Navigation</h3>
+      <a href="#" class="nav-link active" data-section="site" title="Basic site identity and metadata">
+        <div style="font-weight: 600;">Site Info</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Identity & metadata</div>
+      </a>
+      <a href="#" class="nav-link" data-section="seo" title="Search engine optimization">
+        <div style="font-weight: 600;">SEO</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Search & social</div>
+      </a>
+      <a href="#" class="nav-link" data-section="navigation" title="Menu and navigation">
+        <div style="font-weight: 600;">Navigation</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Menu & links</div>
+      </a>
+      <a href="#" class="nav-link" data-section="theme" title="Color palette">
+        <div style="font-weight: 600;">Theme</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Colors & style</div>
+      </a>
+      <a href="#" class="nav-link" data-section="layout" title="Page structure">
+        <div style="font-weight: 600;">Layout</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Structure & spacing</div>
+      </a>
+      <a href="#" class="nav-link" data-section="content" title="Homepage content">
+        <div style="font-weight: 600;">Content</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Hero & homepage</div>
+      </a>
+      <a href="#" class="nav-link" data-section="contact" title="Contact details">
+        <div style="font-weight: 600;">Contact</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Email & address</div>
+      </a>
+      <a href="#" class="nav-link" data-section="inventory" title="Resource management">
+        <div style="font-weight: 600;">Inventory</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Resources & tools</div>
+      </a>
+      <a href="#" class="nav-link" data-section="api" title="Backend API">
+        <div style="font-weight: 600;">API</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Endpoints & base URL</div>
+      </a>
+      <a href="#" class="nav-link" data-section="pwa" title="Progressive Web App">
+        <div style="font-weight: 600;">PWA</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Offline & install</div>
+      </a>
+      <a href="#" class="nav-link" data-section="integrations" title="Third-party services">
+        <div style="font-weight: 600;">Integrations</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">External services</div>
+      </a>
+      <a href="#" class="nav-link" data-section="deployment" title="Remote deployment">
+        <div style="font-weight: 600;">Deployment</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">SSH & remote server</div>
+      </a>
+      <a href="#" class="nav-link" data-section="settings" title="General preferences">
+        <div style="font-weight: 600;">Settings</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Behavior & preferences</div>
+      </a>
+      <a href="/" class="nav-link" title="Server management" style="text-decoration: none; color: inherit;">
+        <div style="font-weight: 600;">🖥️ Server</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Site selector & management</div>
+      </a>
+      <a href="#" class="nav-link" data-section="json" title="Raw configuration">
+        <div style="font-weight: 600;">JSON View</div>
+        <div style="font-size: 11px; opacity: 0.7; margin-top: 2px;">Raw config editor</div>
+      </a>
+    </div>
+
+    <div class="content">
+      <!-- Site Info Section -->
+      <div class="section active" id="section-site">
+        <h2>Site Information</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Configure your site's basic identity, including name, title, description, and metadata. These settings appear in browser tabs, search results, and throughout your site.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> This is your site's core identity. The name appears in navigation and headers, the title shows in browser tabs, and the description is used for SEO and social sharing. The tagline is a short catchphrase, while the mission statement explains your purpose. Version and author help track site iterations.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Fill in your site name (e.g., "LearnMappers HQ Dev"), a descriptive title for browser tabs, and a clear description that explains what your site does. The tagline should be memorable and concise. The mission statement can be longer and more detailed. Set your theme color to match your brand (used for browser UI elements).
+          </p>
+        </div>
+        <div class="form-group">
+          <label>Site Name</label>
+          <input type="text" id="site-name" placeholder="Your Site Name">
+        </div>
+        <div class="form-group">
+          <label>Site Title</label>
+          <input type="text" id="site-title" placeholder="Your Site Title">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="site-description" placeholder="Site description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Tagline</label>
+          <input type="text" id="site-tagline" placeholder="Your tagline">
+        </div>
+        <div class="form-group">
+          <label>Mission</label>
+          <textarea id="site-mission" placeholder="Your mission statement"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Version</label>
+            <input type="text" id="site-version" placeholder="1.0.0">
+          </div>
+          <div class="form-group">
+            <label>Author</label>
+            <input type="text" id="site-author" placeholder="Your Name">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Theme Color</label>
+            <input type="color" id="site-themeColor" value="#6366f1">
+          </div>
+          <div class="form-group">
+            <label>Language</label>
+            <input type="text" id="site-language" value="en">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Charset</label>
+          <input type="text" id="site-charset" value="UTF-8" placeholder="UTF-8">
+          <small>Character encoding (default: UTF-8)</small>
+        </div>
+      </div>
+
+      <!-- SEO Section -->
+      <div class="section" id="section-seo">
+        <h2>SEO Settings</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Optimize your site for search engines and social media sharing. Configure meta tags, Open Graph data, and canonical URLs to improve discoverability and how your site appears when shared.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> SEO settings control how search engines (Google, Bing) and social platforms (Facebook, Twitter, LinkedIn) see and display your site. Meta tags appear in search results, Open Graph tags control how links look when shared on social media, and the canonical URL prevents duplicate content issues.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Write a compelling meta title (50-60 characters) and description (150-160 characters) that includes keywords. Set Open Graph image to a high-quality image (1200x630px recommended) that represents your site. Choose the appropriate OG type (website, article, product, etc.). Set your Twitter card type and handle. The canonical URL should be your primary domain (e.g., https://yoursite.com).
+          </p>
+        </div>
+        <div class="form-group">
+          <label>Meta Title</label>
+          <input type="text" id="seo-metaTitle" placeholder="SEO title">
+        </div>
+        <div class="form-group">
+          <label>Meta Description</label>
+          <textarea id="seo-metaDescription" placeholder="SEO description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Meta Keywords</label>
+          <input type="text" id="seo-metaKeywords" placeholder="keyword1, keyword2, keyword3">
+        </div>
+        <div class="form-group">
+          <label>Open Graph Title</label>
+          <input type="text" id="seo-ogTitle" placeholder="OG title">
+        </div>
+        <div class="form-group">
+          <label>Open Graph Description</label>
+          <textarea id="seo-ogDescription" placeholder="OG description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Canonical URL</label>
+          <input type="url" id="seo-canonicalUrl" placeholder="https://yoursite.com">
+        </div>
+        <div class="form-group">
+          <label>Open Graph Image</label>
+          <input type="url" id="seo-ogImage" placeholder="/og-image.jpg">
+          <small>URL to the Open Graph image for social sharing</small>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Open Graph Type</label>
+            <select id="seo-ogType">
+              <option value="website">Website</option>
+              <option value="article">Article</option>
+              <option value="product">Product</option>
+              <option value="profile">Profile</option>
+            </select>
+            <small>Type of content for Open Graph</small>
+          </div>
+          <div class="form-group">
+            <label>Twitter Card Type</label>
+            <select id="seo-twitterCard">
+              <option value="summary">Summary</option>
+              <option value="summary_large_image">Summary Large Image</option>
+              <option value="app">App</option>
+              <option value="player">Player</option>
+            </select>
+            <small>Twitter card format</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Twitter Site</label>
+          <input type="text" id="seo-twitterSite" placeholder="@yourusername">
+          <small>Twitter username (e.g., @yourusername)</small>
+        </div>
+      </div>
+
+      <!-- Navigation Section -->
+      <div class="section" id="section-navigation">
+        <h2>Navigation</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Customize your site's navigation menu, logo, and header links. Add, remove, or reorder navigation items to create the menu structure that best fits your site.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> Navigation controls your site's header menu and logo. The logo can be text or an image, and clicking it typically takes users to the homepage. Navigation links create your main menu items. Sticky navigation stays visible when scrolling, and transparent headers work well over hero images.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Set your logo text (or image URL). Configure whether the logo shows a dot indicator. Add navigation links using the "Add Navigation Link" button - each link needs a label (what users see), an href (where it goes), and optionally an icon emoji. Enable sticky navigation if you want the menu to stay at the top when scrolling. Enable transparent header for a modern look over hero sections.
+          </p>
+        </div>
+        <div class="form-group">
+          <label>Logo Text</label>
+          <input type="text" id="nav-logo-text" placeholder="Your Logo">
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="nav-logo-showDot">
+            Show Dot
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Logo Href</label>
+          <input type="text" id="nav-logo-href" placeholder="/">
+          <small>Link destination when logo is clicked</small>
+        </div>
+        <div class="form-group">
+          <label>Logo Image URL</label>
+          <input type="url" id="nav-logo-image" placeholder="/logo.png">
+          <small>Optional logo image (if not using text)</small>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="nav-sticky">
+              Sticky Navigation
+            </label>
+            <small>Keep navigation visible when scrolling</small>
+          </div>
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="nav-transparent">
+              Transparent Header
+            </label>
+            <small>Make header background transparent</small>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="nav-showMobileMenu" checked>
+              Show Mobile Menu
+            </label>
+            <small>Display mobile menu button on small screens</small>
+          </div>
+          <div class="form-group">
+            <label>Mobile Menu Icon</label>
+            <input type="text" id="nav-mobileMenuIcon" value="☰" placeholder="☰">
+            <small>Icon for mobile menu button</small>
+          </div>
+        </div>
+        <div id="nav-links-container"></div>
+        <button class="btn-add" onclick="addNavLink()">+ Add Navigation Link</button>
+      </div>
+
+      <!-- Theme Section -->
+      <div class="section" id="section-theme">
+        <h2>Theme Colors</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Define your site's color palette. These colors are used throughout the interface for backgrounds, text, buttons, and accents. Choose colors that reflect your brand identity.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> Theme settings control your entire site's visual appearance - colors, spacing, typography, animations, and shadows. Colors define backgrounds, text, buttons, and UI elements. Spacing controls padding and gaps. Typography sets fonts and text sizing. Animations add smooth transitions. Shadows create depth.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Start with colors - choose a dark background, light text, and a brand color for buttons/links. Adjust spacing values (radius for rounded corners, gap for spacing between elements). Set typography fonts (use web-safe fonts or Google Fonts). Configure animations (duration, easing) for smooth interactions. Define shadow styles for cards and elevated elements. Changes apply site-wide.
+          </p>
+        </div>
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label>Theme Mode</label>
+          <select id="theme-mode" style="width: 100%; padding: 10px; border-radius: 8px; background: var(--card, #1e293b); border: 1px solid var(--line, #334155); color: var(--ink, #f1f5f9); font-size: 14px;">
+            <option value="dark">🌙 Dark</option>
+            <option value="light">☀️ Light</option>
+            <option value="auto">🔄 Auto (follows system)</option>
+          </select>
+          <small>Choose dark mode, light mode, or auto (follows your system preference)</small>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Background</label>
+            <input type="color" id="theme-bg" value="#0f172a">
+          </div>
+          <div class="form-group">
+            <label>Card</label>
+            <input type="color" id="theme-card" value="#1e293b">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Text (Ink)</label>
+            <input type="color" id="theme-ink" value="#f1f5f9">
+          </div>
+          <div class="form-group">
+            <label>Muted</label>
+            <input type="color" id="theme-muted" value="#94a3b8">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Brand</label>
+            <input type="color" id="theme-brand" value="#6366f1">
+          </div>
+          <div class="form-group">
+            <label>Brand 2</label>
+            <input type="color" id="theme-brand2" value="#8b5cf6">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Accent</label>
+            <input type="color" id="theme-accent" value="#f59e0b">
+          </div>
+          <div class="form-group">
+            <label>Success</label>
+            <input type="color" id="theme-success" value="#10b981">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Warning</label>
+            <input type="color" id="theme-warning" value="#f59e0b">
+          </div>
+          <div class="form-group">
+            <label>Error</label>
+            <input type="color" id="theme-error" value="#ef4444">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Info</label>
+            <input type="color" id="theme-info" value="#3b82f6">
+          </div>
+          <div class="form-group">
+            <label>Line</label>
+            <input type="color" id="theme-line" value="#334155">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Shadow</label>
+            <input type="text" id="theme-shadow" value="rgba(3,8,18,.5)" placeholder="rgba(3,8,18,.5)">
+            <small>Shadow color (RGBA format)</small>
+          </div>
+          <div class="form-group">
+            <label>Overlay</label>
+            <input type="text" id="theme-overlay" value="rgba(0,0,0,0.5)" placeholder="rgba(0,0,0,0.5)">
+            <small>Overlay color (RGBA format)</small>
+          </div>
+        </div>
+        
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Spacing</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Border Radius</label>
+            <input type="text" id="theme-spacing-radius" value="16px" placeholder="16px">
+          </div>
+          <div class="form-group">
+            <label>Gap</label>
+            <input type="text" id="theme-spacing-gap" value="16px" placeholder="16px">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Wide Width</label>
+            <input type="text" id="theme-spacing-wide" value="1200px" placeholder="1200px">
+          </div>
+          <div class="form-group">
+            <label>Section Padding</label>
+            <input type="text" id="theme-spacing-sectionPadding" value="80px" placeholder="80px">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Card Padding</label>
+          <input type="text" id="theme-spacing-cardPadding" value="18px" placeholder="18px">
+        </div>
+        
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Typography</h3>
+        <div class="form-group">
+          <label>Font Family</label>
+          <input type="text" id="theme-typography-fontFamily" placeholder="Inter, ui-sans-serif, -apple-system">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Heading Font</label>
+            <input type="text" id="theme-typography-headingFont" placeholder="Inter, ui-sans-serif">
+          </div>
+          <div class="form-group">
+            <label>Body Font</label>
+            <input type="text" id="theme-typography-bodyFont" placeholder="Inter, ui-sans-serif">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Monospace Font</label>
+          <input type="text" id="theme-typography-monoFont" placeholder="ui-monospace, 'SF Mono', Monaco">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Base Font Size</label>
+            <input type="text" id="theme-typography-baseSize" value="16px" placeholder="16px">
+          </div>
+          <div class="form-group">
+            <label>Heading Scale</label>
+            <input type="number" id="theme-typography-headingScale" value="1.25" step="0.05" min="1" max="2">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Line Height</label>
+            <input type="number" id="theme-typography-lineHeight" value="1.6" step="0.1" min="1" max="3">
+          </div>
+          <div class="form-group">
+            <label>Letter Spacing</label>
+            <input type="text" id="theme-typography-letterSpacing" value="normal" placeholder="normal">
+          </div>
+        </div>
+        
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Animations</h3>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="theme-animations-enabled" checked>
+            Enable Animations
+          </label>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Duration</label>
+            <input type="text" id="theme-animations-duration" value="0.18s" placeholder="0.18s">
+          </div>
+          <div class="form-group">
+            <label>Easing</label>
+            <input type="text" id="theme-animations-easing" value="ease" placeholder="ease">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Hover Scale</label>
+            <input type="number" id="theme-animations-hoverScale" value="1.02" step="0.01" min="1" max="2">
+          </div>
+          <div class="form-group">
+            <label>Hover Translate</label>
+            <input type="text" id="theme-animations-hoverTranslate" value="-2px" placeholder="-2px">
+          </div>
+        </div>
+        
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Shadows</h3>
+        <div class="form-group">
+          <label>Small Shadow</label>
+          <input type="text" id="theme-shadows-small" placeholder="0 2px 4px rgba(3,8,18,.2)">
+        </div>
+        <div class="form-group">
+          <label>Medium Shadow</label>
+          <input type="text" id="theme-shadows-medium" placeholder="0 14px 40px -20px rgba(3,8,18,.5)">
+        </div>
+        <div class="form-group">
+          <label>Large Shadow</label>
+          <input type="text" id="theme-shadows-large" placeholder="0 14px 44px -28px rgba(3,8,18,.5)">
+        </div>
+        <div class="form-group">
+          <label>Glow Shadow</label>
+          <input type="text" id="theme-shadows-glow" placeholder="0 0 20px rgba(124,227,255,.2)">
+        </div>
+      </div>
+
+      <!-- Layout Section -->
+      <div class="section" id="section-layout">
+        <h2>Layout Settings</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Control your site's overall layout structure, including maximum width, padding, spacing, and grid columns. These settings affect how content is displayed and organized across all pages.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> Layout settings control the structural spacing and organization of your site. Max width prevents content from being too wide on large screens. Padding controls spacing around content. Hero padding specifically controls the homepage hero section. Grid columns determine how many items appear side-by-side (responsive - different for desktop, tablet, mobile).
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Set max width (e.g., "1440px") to limit content width on large screens. Use responsive padding with clamp() (e.g., "clamp(18px,4vw,60px)") for fluid spacing. Configure hero padding separately for top, bottom, and sides. Set grid columns: default (desktop, e.g., 3), tablet (e.g., 2), and mobile (e.g., 1). This creates a responsive layout that adapts to screen size.
+          </p>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Max Width</label>
+            <input type="text" id="layout-maxWidth" placeholder="1200px">
+          </div>
+          <div class="form-group">
+            <label>Padding</label>
+            <input type="text" id="layout-padding" placeholder="clamp(20px,4vw,60px)">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Container Padding</label>
+          <input type="text" id="layout-containerPadding" placeholder="clamp(18px,4vw,60px)">
+          <small>Padding for main container</small>
+        </div>
+        <div class="form-group">
+          <label>Section Spacing</label>
+          <input type="text" id="layout-sectionSpacing" placeholder="60px">
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Hero Padding</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Top</label>
+            <input type="text" id="layout-heroPadding-top" placeholder="54px">
+          </div>
+          <div class="form-group">
+            <label>Bottom</label>
+            <input type="text" id="layout-heroPadding-bottom" placeholder="24px">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Sides</label>
+          <input type="text" id="layout-heroPadding-sides" placeholder="clamp(18px,4vw,60px)">
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Grid Columns</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Default</label>
+            <input type="number" id="layout-gridColumns-default" value="3" min="1" max="6">
+          </div>
+          <div class="form-group">
+            <label>Tablet</label>
+            <input type="number" id="layout-gridColumns-tablet" value="2" min="1" max="6">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Mobile</label>
+          <input type="number" id="layout-gridColumns-mobile" value="1" min="1" max="6">
+        </div>
+      </div>
+
+      <!-- Content Section -->
+      <div class="section" id="section-content">
+        <h2>Content</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Configure your homepage hero section content, including the main headline, subtitle, description, and call-to-action button. This is often the first thing visitors see.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> The Content section controls your homepage hero - the large banner section at the top of your homepage. This is your first impression, so it should be compelling. You can set the headline, subtitle, description, background image/video, alignment, and a call-to-action button. Hero chips are small tags that appear below the title.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Write a clear, benefit-focused headline. Add a subtitle that expands on the headline. Write a description that explains what you do. Optionally add a background image or video URL. Set alignment (center, left, or right). Add hero chips as comma-separated tags (e.g., "Homesteading, Handyman, Carpentry"). Configure your CTA button with text, link, style, icon, and whether it's an external link. Enable scroll indicator if you want a visual cue to scroll down.
+          </p>
+        </div>
+        <h3 style="margin-top: 0; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Hero Section</h3>
+        <div class="form-group">
+          <label>Hero Title</label>
+          <input type="text" id="content-hero-title" placeholder="Hero title">
+        </div>
+        <div class="form-group">
+          <label>Hero Subtitle</label>
+          <input type="text" id="content-hero-subtitle" placeholder="Hero subtitle">
+        </div>
+        <div class="form-group">
+          <label>Hero Description</label>
+          <textarea id="content-hero-description" placeholder="Hero description"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Background Image URL</label>
+            <input type="url" id="content-hero-backgroundImage" placeholder="/hero-bg.jpg">
+          </div>
+          <div class="form-group">
+            <label>Background Video URL</label>
+            <input type="url" id="content-hero-backgroundVideo" placeholder="/hero-video.mp4">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="content-hero-overlay">
+              Show Overlay
+            </label>
+          </div>
+          <div class="form-group">
+            <label>Alignment</label>
+            <select id="content-hero-alignment">
+              <option value="center">Center</option>
+              <option value="left">Left</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Hero Chips/Tags (comma-separated)</label>
+          <input type="text" id="content-hero-chips" placeholder="Tag1, Tag2, Tag3">
+          <small>Small tags/chips to display below hero title</small>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="content-hero-showScrollIndicator">
+            Show Scroll Indicator
+          </label>
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Primary CTA</h3>
+        <div class="form-group">
+          <label>Primary CTA Text</label>
+          <input type="text" id="content-hero-cta-text" placeholder="Get Started">
+        </div>
+        <div class="form-group">
+          <label>Primary CTA Link</label>
+          <input type="text" id="content-hero-cta-href" placeholder="/contact.html">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>CTA Style</label>
+            <select id="content-hero-cta-style">
+              <option value="brand">Brand</option>
+              <option value="secondary">Secondary</option>
+              <option value="outline">Outline</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>CTA Icon</label>
+            <input type="text" id="content-hero-cta-icon" placeholder="📅">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="content-hero-cta-external">
+            External Link
+          </label>
+          <small>Check if CTA links to external site</small>
+        </div>
+        <div style="margin-top: 40px; padding: 20px; background: var(--bg, #0f172a); border-radius: 8px; border: 1px solid var(--line, #334155);">
+          <p style="color: var(--muted, #94a3b8); font-size: 14px; margin-bottom: 12px;">
+            <strong>Note:</strong> Services, Features, Sections, Testimonials, Stats, Tools, Skills, Certifications, Service Areas, Availability, Pricing, FAQ, and Footer are complex nested structures.
+          </p>
+          <p style="color: var(--muted, #94a3b8); font-size: 14px;">
+            For these sections, use the <strong>JSON View</strong> tab to edit them directly, or they can be managed through the site's individual pages and components.
+          </p>
+        </div>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="section" id="section-contact">
+        <h2>Contact Information</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Add your contact details including email, phone, and address. This information can be displayed on contact pages, footers, and used for business listings.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> Contact information is displayed throughout your site - in footers, contact pages, and business listings. This includes email, phone, physical address, business hours, and booking links. Business hours help customers know when you're available, and booking links provide direct ways to schedule services.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Enter your email and phone number. Fill in your complete address (street, city, state, ZIP, country). Set up business hours by adding day ranges and times (e.g., "Monday - Friday: 9:00 AM - 6:00 PM"). Configure booking links - set a primary booking URL (like TaskRabbit) and optionally a secondary one. The timezone ensures hours display correctly for your location.
+          </p>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="contact-enabled" checked>
+            Enable Contact Section
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="contact-email" placeholder="contact@yoursite.com">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="contact-phone" placeholder="+1 (555) 123-4567">
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Address</h3>
+        <div class="form-group">
+          <label>Street</label>
+          <input type="text" id="contact-address-street" placeholder="123 Main St">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" id="contact-city" placeholder="City">
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" id="contact-state" placeholder="State">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ZIP Code</label>
+            <input type="text" id="contact-address-zip" placeholder="12345">
+          </div>
+          <div class="form-group">
+            <label>Country</label>
+            <input type="text" id="contact-country" placeholder="Country">
+          </div>
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Business Hours</h3>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="contact-hours-enabled" checked>
+            Enable Business Hours Display
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Timezone</label>
+          <input type="text" id="contact-hours-timezone" placeholder="America/Los_Angeles">
+        </div>
+        <div id="contact-hours-container"></div>
+        <button class="btn-add" onclick="addContactHour()" style="margin-top: 12px;">+ Add Business Hour</button>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Booking</h3>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="contact-booking-enabled" checked>
+            Enable Booking Links
+          </label>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Primary Booking Link</label>
+            <input type="url" id="contact-booking-primaryLink" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label>Primary Booking Text</label>
+            <input type="text" id="contact-booking-primaryText" placeholder="Book Now">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Secondary Booking Link</label>
+            <input type="url" id="contact-booking-secondaryLink" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label>Secondary Booking Text</label>
+            <input type="text" id="contact-booking-secondaryText" placeholder="Alternative Booking">
+          </div>
+        </div>
+      </div>
+
+      <!-- Inventory Section -->
+      <div class="section" id="section-inventory">
+        <h2>Inventory Settings</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Enable and configure your inventory management system. Define categories for organizing your resources, tools, equipment, and other items. This powers the inventory and resource card features.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> Inventory settings control how you manage and display your resources (tools, equipment, materials, etc.). Categories help organize items. Display fields determine which information columns appear in the inventory table. Import settings enable automatic importing from vendor files (Amazon, eBay, etc.) in CSV, JSON, or ZIP formats.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Enable inventory to activate the system. Set categories as comma-separated values (e.g., "Tools, Equipment, Materials"). Toggle display fields on/off to show/hide columns like name, type, power, state, spot, notes, and timestamps. Enable vendor import to allow drag-and-drop file imports. List supported vendors and file formats. When you drop a vendor file on the inventory page, it will automatically detect the vendor and parse the data.
+          </p>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="inventory-enabled" checked>
+            Enable Inventory
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Categories (comma-separated)</label>
+          <input type="text" id="inventory-categories" placeholder="Tools, Equipment, Materials">
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Display Fields</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="inventory-fields-name" checked>
+              Name
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="inventory-fields-type" checked>
+              Type
+            </label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="inventory-fields-power" checked>
+              Power
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="inventory-fields-state" checked>
+              State
+            </label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="inventory-fields-spot" checked>
+              Spot
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="inventory-fields-notes" checked>
+              Notes
+            </label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="inventory-fields-created_at" checked>
+              Created At
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="checkbox-group">
+              <input type="checkbox" id="inventory-fields-updated_at" checked>
+              Updated At
+            </label>
+          </div>
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Import Settings</h3>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="inventory-import-enabled" checked>
+            Enable Vendor Import
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Supported Vendors (comma-separated)</label>
+          <input type="text" id="inventory-import-vendors" placeholder="Amazon, eBay, Home Depot">
+          <small>List of supported vendor names for import</small>
+        </div>
+        <div class="form-group">
+          <label>Supported Formats (comma-separated)</label>
+          <input type="text" id="inventory-import-formats" placeholder="CSV, JSON, ZIP">
+          <small>File formats that can be imported</small>
+        </div>
+      </div>
+
+      <!-- API Section -->
+      <div class="section" id="section-api">
+        <h2>API Settings</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Configure your backend API endpoints and base URL. Enable or disable API functionality for inventory management, resource cards, and other dynamic features that require server communication.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> The API settings control how your site communicates with the backend server. This enables features like dynamic inventory loading, resource card generation, site statistics, and data synchronization. If you're running the Node.js server, these endpoints allow your frontend to fetch and update data in real-time.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Set your base URL (usually <code>/api</code>), configure local and production endpoints for different environments, and adjust timeout/retry settings for reliability. Enable caching to reduce server load. Configure authentication if your API requires it. The endpoints section lets you customize the exact paths for each API function.
+          </p>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="api-enabled" checked>
+            Enable API
+          </label>
+          <small>Enable backend API for dynamic features like inventory, resource cards, and data management</small>
+        </div>
+        <div class="form-group">
+          <label>Base URL</label>
+          <input type="text" id="api-baseUrl" placeholder="/api">
+          <small>The base path for all API endpoints (e.g., /api)</small>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Local API URL</label>
+            <input type="text" id="api-localUrl" placeholder="http://localhost:8000/api">
+            <small>Local development API endpoint</small>
+          </div>
+          <div class="form-group">
+            <label>Production API URL</label>
+            <input type="text" id="api-productionUrl" placeholder="https://api.yoursite.com">
+            <small>Production API endpoint</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Timeout (ms)</label>
+          <input type="number" id="api-timeout" value="30000" min="1000" step="1000">
+          <small>Request timeout in milliseconds (default: 30000)</small>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="api-retryEnabled" checked>
+            Enable Retry on Failure
+          </label>
+          <small>Automatically retry failed API requests</small>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Max Retries</label>
+            <input type="number" id="api-maxRetries" value="3" min="0" max="10">
+            <small>Maximum number of retry attempts</small>
+          </div>
+          <div class="form-group">
+            <label>Retry Delay (ms)</label>
+            <input type="number" id="api-retryDelay" value="1000" min="100" step="100">
+            <small>Delay between retry attempts</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="api-cacheEnabled" checked>
+            Enable Response Caching
+          </label>
+          <small>Cache API responses to reduce server load</small>
+        </div>
+        <div class="form-group">
+          <label>Cache Duration (seconds)</label>
+          <input type="number" id="api-cacheDuration" value="300" min="0" step="60">
+          <small>How long to cache responses (0 = no cache)</small>
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Endpoints</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Inventory Endpoint</label>
+            <input type="text" id="api-endpoints-inventory" value="/api/inventory" placeholder="/api/inventory">
+          </div>
+          <div class="form-group">
+            <label>Stats Endpoint</label>
+            <input type="text" id="api-endpoints-stats" value="/api/stats" placeholder="/api/stats">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Sites Endpoint</label>
+            <input type="text" id="api-endpoints-sites" value="/api/sites" placeholder="/api/sites">
+          </div>
+          <div class="form-group">
+            <label>Health Endpoint</label>
+            <input type="text" id="api-endpoints-health" value="/api/health" placeholder="/api/health">
+          </div>
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Authentication</h3>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="api-authentication-enabled">
+            Enable API Authentication
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Authentication Method</label>
+          <select id="api-authentication-method">
+            <option value="none">None</option>
+            <option value="bearer">Bearer Token</option>
+            <option value="api-key">API Key</option>
+            <option value="basic">Basic Auth</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- PWA Section -->
+      <div class="section" id="section-pwa">
+        <h2>PWA Settings</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Configure Progressive Web App features, including offline caching and installability. Enable PWA functionality to allow users to install your site as an app on their devices.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> PWA (Progressive Web App) settings enable your site to work like a native app. Users can install it on their phones/desktops, and it works offline. The manifest file defines app metadata (name, icons, colors). The service worker caches files for offline access. The offline page shows when there's no internet connection.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Enable PWA to activate app-like features. Set the manifest path (usually <code>/manifest.webmanifest</code>). Set the service worker path (usually <code>/service-worker.js</code>). Choose an offline page (usually your homepage). Set a cache name (e.g., "site-v1") - increment this when you want to force a cache refresh. Enable install prompt to show users they can install your site as an app.
+          </p>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="pwa-enabled" checked>
+            Enable PWA
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Manifest Path</label>
+          <input type="text" id="pwa-manifest" value="/manifest.webmanifest" placeholder="/manifest.webmanifest">
+          <small>Path to the web manifest file</small>
+        </div>
+        <div class="form-group">
+          <label>Service Worker Path</label>
+          <input type="text" id="pwa-serviceWorker" value="/service-worker.js" placeholder="/service-worker.js">
+          <small>Path to the service worker file</small>
+        </div>
+        <div class="form-group">
+          <label>Offline Page</label>
+          <input type="text" id="pwa-offlinePage" value="/index.html" placeholder="/index.html">
+          <small>Page to show when offline</small>
+        </div>
+        <div class="form-group">
+          <label>Cache Name</label>
+          <input type="text" id="pwa-cacheName" placeholder="site-v1">
+          <small>Name for the cache storage</small>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="pwa-installPrompt" checked>
+            Show Install Prompt
+          </label>
+          <small>Prompt users to install the PWA</small>
+        </div>
+      </div>
+
+      <!-- Integrations Section -->
+      <div class="section" id="section-integrations">
+        <h2>Integrations</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Connect your site with external services and platforms. Configure integrations like TaskRabbit, social media, analytics, and other third-party services to extend functionality.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> Integrations connect your site to external services. TaskRabbit integration adds booking buttons with UTM tracking. Mailchimp enables newsletter signups and email marketing. Stripe enables payment processing. Each integration extends your site's capabilities without building features from scratch.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> For TaskRabbit: Enable it, paste your profile URL, and set UTM parameters (source, medium, campaign) to track which links come from your site. For Mailchimp: Enable it, enter your list ID and API key from your Mailchimp account. For Stripe: Enable it and enter your publishable key (starts with "pk_") from your Stripe dashboard. Never share secret keys publicly - only use publishable keys in frontend code.
+          </p>
+        </div>
+        <h3 style="margin-top: 0; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">TaskRabbit</h3>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="integration-taskrabbit-enabled">
+            Enable TaskRabbit
+          </label>
+        </div>
+        <div class="form-group">
+          <label>TaskRabbit Profile URL</label>
+          <input type="url" id="integration-taskrabbit-url" placeholder="https://...">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>UTM Source</label>
+            <input type="text" id="integration-taskrabbit-utmSource" placeholder="learnmappers_site">
+          </div>
+          <div class="form-group">
+            <label>UTM Medium</label>
+            <input type="text" id="integration-taskrabbit-utmMedium" placeholder="btn">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>UTM Campaign</label>
+          <input type="text" id="integration-taskrabbit-utmCampaign" placeholder="v7_0">
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Mailchimp</h3>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="integration-mailchimp-enabled">
+            Enable Mailchimp
+          </label>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>List ID</label>
+            <input type="text" id="integration-mailchimp-listId" placeholder="your-list-id">
+          </div>
+          <div class="form-group">
+            <label>API Key</label>
+            <input type="password" id="integration-mailchimp-apiKey" placeholder="your-api-key">
+          </div>
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Stripe</h3>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="integration-stripe-enabled">
+            Enable Stripe
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Publishable Key</label>
+          <input type="text" id="integration-stripe-publishableKey" placeholder="pk_live_...">
+          <small>Your Stripe publishable key</small>
+        </div>
+      </div>
+
+      <!-- Deployment Section -->
+      <div class="section" id="section-deployment">
+        <h2>Remote Server Deployment</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Configure remote server deployment via SSH/SFTP. Set up connection credentials, sync settings, and environment URLs to push your site to production or staging servers. Test connections and deploy with one click.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> Deployment settings allow you to push your site to a remote server (VPS, cloud hosting, etc.) via SSH/SFTP. This automates the process of uploading files, so you can deploy updates with one click instead of manually transferring files. You can set up both production and staging environments.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Enable deployment first. Enter your server host (IP or domain) and SSH port (usually 22). Enter your username and the remote path where files should go (e.g., <code>/var/www/html</code>). Use SSH key authentication (recommended) - set the path to your private key (e.g., <code>~/.ssh/id_rsa</code>). Or use password authentication. Configure include/exclude patterns to control which files sync. Set production and staging URLs. Click "Test Connection" to verify, then "Deploy Site" to push files.
+          </p>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="deployment-enabled">
+            Enable Remote Deployment
+          </label>
+          <small>Enable this to push your site to a remote server via SSH/SFTP</small>
+        </div>
+        
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Remote Server Connection</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Host (IP or Domain)</label>
+            <input type="text" id="deployment-host" placeholder="example.com or 192.168.1.100">
+            <small>Your VPS hostname or IP address</small>
+          </div>
+          <div class="form-group">
+            <label>Port</label>
+            <input type="number" id="deployment-port" value="22" min="1" max="65535">
+            <small>SSH port (default: 22)</small>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="deployment-username" placeholder="root or your-username">
+            <small>SSH username for remote server</small>
+          </div>
+          <div class="form-group">
+            <label>Remote Path</label>
+            <input type="text" id="deployment-remotePath" placeholder="/var/www/html">
+            <small>Destination path on remote server</small>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="deployment-useSSHKey" checked>
+            Use SSH Key Authentication
+          </label>
+          <small>Recommended: Use SSH keys instead of password</small>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>SSH Key Path</label>
+            <input type="text" id="deployment-sshKeyPath" value="~/.ssh/id_rsa" placeholder="~/.ssh/id_rsa">
+            <small>Path to your private SSH key (e.g., ~/.ssh/id_rsa)</small>
+          </div>
+          <div class="form-group">
+            <label>Password (if not using SSH key)</label>
+            <input type="password" id="deployment-password" placeholder="Leave empty if using SSH key">
+            <small>Only needed if not using SSH key authentication</small>
+          </div>
+        </div>
+        
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Sync Settings</h3>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="deployment-autoSync">
+            Auto-Sync on Save
+          </label>
+          <small>Automatically push changes to remote server when config is saved</small>
+        </div>
+        
+        <div class="form-group">
+          <label>Files to Include (one per line)</label>
+          <textarea id="deployment-include" rows="6" placeholder="content/**&#10;config.json&#10;config.js&#10;scripts.js&#10;manifest.webmanifest&#10;service-worker.js"></textarea>
+          <small>List of files/patterns to include in deployment (one per line)</small>
+        </div>
+        
+        <div class="form-group">
+          <label>Files to Exclude (one per line)</label>
+          <textarea id="deployment-exclude" rows="6" placeholder="node_modules&#10;.git&#10;.DS_Store&#10;*.log"></textarea>
+          <small>List of files/patterns to exclude from deployment (one per line)</small>
+        </div>
+        
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Environment URLs</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Production URL</label>
+            <input type="url" id="deployment-prod-url" placeholder="https://yoursite.com">
+            <small>Your production site URL</small>
+          </div>
+          <div class="form-group">
+            <label>Production API URL</label>
+            <input type="url" id="deployment-prod-apiUrl" placeholder="https://api.yoursite.com">
+            <small>Production API endpoint (if different)</small>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Staging URL</label>
+            <input type="url" id="deployment-staging-url" placeholder="https://staging.yoursite.com">
+            <small>Your staging site URL (optional)</small>
+          </div>
+          <div class="form-group">
+            <label>Staging API URL</label>
+            <input type="url" id="deployment-staging-apiUrl" placeholder="https://api-staging.yoursite.com">
+            <small>Staging API endpoint (optional)</small>
+          </div>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: var(--bg, #0f172a); border-radius: 8px; border: 1px solid var(--line, #334155);">
+          <h4 style="margin-bottom: 12px; color: var(--brand, #6366f1);">🚀 Deploy Now</h4>
+          <p style="margin-bottom: 16px; color: var(--muted, #94a3b8); font-size: 14px;">Test your connection and push your site to the remote server</p>
+          <button class="btn btn-success" onclick="testDeployment()" style="margin-right: 12px;">🔍 Test Connection</button>
+          <button class="btn" onclick="deploySite()">📤 Deploy Site</button>
+          <div id="deployment-status" style="margin-top: 16px; padding: 12px; border-radius: 6px; display: none;"></div>
+        </div>
+      </div>
+
+      <!-- Settings Section -->
+      <div class="section" id="section-settings">
+        <h2>General Settings</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          Configure general site behavior and preferences, including image loading, scrolling behavior, timezone, and date formatting. These settings affect user experience and performance.
+        </p>
+        <div style="background: var(--bg, #0f172a); border-left: 3px solid var(--brand, #6366f1); padding: 16px; margin-bottom: 24px; border-radius: 6px;">
+          <p style="margin: 0; color: var(--ink, #f1f5f9); font-size: 13px; line-height: 1.6;">
+            <strong>What is this for?</strong> General settings control site-wide behavior and preferences. Lazy loading improves performance by loading images only when needed. Smooth scroll creates elegant page navigation. Back to top button helps users return to the top. Timezone and date/time formats ensure dates display correctly. Dark mode provides a dark theme option. Language settings control default and supported languages.
+          </p>
+          <p style="margin: 12px 0 0 0; color: var(--muted, #94a3b8); font-size: 13px; line-height: 1.6;">
+            <strong>How to use:</strong> Enable lazy load images for better performance (images load as you scroll). Enable smooth scroll for elegant navigation. Enable back to top button for long pages. Set your timezone (e.g., "America/Los_Angeles") and date format (e.g., "MM/DD/YYYY"). Choose 12-hour or 24-hour time format. Enable dark mode if you want a dark theme option, and set the default (dark, light, or auto based on system). Set default language and list supported languages (comma-separated).
+          </p>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="settings-lazyLoadImages" checked>
+            Lazy Load Images
+          </label>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="settings-smoothScroll" checked>
+            Smooth Scroll
+          </label>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="settings-backToTop" checked>
+            Back to Top Button
+          </label>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Timezone</label>
+            <input type="text" id="settings-timezone" placeholder="America/Los_Angeles">
+          </div>
+          <div class="form-group">
+            <label>Date Format</label>
+            <input type="text" id="settings-dateFormat" placeholder="MM/DD/YYYY">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Time Format</label>
+          <select id="settings-timeFormat">
+            <option value="12h">12 Hour (AM/PM)</option>
+            <option value="24h">24 Hour</option>
+          </select>
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Dark Mode</h3>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="settings-darkMode-enabled">
+            Enable Dark Mode
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Default Mode</label>
+          <select id="settings-darkMode-default">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto (System)</option>
+          </select>
+        </div>
+        <h3 style="margin-top: 30px; margin-bottom: 16px; font-size: 1.3rem; color: var(--brand, #6366f1);">Language</h3>
+        <div class="form-group">
+          <label>Default Language</label>
+          <input type="text" id="settings-language-default" value="en" placeholder="en">
+        </div>
+        <div class="form-group">
+          <label>Supported Languages (comma-separated)</label>
+          <input type="text" id="settings-language-supported" value="en" placeholder="en, es, fr">
+        </div>
+      </div>
+
+      <!-- JSON View Section -->
+      <div class="section" id="section-json">
+        <h2>Raw JSON Configuration</h2>
+        <p style="color: var(--muted, #94a3b8); margin-bottom: 24px; font-size: 14px; line-height: 1.6;">
+          View and edit the complete configuration as raw JSON. This is useful for advanced users who want direct access to the config structure, or for copying/backing up your entire configuration.
+        </p>
+        <div class="json-viewer" id="json-viewer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let config = {};
+let originalConfig = {};
+
+// Load config on page load
+async function loadConfig() {
+  try {
+    const response = await fetch('/config.json');
+    if (!response.ok) throw new Error('Failed to load config');
+    config = await response.json();
+    originalConfig = JSON.parse(JSON.stringify(config));
+    populateForm();
+    updateJSONView();
+    showStatus('Configuration loaded successfully', 'success');
+  } catch (error) {
+    console.error('Error loading config:', error);
+    showStatus('Error loading configuration: ' + error.message, 'error');
+  }
+}
+
+// Populate form with config values
+function populateForm() {
+  // Site
+  document.getElementById('site-name').value = config.site?.name || '';
+  document.getElementById('site-title').value = config.site?.title || '';
+  document.getElementById('site-description').value = config.site?.description || '';
+  document.getElementById('site-tagline').value = config.site?.tagline || '';
+  document.getElementById('site-mission').value = config.site?.mission || '';
+  document.getElementById('site-version').value = config.site?.version || '';
+  document.getElementById('site-author').value = config.site?.author || '';
+  document.getElementById('site-themeColor').value = config.site?.themeColor || '#6366f1';
+  document.getElementById('site-language').value = config.site?.language || 'en';
+  document.getElementById('site-charset').value = config.site?.charset || 'UTF-8';
+
+  // SEO
+  document.getElementById('seo-metaTitle').value = config.seo?.metaTitle || '';
+  document.getElementById('seo-metaDescription').value = config.seo?.metaDescription || '';
+  document.getElementById('seo-metaKeywords').value = config.seo?.metaKeywords || '';
+  document.getElementById('seo-ogTitle').value = config.seo?.ogTitle || '';
+  document.getElementById('seo-ogDescription').value = config.seo?.ogDescription || '';
+  document.getElementById('seo-canonicalUrl').value = config.seo?.canonicalUrl || '';
+  document.getElementById('seo-ogImage').value = config.seo?.ogImage || '';
+  document.getElementById('seo-ogType').value = config.seo?.ogType || 'website';
+  document.getElementById('seo-twitterCard').value = config.seo?.twitterCard || 'summary';
+  document.getElementById('seo-twitterSite').value = config.seo?.twitterSite || '';
+
+  // Navigation
+  document.getElementById('nav-logo-text').value = config.navigation?.logo?.text || '';
+  document.getElementById('nav-logo-showDot').checked = config.navigation?.logo?.showDot || false;
+  document.getElementById('nav-logo-href').value = config.navigation?.logo?.href || '/';
+  document.getElementById('nav-logo-image').value = config.navigation?.logo?.image || '';
+  document.getElementById('nav-sticky').checked = config.navigation?.sticky !== false;
+  document.getElementById('nav-transparent').checked = config.navigation?.transparent || false;
+  document.getElementById('nav-showMobileMenu').checked = config.navigation?.showMobileMenu !== false;
+  document.getElementById('nav-mobileMenuIcon').value = config.navigation?.mobileMenuIcon || '☰';
+  renderNavLinks();
+
+  // Theme
+  // Theme mode
+  const themeMode = document.getElementById('theme-mode');
+  if (themeMode) {
+    themeMode.value = config.theme?.mode || 'dark';
+    // Apply theme immediately when mode changes
+    themeMode.addEventListener('change', function() {
+      if (window.CONFIG) {
+        if (!window.CONFIG.theme) window.CONFIG.theme = {};
+        window.CONFIG.theme.mode = this.value;
+        // Try to apply theme if function is available
+        if (window.applyTheme) {
+          window.applyTheme(window.CONFIG);
+        }
+      }
+    });
+  }
+  
+  document.getElementById('theme-bg').value = config.theme?.colors?.bg || '#0f172a';
+  document.getElementById('theme-card').value = config.theme?.colors?.card || '#1e293b';
+  document.getElementById('theme-ink').value = config.theme?.colors?.ink || '#f1f5f9';
+  document.getElementById('theme-muted').value = config.theme?.colors?.muted || '#94a3b8';
+  document.getElementById('theme-brand').value = config.theme?.colors?.brand || '#6366f1';
+  document.getElementById('theme-brand2').value = config.theme?.colors?.brand2 || '#8b5cf6';
+  document.getElementById('theme-accent').value = config.theme?.colors?.accent || '#f59e0b';
+  document.getElementById('theme-success').value = config.theme?.colors?.success || '#10b981';
+  document.getElementById('theme-warning').value = config.theme?.colors?.warning || '#f59e0b';
+  document.getElementById('theme-error').value = config.theme?.colors?.error || '#ef4444';
+  document.getElementById('theme-info').value = config.theme?.colors?.info || '#3b82f6';
+  document.getElementById('theme-line').value = config.theme?.colors?.line || '#334155';
+  document.getElementById('theme-shadow').value = config.theme?.colors?.shadow || 'rgba(3,8,18,.5)';
+  document.getElementById('theme-overlay').value = config.theme?.colors?.overlay || 'rgba(0,0,0,0.5)';
+  document.getElementById('theme-spacing-radius').value = config.theme?.spacing?.radius || '16px';
+  document.getElementById('theme-spacing-gap').value = config.theme?.spacing?.gap || '16px';
+  document.getElementById('theme-spacing-wide').value = config.theme?.spacing?.wide || '1200px';
+  document.getElementById('theme-spacing-sectionPadding').value = config.theme?.spacing?.sectionPadding || '80px';
+  document.getElementById('theme-spacing-cardPadding').value = config.theme?.spacing?.cardPadding || '18px';
+  document.getElementById('theme-typography-fontFamily').value = config.theme?.typography?.fontFamily || '';
+  document.getElementById('theme-typography-headingFont').value = config.theme?.typography?.headingFont || '';
+  document.getElementById('theme-typography-bodyFont').value = config.theme?.typography?.bodyFont || '';
+  document.getElementById('theme-typography-monoFont').value = config.theme?.typography?.monoFont || '';
+  document.getElementById('theme-typography-baseSize').value = config.theme?.typography?.baseSize || '16px';
+  document.getElementById('theme-typography-headingScale').value = config.theme?.typography?.headingScale || 1.25;
+  document.getElementById('theme-typography-lineHeight').value = config.theme?.typography?.lineHeight || 1.6;
+  document.getElementById('theme-typography-letterSpacing').value = config.theme?.typography?.letterSpacing || 'normal';
+  document.getElementById('theme-animations-enabled').checked = config.theme?.animations?.enabled !== false;
+  document.getElementById('theme-animations-duration').value = config.theme?.animations?.duration || '0.18s';
+  document.getElementById('theme-animations-easing').value = config.theme?.animations?.easing || 'ease';
+  document.getElementById('theme-animations-hoverScale').value = config.theme?.animations?.hoverScale || 1.02;
+  document.getElementById('theme-animations-hoverTranslate').value = config.theme?.animations?.hoverTranslate || '-2px';
+  document.getElementById('theme-shadows-small').value = config.theme?.shadows?.small || '';
+  document.getElementById('theme-shadows-medium').value = config.theme?.shadows?.medium || '';
+  document.getElementById('theme-shadows-large').value = config.theme?.shadows?.large || '';
+  document.getElementById('theme-shadows-glow').value = config.theme?.shadows?.glow || '';
+
+  // Layout
+  document.getElementById('layout-maxWidth').value = config.layout?.maxWidth || '';
+  document.getElementById('layout-padding').value = config.layout?.padding || '';
+  document.getElementById('layout-containerPadding').value = config.layout?.containerPadding || '';
+  document.getElementById('layout-sectionSpacing').value = config.layout?.sectionSpacing || '';
+  document.getElementById('layout-heroPadding-top').value = config.layout?.heroPadding?.top || '';
+  document.getElementById('layout-heroPadding-bottom').value = config.layout?.heroPadding?.bottom || '';
+  document.getElementById('layout-heroPadding-sides').value = config.layout?.heroPadding?.sides || '';
+  document.getElementById('layout-gridColumns-default').value = config.layout?.gridColumns?.default || 3;
+  document.getElementById('layout-gridColumns-tablet').value = config.layout?.gridColumns?.tablet || 2;
+  document.getElementById('layout-gridColumns-mobile').value = config.layout?.gridColumns?.mobile || 1;
+
+  // Content
+  document.getElementById('content-hero-title').value = config.content?.hero?.title || '';
+  document.getElementById('content-hero-subtitle').value = config.content?.hero?.subtitle || '';
+  document.getElementById('content-hero-description').value = config.content?.hero?.description || '';
+  document.getElementById('content-hero-backgroundImage').value = config.content?.hero?.backgroundImage || '';
+  document.getElementById('content-hero-backgroundVideo').value = config.content?.hero?.backgroundVideo || '';
+  document.getElementById('content-hero-overlay').checked = config.content?.hero?.overlay || false;
+  document.getElementById('content-hero-alignment').value = config.content?.hero?.alignment || 'center';
+  document.getElementById('content-hero-chips').value = (config.content?.hero?.chips || []).join(', ');
+  document.getElementById('content-hero-showScrollIndicator').checked = config.content?.hero?.showScrollIndicator || false;
+  document.getElementById('content-hero-cta-text').value = config.content?.hero?.cta?.primary?.text || '';
+  document.getElementById('content-hero-cta-href').value = config.content?.hero?.cta?.primary?.href || '';
+  document.getElementById('content-hero-cta-style').value = config.content?.hero?.cta?.primary?.style || 'brand';
+  document.getElementById('content-hero-cta-icon').value = config.content?.hero?.cta?.primary?.icon || '';
+  document.getElementById('content-hero-cta-external').checked = config.content?.hero?.cta?.primary?.external || false;
+
+  // Contact
+  document.getElementById('contact-enabled').checked = config.contact?.enabled !== false;
+  document.getElementById('contact-email').value = config.contact?.email || '';
+  document.getElementById('contact-phone').value = config.contact?.phone || '';
+  document.getElementById('contact-address-street').value = config.contact?.address?.street || '';
+  document.getElementById('contact-city').value = config.contact?.address?.city || '';
+  document.getElementById('contact-state').value = config.contact?.address?.state || '';
+  document.getElementById('contact-address-zip').value = config.contact?.address?.zip || '';
+  document.getElementById('contact-country').value = config.contact?.address?.country || '';
+  document.getElementById('contact-hours-enabled').checked = config.contact?.hours?.enabled !== false;
+  document.getElementById('contact-hours-timezone').value = config.contact?.hours?.timezone || '';
+  renderContactHours();
+  document.getElementById('contact-booking-enabled').checked = config.contact?.booking?.enabled !== false;
+  document.getElementById('contact-booking-primaryLink').value = config.contact?.booking?.primaryLink || '';
+  document.getElementById('contact-booking-primaryText').value = config.contact?.booking?.primaryText || '';
+  document.getElementById('contact-booking-secondaryLink').value = config.contact?.booking?.secondaryLink || '';
+  document.getElementById('contact-booking-secondaryText').value = config.contact?.booking?.secondaryText || '';
+
+  // Inventory
+  document.getElementById('inventory-enabled').checked = config.inventory?.enabled !== false;
+  document.getElementById('inventory-categories').value = (config.inventory?.categories || []).join(', ');
+  document.getElementById('inventory-fields-name').checked = config.inventory?.fields?.name !== false;
+  document.getElementById('inventory-fields-type').checked = config.inventory?.fields?.type !== false;
+  document.getElementById('inventory-fields-power').checked = config.inventory?.fields?.power !== false;
+  document.getElementById('inventory-fields-state').checked = config.inventory?.fields?.state !== false;
+  document.getElementById('inventory-fields-spot').checked = config.inventory?.fields?.spot !== false;
+  document.getElementById('inventory-fields-notes').checked = config.inventory?.fields?.notes !== false;
+  document.getElementById('inventory-fields-created_at').checked = config.inventory?.fields?.created_at !== false;
+  document.getElementById('inventory-fields-updated_at').checked = config.inventory?.fields?.updated_at !== false;
+  document.getElementById('inventory-import-enabled').checked = config.inventory?.import?.enabled !== false;
+  document.getElementById('inventory-import-vendors').value = (config.inventory?.import?.vendors || []).join(', ');
+  document.getElementById('inventory-import-formats').value = (config.inventory?.import?.formats || []).join(', ');
+
+  // API
+  document.getElementById('api-enabled').checked = config.api?.enabled !== false;
+  document.getElementById('api-baseUrl').value = config.api?.baseUrl || '';
+  document.getElementById('api-localUrl').value = config.api?.localUrl || '';
+  document.getElementById('api-productionUrl').value = config.api?.productionUrl || '';
+  document.getElementById('api-timeout').value = config.api?.timeout || 30000;
+  document.getElementById('api-retryEnabled').checked = config.api?.retryEnabled !== false;
+  document.getElementById('api-maxRetries').value = config.api?.maxRetries || 3;
+  document.getElementById('api-retryDelay').value = config.api?.retryDelay || 1000;
+  document.getElementById('api-cacheEnabled').checked = config.api?.cacheEnabled !== false;
+  document.getElementById('api-cacheDuration').value = config.api?.cacheDuration || 300;
+  document.getElementById('api-endpoints-inventory').value = config.api?.endpoints?.inventory || '/api/inventory';
+  document.getElementById('api-endpoints-stats').value = config.api?.endpoints?.stats || '/api/stats';
+  document.getElementById('api-endpoints-sites').value = config.api?.endpoints?.sites || '/api/sites';
+  document.getElementById('api-endpoints-health').value = config.api?.endpoints?.health || '/api/health';
+  document.getElementById('api-authentication-enabled').checked = config.api?.authentication?.enabled || false;
+  document.getElementById('api-authentication-method').value = config.api?.authentication?.method || 'none';
+
+  // PWA
+  document.getElementById('pwa-enabled').checked = config.pwa?.enabled !== false;
+  document.getElementById('pwa-manifest').value = config.pwa?.manifest || '/manifest.webmanifest';
+  document.getElementById('pwa-serviceWorker').value = config.pwa?.serviceWorker || '/service-worker.js';
+  document.getElementById('pwa-offlinePage').value = config.pwa?.offlinePage || '/index.html';
+  document.getElementById('pwa-cacheName').value = config.pwa?.cacheName || '';
+  document.getElementById('pwa-installPrompt').checked = config.pwa?.installPrompt !== false;
+
+  // Integrations
+  document.getElementById('integration-taskrabbit-enabled').checked = config.integrations?.taskrabbit?.enabled || false;
+  document.getElementById('integration-taskrabbit-url').value = config.integrations?.taskrabbit?.profileUrl || '';
+  document.getElementById('integration-taskrabbit-utmSource').value = config.integrations?.taskrabbit?.utmSource || '';
+  document.getElementById('integration-taskrabbit-utmMedium').value = config.integrations?.taskrabbit?.utmMedium || '';
+  document.getElementById('integration-taskrabbit-utmCampaign').value = config.integrations?.taskrabbit?.utmCampaign || '';
+  document.getElementById('integration-mailchimp-enabled').checked = config.integrations?.mailchimp?.enabled || false;
+  document.getElementById('integration-mailchimp-listId').value = config.integrations?.mailchimp?.listId || '';
+  document.getElementById('integration-mailchimp-apiKey').value = config.integrations?.mailchimp?.apiKey || '';
+  document.getElementById('integration-stripe-enabled').checked = config.integrations?.stripe?.enabled || false;
+  document.getElementById('integration-stripe-publishableKey').value = config.integrations?.stripe?.publishableKey || '';
+
+  // Settings
+  document.getElementById('settings-lazyLoadImages').checked = config.settings?.lazyLoadImages !== false;
+  document.getElementById('settings-smoothScroll').checked = config.settings?.smoothScroll !== false;
+  document.getElementById('settings-backToTop').checked = config.settings?.backToTop !== false;
+  document.getElementById('settings-timezone').value = config.settings?.timezone || '';
+  document.getElementById('settings-dateFormat').value = config.settings?.dateFormat || '';
+  document.getElementById('settings-timeFormat').value = config.settings?.timeFormat || '12h';
+  document.getElementById('settings-darkMode-enabled').checked = config.settings?.darkMode?.enabled || false;
+  document.getElementById('settings-darkMode-default').value = config.settings?.darkMode?.default || 'dark';
+  document.getElementById('settings-language-default').value = config.settings?.language?.default || 'en';
+  document.getElementById('settings-language-supported').value = (config.settings?.language?.supported || ['en']).join(', ');
+  
+  // Deployment
+  document.getElementById('deployment-enabled').checked = config.deployment?.enabled || false;
+  document.getElementById('deployment-host').value = config.deployment?.remote?.host || '';
+  document.getElementById('deployment-port').value = config.deployment?.remote?.port || 22;
+  document.getElementById('deployment-username').value = config.deployment?.remote?.username || '';
+  document.getElementById('deployment-remotePath').value = config.deployment?.remote?.remotePath || '/var/www/html';
+  document.getElementById('deployment-useSSHKey').checked = config.deployment?.remote?.useSSHKey !== false;
+  document.getElementById('deployment-sshKeyPath').value = config.deployment?.remote?.sshKeyPath || '~/.ssh/id_rsa';
+  document.getElementById('deployment-password').value = config.deployment?.remote?.password || '';
+  document.getElementById('deployment-autoSync').checked = config.deployment?.sync?.autoSync || false;
+  document.getElementById('deployment-include').value = (config.deployment?.sync?.include || []).join('\n');
+  document.getElementById('deployment-exclude').value = (config.deployment?.sync?.exclude || []).join('\n');
+  document.getElementById('deployment-prod-url').value = config.deployment?.environment?.production?.url || '';
+  document.getElementById('deployment-prod-apiUrl').value = config.deployment?.environment?.production?.apiUrl || '';
+  document.getElementById('deployment-staging-url').value = config.deployment?.environment?.staging?.url || '';
+  document.getElementById('deployment-staging-apiUrl').value = config.deployment?.environment?.staging?.apiUrl || '';
+}
+
+// Render navigation links
+function renderNavLinks() {
+  const container = document.getElementById('nav-links-container');
+  const links = config.navigation?.links || [];
+  container.innerHTML = links.map((link, index) => `
+    <div class="array-item">
+      <div class="array-item-header">
+        <span class="array-item-title">${link.label || 'Link ' + (index + 1)}</span>
+        <button class="btn-remove" onclick="removeNavLink(${index})">Remove</button>
+      </div>
+      <div class="form-group">
+        <label>Label</label>
+        <input type="text" value="${link.label || ''}" onchange="updateNavLink(${index}, 'label', this.value)">
+      </div>
+      <div class="form-group">
+        <label>Href</label>
+        <input type="text" value="${link.href || ''}" onchange="updateNavLink(${index}, 'href', this.value)">
+      </div>
+      <div class="form-group">
+        <label>Icon</label>
+        <input type="text" value="${link.icon || ''}" onchange="updateNavLink(${index}, 'icon', this.value)">
+      </div>
+    </div>
+  `).join('');
+}
+
+function addNavLink() {
+  if (!config.navigation) config.navigation = {};
+  if (!config.navigation.links) config.navigation.links = [];
+  config.navigation.links.push({ label: 'New Link', href: '/', icon: '🔗' });
+  renderNavLinks();
+  updateJSONView();
+}
+
+function removeNavLink(index) {
+  config.navigation.links.splice(index, 1);
+  renderNavLinks();
+  updateJSONView();
+}
+
+function updateNavLink(index, field, value) {
+  config.navigation.links[index][field] = value;
+  updateJSONView();
+}
+
+// Render contact hours
+function renderContactHours() {
+  const container = document.getElementById('contact-hours-container');
+  const schedule = config.contact?.hours?.schedule || [];
+  container.innerHTML = schedule.map((item, index) => `
+    <div class="array-item">
+      <div class="array-item-header">
+        <span class="array-item-title">${item.day || 'Day ' + (index + 1)}</span>
+        <button class="btn-remove" onclick="removeContactHour(${index})">Remove</button>
+      </div>
+      <div class="form-group">
+        <label>Day</label>
+        <input type="text" value="${item.day || ''}" onchange="updateContactHour(${index}, 'day', this.value)">
+      </div>
+      <div class="form-group">
+        <label>Hours</label>
+        <input type="text" value="${item.hours || ''}" onchange="updateContactHour(${index}, 'hours', this.value)">
+      </div>
+    </div>
+  `).join('');
+}
+
+function addContactHour() {
+  if (!config.contact) config.contact = {};
+  if (!config.contact.hours) config.contact.hours = {};
+  if (!config.contact.hours.schedule) config.contact.hours.schedule = [];
+  config.contact.hours.schedule.push({ day: 'Monday', hours: '9:00 AM - 5:00 PM' });
+  renderContactHours();
+  updateJSONView();
+}
+
+function removeContactHour(index) {
+  config.contact.hours.schedule.splice(index, 1);
+  renderContactHours();
+  updateJSONView();
+}
+
+function updateContactHour(index, field, value) {
+  config.contact.hours.schedule[index][field] = value;
+  updateJSONView();
+}
+
+// Save config
+async function saveConfig() {
+  try {
+    // Update config from form
+    updateConfigFromForm();
+
+    const response = await fetch('/api/config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config, null, 2)
+    });
+
+    if (!response.ok) throw new Error('Failed to save config');
+    
+    showStatus('Configuration saved successfully!', 'success');
+    originalConfig = JSON.parse(JSON.stringify(config));
+    updateJSONView();
+  } catch (error) {
+    console.error('Error saving config:', error);
+    showStatus('Error saving configuration: ' + error.message, 'error');
+  }
+}
+
+// Update config object from form values
+function updateConfigFromForm() {
+  // Site
+  if (!config.site) config.site = {};
+  config.site.name = document.getElementById('site-name').value;
+  config.site.title = document.getElementById('site-title').value;
+  config.site.description = document.getElementById('site-description').value;
+  config.site.tagline = document.getElementById('site-tagline').value;
+  config.site.mission = document.getElementById('site-mission').value;
+  config.site.version = document.getElementById('site-version').value;
+  config.site.author = document.getElementById('site-author').value;
+  config.site.themeColor = document.getElementById('site-themeColor').value;
+  config.site.language = document.getElementById('site-language').value;
+  config.site.charset = document.getElementById('site-charset').value || 'UTF-8';
+
+  // SEO
+  if (!config.seo) config.seo = {};
+  config.seo.metaTitle = document.getElementById('seo-metaTitle').value;
+  config.seo.metaDescription = document.getElementById('seo-metaDescription').value;
+  config.seo.metaKeywords = document.getElementById('seo-metaKeywords').value;
+  config.seo.ogTitle = document.getElementById('seo-ogTitle').value;
+  config.seo.ogDescription = document.getElementById('seo-ogDescription').value;
+  config.seo.canonicalUrl = document.getElementById('seo-canonicalUrl').value;
+  config.seo.ogImage = document.getElementById('seo-ogImage').value || null;
+  config.seo.ogType = document.getElementById('seo-ogType').value || 'website';
+  config.seo.twitterCard = document.getElementById('seo-twitterCard').value || 'summary';
+  config.seo.twitterSite = document.getElementById('seo-twitterSite').value || null;
+
+  // Navigation
+  if (!config.navigation) config.navigation = {};
+  if (!config.navigation.logo) config.navigation.logo = {};
+  config.navigation.logo.text = document.getElementById('nav-logo-text').value;
+  config.navigation.logo.showDot = document.getElementById('nav-logo-showDot').checked;
+  config.navigation.logo.href = document.getElementById('nav-logo-href').value || '/';
+  config.navigation.logo.image = document.getElementById('nav-logo-image').value || null;
+  config.navigation.sticky = document.getElementById('nav-sticky').checked;
+  config.navigation.transparent = document.getElementById('nav-transparent').checked;
+  config.navigation.showMobileMenu = document.getElementById('nav-showMobileMenu').checked;
+  config.navigation.mobileMenuIcon = document.getElementById('nav-mobileMenuIcon').value || '☰';
+
+  // Theme
+  if (!config.theme) config.theme = {};
+  if (!config.theme.colors) config.theme.colors = {};
+  // Theme mode
+  const themeMode = document.getElementById('theme-mode');
+  if (themeMode) {
+    config.theme.mode = themeMode.value;
+  }
+  
+  config.theme.colors.bg = document.getElementById('theme-bg').value;
+  config.theme.colors.card = document.getElementById('theme-card').value;
+  config.theme.colors.ink = document.getElementById('theme-ink').value;
+  config.theme.colors.muted = document.getElementById('theme-muted').value;
+  config.theme.colors.brand = document.getElementById('theme-brand').value;
+  config.theme.colors.brand2 = document.getElementById('theme-brand2').value;
+  config.theme.colors.accent = document.getElementById('theme-accent').value;
+  config.theme.colors.success = document.getElementById('theme-success').value;
+  config.theme.colors.warning = document.getElementById('theme-warning').value;
+  config.theme.colors.error = document.getElementById('theme-error').value;
+  config.theme.colors.info = document.getElementById('theme-info').value;
+  config.theme.colors.line = document.getElementById('theme-line').value;
+  config.theme.colors.shadow = document.getElementById('theme-shadow').value;
+  config.theme.colors.overlay = document.getElementById('theme-overlay').value;
+  if (!config.theme.spacing) config.theme.spacing = {};
+  config.theme.spacing.radius = document.getElementById('theme-spacing-radius').value;
+  config.theme.spacing.gap = document.getElementById('theme-spacing-gap').value;
+  config.theme.spacing.wide = document.getElementById('theme-spacing-wide').value;
+  config.theme.spacing.sectionPadding = document.getElementById('theme-spacing-sectionPadding').value;
+  config.theme.spacing.cardPadding = document.getElementById('theme-spacing-cardPadding').value;
+  if (!config.theme.typography) config.theme.typography = {};
+  config.theme.typography.fontFamily = document.getElementById('theme-typography-fontFamily').value || null;
+  config.theme.typography.headingFont = document.getElementById('theme-typography-headingFont').value || null;
+  config.theme.typography.bodyFont = document.getElementById('theme-typography-bodyFont').value || null;
+  config.theme.typography.monoFont = document.getElementById('theme-typography-monoFont').value || null;
+  config.theme.typography.baseSize = document.getElementById('theme-typography-baseSize').value;
+  config.theme.typography.headingScale = parseFloat(document.getElementById('theme-typography-headingScale').value) || 1.25;
+  config.theme.typography.lineHeight = parseFloat(document.getElementById('theme-typography-lineHeight').value) || 1.6;
+  config.theme.typography.letterSpacing = document.getElementById('theme-typography-letterSpacing').value || 'normal';
+  if (!config.theme.animations) config.theme.animations = {};
+  config.theme.animations.enabled = document.getElementById('theme-animations-enabled').checked;
+  config.theme.animations.duration = document.getElementById('theme-animations-duration').value;
+  config.theme.animations.easing = document.getElementById('theme-animations-easing').value;
+  config.theme.animations.hoverScale = parseFloat(document.getElementById('theme-animations-hoverScale').value) || 1.02;
+  config.theme.animations.hoverTranslate = document.getElementById('theme-animations-hoverTranslate').value;
+  if (!config.theme.shadows) config.theme.shadows = {};
+  config.theme.shadows.small = document.getElementById('theme-shadows-small').value || null;
+  config.theme.shadows.medium = document.getElementById('theme-shadows-medium').value || null;
+  config.theme.shadows.large = document.getElementById('theme-shadows-large').value || null;
+  config.theme.shadows.glow = document.getElementById('theme-shadows-glow').value || null;
+
+  // Layout
+  if (!config.layout) config.layout = {};
+  config.layout.maxWidth = document.getElementById('layout-maxWidth').value;
+  config.layout.padding = document.getElementById('layout-padding').value;
+  config.layout.containerPadding = document.getElementById('layout-containerPadding').value;
+  config.layout.sectionSpacing = document.getElementById('layout-sectionSpacing').value;
+  if (!config.layout.heroPadding) config.layout.heroPadding = {};
+  config.layout.heroPadding.top = document.getElementById('layout-heroPadding-top').value;
+  config.layout.heroPadding.bottom = document.getElementById('layout-heroPadding-bottom').value;
+  config.layout.heroPadding.sides = document.getElementById('layout-heroPadding-sides').value;
+  if (!config.layout.gridColumns) config.layout.gridColumns = {};
+  config.layout.gridColumns.default = parseInt(document.getElementById('layout-gridColumns-default').value) || 3;
+  config.layout.gridColumns.tablet = parseInt(document.getElementById('layout-gridColumns-tablet').value) || 2;
+  config.layout.gridColumns.mobile = parseInt(document.getElementById('layout-gridColumns-mobile').value) || 1;
+
+  // Content
+  if (!config.content) config.content = {};
+  if (!config.content.hero) config.content.hero = {};
+  config.content.hero.title = document.getElementById('content-hero-title').value;
+  config.content.hero.subtitle = document.getElementById('content-hero-subtitle').value;
+  config.content.hero.description = document.getElementById('content-hero-description').value;
+  config.content.hero.backgroundImage = document.getElementById('content-hero-backgroundImage').value || null;
+  config.content.hero.backgroundVideo = document.getElementById('content-hero-backgroundVideo').value || null;
+  config.content.hero.overlay = document.getElementById('content-hero-overlay').checked;
+  config.content.hero.alignment = document.getElementById('content-hero-alignment').value || 'center';
+  const chipsText = document.getElementById('content-hero-chips').value;
+  config.content.hero.chips = chipsText ? chipsText.split(',').map(s => s.trim()).filter(s => s) : [];
+  config.content.hero.showScrollIndicator = document.getElementById('content-hero-showScrollIndicator').checked;
+  if (!config.content.hero.cta) config.content.hero.cta = {};
+  if (!config.content.hero.cta.primary) config.content.hero.cta.primary = {};
+  config.content.hero.cta.primary.text = document.getElementById('content-hero-cta-text').value;
+  config.content.hero.cta.primary.href = document.getElementById('content-hero-cta-href').value;
+  config.content.hero.cta.primary.style = document.getElementById('content-hero-cta-style').value || 'brand';
+  config.content.hero.cta.primary.icon = document.getElementById('content-hero-cta-icon').value || null;
+  config.content.hero.cta.primary.external = document.getElementById('content-hero-cta-external').checked;
+
+  // Contact
+  if (!config.contact) config.contact = {};
+  config.contact.enabled = document.getElementById('contact-enabled').checked;
+  config.contact.email = document.getElementById('contact-email').value || null;
+  config.contact.phone = document.getElementById('contact-phone').value || null;
+  if (!config.contact.address) config.contact.address = {};
+  config.contact.address.street = document.getElementById('contact-address-street').value || null;
+  config.contact.address.city = document.getElementById('contact-city').value || null;
+  config.contact.address.state = document.getElementById('contact-state').value || null;
+  config.contact.address.zip = document.getElementById('contact-address-zip').value || null;
+  config.contact.address.country = document.getElementById('contact-country').value || null;
+  if (!config.contact.hours) config.contact.hours = {};
+  config.contact.hours.enabled = document.getElementById('contact-hours-enabled').checked;
+  config.contact.hours.timezone = document.getElementById('contact-hours-timezone').value || null;
+  // Contact hours are handled by renderContactHours/updateContactHours
+  if (!config.contact.booking) config.contact.booking = {};
+  config.contact.booking.enabled = document.getElementById('contact-booking-enabled').checked;
+  config.contact.booking.primaryLink = document.getElementById('contact-booking-primaryLink').value || null;
+  config.contact.booking.primaryText = document.getElementById('contact-booking-primaryText').value || null;
+  config.contact.booking.secondaryLink = document.getElementById('contact-booking-secondaryLink').value || null;
+  config.contact.booking.secondaryText = document.getElementById('contact-booking-secondaryText').value || null;
+
+  // Inventory
+  if (!config.inventory) config.inventory = {};
+  config.inventory.enabled = document.getElementById('inventory-enabled').checked;
+  const categories = document.getElementById('inventory-categories').value.split(',').map(s => s.trim()).filter(s => s);
+  config.inventory.categories = categories;
+  if (!config.inventory.fields) config.inventory.fields = {};
+  config.inventory.fields.name = document.getElementById('inventory-fields-name').checked;
+  config.inventory.fields.type = document.getElementById('inventory-fields-type').checked;
+  config.inventory.fields.power = document.getElementById('inventory-fields-power').checked;
+  config.inventory.fields.state = document.getElementById('inventory-fields-state').checked;
+  config.inventory.fields.spot = document.getElementById('inventory-fields-spot').checked;
+  config.inventory.fields.notes = document.getElementById('inventory-fields-notes').checked;
+  config.inventory.fields.created_at = document.getElementById('inventory-fields-created_at').checked;
+  config.inventory.fields.updated_at = document.getElementById('inventory-fields-updated_at').checked;
+  if (!config.inventory.import) config.inventory.import = {};
+  config.inventory.import.enabled = document.getElementById('inventory-import-enabled').checked;
+  const vendors = document.getElementById('inventory-import-vendors').value.split(',').map(s => s.trim()).filter(s => s);
+  config.inventory.import.vendors = vendors;
+  const formats = document.getElementById('inventory-import-formats').value.split(',').map(s => s.trim()).filter(s => s);
+  config.inventory.import.formats = formats;
+
+  // API
+  if (!config.api) config.api = {};
+  config.api.enabled = document.getElementById('api-enabled').checked;
+  config.api.baseUrl = document.getElementById('api-baseUrl').value;
+  config.api.localUrl = document.getElementById('api-localUrl').value || null;
+  config.api.productionUrl = document.getElementById('api-productionUrl').value || null;
+  config.api.timeout = parseInt(document.getElementById('api-timeout').value) || 30000;
+  config.api.retryEnabled = document.getElementById('api-retryEnabled').checked;
+  config.api.maxRetries = parseInt(document.getElementById('api-maxRetries').value) || 3;
+  config.api.retryDelay = parseInt(document.getElementById('api-retryDelay').value) || 1000;
+  config.api.cacheEnabled = document.getElementById('api-cacheEnabled').checked;
+  config.api.cacheDuration = parseInt(document.getElementById('api-cacheDuration').value) || 300;
+  if (!config.api.endpoints) config.api.endpoints = {};
+  config.api.endpoints.inventory = document.getElementById('api-endpoints-inventory').value;
+  config.api.endpoints.stats = document.getElementById('api-endpoints-stats').value;
+  config.api.endpoints.sites = document.getElementById('api-endpoints-sites').value;
+  config.api.endpoints.health = document.getElementById('api-endpoints-health').value;
+  if (!config.api.authentication) config.api.authentication = {};
+  config.api.authentication.enabled = document.getElementById('api-authentication-enabled').checked;
+  config.api.authentication.method = document.getElementById('api-authentication-method').value || 'none';
+
+  // PWA
+  if (!config.pwa) config.pwa = {};
+  config.pwa.enabled = document.getElementById('pwa-enabled').checked;
+  config.pwa.manifest = document.getElementById('pwa-manifest').value || '/manifest.webmanifest';
+  config.pwa.serviceWorker = document.getElementById('pwa-serviceWorker').value || '/service-worker.js';
+  config.pwa.offlinePage = document.getElementById('pwa-offlinePage').value || '/index.html';
+  config.pwa.cacheName = document.getElementById('pwa-cacheName').value;
+  config.pwa.installPrompt = document.getElementById('pwa-installPrompt').checked;
+
+  // Integrations
+  if (!config.integrations) config.integrations = {};
+  if (!config.integrations.taskrabbit) config.integrations.taskrabbit = {};
+  config.integrations.taskrabbit.enabled = document.getElementById('integration-taskrabbit-enabled').checked;
+  config.integrations.taskrabbit.profileUrl = document.getElementById('integration-taskrabbit-url').value || null;
+  config.integrations.taskrabbit.utmSource = document.getElementById('integration-taskrabbit-utmSource').value || null;
+  config.integrations.taskrabbit.utmMedium = document.getElementById('integration-taskrabbit-utmMedium').value || null;
+  config.integrations.taskrabbit.utmCampaign = document.getElementById('integration-taskrabbit-utmCampaign').value || null;
+  if (!config.integrations.mailchimp) config.integrations.mailchimp = {};
+  config.integrations.mailchimp.enabled = document.getElementById('integration-mailchimp-enabled').checked;
+  config.integrations.mailchimp.listId = document.getElementById('integration-mailchimp-listId').value || null;
+  config.integrations.mailchimp.apiKey = document.getElementById('integration-mailchimp-apiKey').value || null;
+  if (!config.integrations.stripe) config.integrations.stripe = {};
+  config.integrations.stripe.enabled = document.getElementById('integration-stripe-enabled').checked;
+  config.integrations.stripe.publishableKey = document.getElementById('integration-stripe-publishableKey').value || null;
+
+  // Settings
+  if (!config.settings) config.settings = {};
+  config.settings.lazyLoadImages = document.getElementById('settings-lazyLoadImages').checked;
+  config.settings.smoothScroll = document.getElementById('settings-smoothScroll').checked;
+  config.settings.backToTop = document.getElementById('settings-backToTop').checked;
+  config.settings.timezone = document.getElementById('settings-timezone').value || null;
+  config.settings.dateFormat = document.getElementById('settings-dateFormat').value || null;
+  config.settings.timeFormat = document.getElementById('settings-timeFormat').value || '12h';
+  if (!config.settings.darkMode) config.settings.darkMode = {};
+  config.settings.darkMode.enabled = document.getElementById('settings-darkMode-enabled').checked;
+  config.settings.darkMode.default = document.getElementById('settings-darkMode-default').value || 'dark';
+  if (!config.settings.language) config.settings.language = {};
+  config.settings.language.default = document.getElementById('settings-language-default').value || 'en';
+  const supportedLangs = document.getElementById('settings-language-supported').value.split(',').map(s => s.trim()).filter(s => s);
+  config.settings.language.supported = supportedLangs.length > 0 ? supportedLangs : ['en'];
+  
+  // Deployment
+  if (!config.deployment) config.deployment = {};
+  config.deployment.enabled = document.getElementById('deployment-enabled').checked;
+  if (!config.deployment.remote) config.deployment.remote = {};
+  config.deployment.remote.host = document.getElementById('deployment-host').value || null;
+  config.deployment.remote.port = parseInt(document.getElementById('deployment-port').value) || 22;
+  config.deployment.remote.username = document.getElementById('deployment-username').value || null;
+  config.deployment.remote.remotePath = document.getElementById('deployment-remotePath').value || '/var/www/html';
+  config.deployment.remote.useSSHKey = document.getElementById('deployment-useSSHKey').checked;
+  config.deployment.remote.sshKeyPath = document.getElementById('deployment-sshKeyPath').value || '~/.ssh/id_rsa';
+  const password = document.getElementById('deployment-password').value;
+  config.deployment.remote.password = password || null;
+  if (!config.deployment.sync) config.deployment.sync = {};
+  config.deployment.sync.enabled = config.deployment.enabled;
+  config.deployment.sync.autoSync = document.getElementById('deployment-autoSync').checked;
+  const includeText = document.getElementById('deployment-include').value;
+  config.deployment.sync.include = includeText ? includeText.split('\n').map(s => s.trim()).filter(s => s) : [];
+  const excludeText = document.getElementById('deployment-exclude').value;
+  config.deployment.sync.exclude = excludeText ? excludeText.split('\n').map(s => s.trim()).filter(s => s) : [];
+  if (!config.deployment.environment) config.deployment.environment = {};
+  if (!config.deployment.environment.production) config.deployment.environment.production = {};
+  config.deployment.environment.production.url = document.getElementById('deployment-prod-url').value || null;
+  config.deployment.environment.production.apiUrl = document.getElementById('deployment-prod-apiUrl').value || null;
+  if (!config.deployment.environment.staging) config.deployment.environment.staging = {};
+  config.deployment.environment.staging.url = document.getElementById('deployment-staging-url').value || null;
+  config.deployment.environment.staging.apiUrl = document.getElementById('deployment-staging-apiUrl').value || null;
+}
+
+// Test deployment connection
+async function testDeployment() {
+  const statusEl = document.getElementById('deployment-status');
+  statusEl.style.display = 'block';
+  statusEl.style.background = 'rgba(59, 130, 246, 0.2)';
+  statusEl.style.border = '1px solid var(--info, #3b82f6)';
+  statusEl.style.color = 'var(--info, #3b82f6)';
+  statusEl.textContent = 'Testing connection...';
+  
+  try {
+    updateConfigFromForm();
+    const response = await fetch('/api/deployment/test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config.deployment)
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      statusEl.style.background = 'rgba(16, 185, 129, 0.2)';
+      statusEl.style.border = '1px solid var(--success, #10b981)';
+      statusEl.style.color = 'var(--success, #10b981)';
+      statusEl.textContent = '✅ Connection successful! ' + (result.message || '');
+    } else {
+      statusEl.style.background = 'rgba(239, 68, 68, 0.2)';
+      statusEl.style.border = '1px solid var(--error, #ef4444)';
+      statusEl.style.color = 'var(--error, #ef4444)';
+      statusEl.textContent = '❌ Connection failed: ' + (result.error || 'Unknown error');
+    }
+  } catch (error) {
+    statusEl.style.background = 'rgba(239, 68, 68, 0.2)';
+    statusEl.style.border = '1px solid var(--error, #ef4444)';
+    statusEl.style.color = 'var(--error, #ef4444)';
+    statusEl.textContent = '❌ Error: ' + error.message;
+  }
+}
+
+// Deploy site to remote
+async function deploySite() {
+  const statusEl = document.getElementById('deployment-status');
+  statusEl.style.display = 'block';
+  statusEl.style.background = 'rgba(59, 130, 246, 0.2)';
+  statusEl.style.border = '1px solid var(--info, #3b82f6)';
+  statusEl.style.color = 'var(--info, #3b82f6)';
+  statusEl.textContent = 'Deploying site... This may take a few moments.';
+  
+  try {
+    updateConfigFromForm();
+    const response = await fetch('/api/deployment/deploy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config.deployment)
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      statusEl.style.background = 'rgba(16, 185, 129, 0.2)';
+      statusEl.style.border = '1px solid var(--success, #10b981)';
+      statusEl.style.color = 'var(--success, #10b981)';
+      statusEl.textContent = '✅ Deployment successful! ' + (result.message || '');
+    } else {
+      statusEl.style.background = 'rgba(239, 68, 68, 0.2)';
+      statusEl.style.border = '1px solid var(--error, #ef4444)';
+      statusEl.style.color = 'var(--error, #ef4444)';
+      statusEl.textContent = '❌ Deployment failed: ' + (result.error || 'Unknown error');
+    }
+  } catch (error) {
+    statusEl.style.background = 'rgba(239, 68, 68, 0.2)';
+    statusEl.style.border = '1px solid var(--error, #ef4444)';
+    statusEl.style.color = 'var(--error, #ef4444)';
+    statusEl.textContent = '❌ Error: ' + error.message;
+  }
+}
+
+// Update JSON viewer
+function updateJSONView() {
+  updateConfigFromForm();
+  document.getElementById('json-viewer').textContent = JSON.stringify(config, null, 2);
+}
+
+// Export config
+function exportConfig() {
+  updateConfigFromForm();
+  const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'config.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Import config
+function importConfig() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        config = JSON.parse(event.target.result);
+        originalConfig = JSON.parse(JSON.stringify(config));
+        populateForm();
+        updateJSONView();
+        showStatus('Configuration imported successfully', 'success');
+      } catch (error) {
+        showStatus('Error importing configuration: ' + error.message, 'error');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// Reset config
+function resetConfig() {
+  if (confirm('Are you sure you want to reset to the original configuration? All unsaved changes will be lost.')) {
+    config = JSON.parse(JSON.stringify(originalConfig));
+    populateForm();
+    updateJSONView();
+    showStatus('Configuration reset to original', 'success');
+  }
+}
+
+// Show status message
+function showStatus(message, type) {
+  const status = document.getElementById('status');
+  status.textContent = message;
+  status.className = `status ${type}`;
+  setTimeout(() => {
+    status.className = 'status';
+  }, 5000);
+}
+
+// Navigation
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const section = link.dataset.section;
+    
+    // Update active nav
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    
+    // Show section
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(`section-${section}`).classList.add('active');
+  });
+});
+
+// Auto-update JSON view on form changes
+document.querySelectorAll('input, textarea, select').forEach(input => {
+  input.addEventListener('change', updateJSONView);
+});
+
+// Determine where to navigate back to
+function getReturnPath() {
+  // Check for 'from' query parameter first
+  const urlParams = new URLSearchParams(window.location.search);
+  const fromParam = urlParams.get('from');
+  if (fromParam) {
+    const decoded = decodeURIComponent(fromParam);
+    console.log('Return path from query param:', decoded);
+    
+    // If it's a full URL, extract just the path
+    if (decoded.startsWith('http://') || decoded.startsWith('https://')) {
+      try {
+        const url = new URL(decoded);
+        const path = url.pathname + url.search;
+        console.log('Extracted path from full URL:', path);
+        return path;
+      } catch (e) {
+        console.warn('Failed to parse URL:', e);
+        return '/';
+      }
+    }
+    
+    // If it's already a path, use it as-is (ensure it starts with /)
+    const path = decoded.startsWith('/') ? decoded : '/' + decoded;
+    console.log('Using path as-is:', path);
+    return path;
+  }
+  
+  // Check document.referrer
+  if (document.referrer) {
+    try {
+      const referrerUrl = new URL(document.referrer);
+      const currentUrl = new URL(window.location.href);
+      // Only use referrer if it's from the same origin
+      if (referrerUrl.origin === currentUrl.origin) {
+        const path = referrerUrl.pathname + referrerUrl.search;
+        console.log('Return path from referrer:', path);
+        return path;
+      }
+    } catch (e) {
+      console.warn('Failed to parse referrer:', e);
+    }
+  }
+  
+  // Default to server selector
+  console.log('Using default return path: /');
+  return '/';
+}
+
+// Update back button text based on return path
+function updateBackButton() {
+  const returnPath = getReturnPath();
+  const backButtonText = document.getElementById('back-button-text');
+  const backButton = document.getElementById('back-button');
+  
+  if (backButtonText && backButton) {
+    if (returnPath === '/' || returnPath.startsWith('/?')) {
+      backButtonText.textContent = 'Back to Server';
+    } else if (returnPath.includes('/sites/')) {
+      // Extract site name from path
+      const siteMatch = returnPath.match(/\/sites\/([^\/]+)/);
+      if (siteMatch) {
+        const siteName = siteMatch[1].replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        backButtonText.textContent = `Back to ${siteName}`;
+      } else {
+        backButtonText.textContent = 'Back to Site';
+      }
+    } else {
+      backButtonText.textContent = 'Back';
+    }
+    
+    // Update href for fallback (if JS fails)
+    backButton.href = returnPath;
+  }
+}
+
+// Smooth navigation back to previous page
+function navigateBack(e) {
+  if (e) e.preventDefault();
+  
+  const returnPath = getReturnPath();
+  
+  console.log('Navigating back to:', returnPath);
+  
+  // Add fade-out animation
+  document.body.style.transition = 'opacity 0.2s ease';
+  document.body.style.opacity = '0';
+  
+  // Navigate after fade
+  setTimeout(() => {
+    // Use relative path to avoid full URL issues
+    if (returnPath.startsWith('http://') || returnPath.startsWith('https://')) {
+      // If somehow we got a full URL, extract the path
+      try {
+        const url = new URL(returnPath);
+        window.location.href = url.pathname + url.search;
+      } catch (e) {
+        window.location.href = returnPath;
+      }
+    } else {
+      window.location.href = returnPath;
+    }
+  }, 200);
+}
+
+// Fade-in on page load and update back button
+window.addEventListener('load', () => {
+  // Update back button text based on return path
+  updateBackButton();
+  
+  // Fade-in animation
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity 0.3s ease';
+  setTimeout(() => {
+    document.body.style.opacity = '1';
+  }, 50);
+});
+
+// Load config on page load
+loadConfig();
+</script>
+</body>
+</html>
+

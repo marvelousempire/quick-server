@@ -1,0 +1,389 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Person Schema",
+  "description": "Schema for persons (contacts, team members, partners, clients)",
+  "type": "object",
+  "required": ["name", "role", "relationship"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the person",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "udin": {
+      "type": "string",
+      "description": "Unique Digital Identifier Number (UDIN) for the contact/person. Used to prevent duplicates - each contact should have a unique UDIN. This ensures no duplicate contacts are created unless they are actually different people.",
+      "pattern": "^[A-Z0-9-]+$",
+      "minLength": 8,
+      "maxLength": 32
+    },
+    "image": {
+      "type": "object",
+      "description": "Image information for the person/contact (photo for ID card mockup)",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Photo URL (for ID card, license, or passport mockup)"
+        },
+        "thumbnail": {
+          "type": "string",
+          "format": "uri",
+          "description": "Thumbnail photo URL"
+        },
+        "alt": {
+          "type": "string",
+          "description": "Alt text for accessibility"
+        },
+        "mockup": {
+          "type": "object",
+          "description": "ID card mockup settings (ID card, license, or passport)",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable ID card mockup display",
+              "default": true
+            },
+            "type": {
+              "type": "string",
+              "enum": ["idcard", "license", "passport", "auto"],
+              "description": "Mockup template type. 'auto' selects based on context",
+              "default": "auto"
+            },
+            "showDetails": {
+              "type": "boolean",
+              "description": "Show person details on ID card",
+              "default": true
+            },
+            "showHeader": {
+              "type": "boolean",
+              "description": "Show header/footer on ID card",
+              "default": true
+            }
+          }
+        }
+      }
+    },
+    "name": {
+      "type": "object",
+      "description": "Person's name",
+      "required": ["first", "last"],
+      "properties": {
+        "first": {
+          "type": "string",
+          "description": "First name",
+          "minLength": 1
+        },
+        "last": {
+          "type": "string",
+          "description": "Last name",
+          "minLength": 1
+        },
+        "middle": {
+          "type": "string",
+          "description": "Middle name or initial"
+        },
+        "preferred": {
+          "type": "string",
+          "description": "Preferred name or nickname"
+        },
+        "full": {
+          "type": "string",
+          "description": "Full name (auto-generated if not provided)"
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "description": "Metadata about the person",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Professional title or position"
+        },
+        "company": {
+          "type": "string",
+          "description": "Company they work for (reference to company ID)"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional tags for categorization"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Personal notes or observations"
+        }
+      }
+    },
+    "role": {
+      "type": "string",
+      "description": "Primary role or function",
+      "enum": [
+        "client",
+        "partner",
+        "vendor",
+        "contractor",
+        "team-member",
+        "advisor",
+        "referral-source",
+        "other"
+      ]
+    },
+    "relationship": {
+      "type": "string",
+      "description": "Nature of relationship",
+      "enum": [
+        "active-client",
+        "past-client",
+        "potential-client",
+        "strategic-partner",
+        "service-provider",
+        "supplier",
+        "collaborator",
+        "mentor",
+        "colleague",
+        "other"
+      ]
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Why this person/contact is a resource and what value they provide",
+      "minLength": 10,
+      "maxLength": 500
+    },
+    "useCases": {
+      "type": "array",
+      "description": "List of specific use cases or scenarios where this person resource is applied",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scenario": {
+            "type": "string",
+            "description": "Description of the use case or scenario"
+          },
+          "frequency": {
+            "type": "string",
+            "enum": ["daily", "weekly", "monthly", "occasional", "rare"],
+            "description": "How often this use case occurs"
+          }
+        },
+        "required": ["scenario"]
+      },
+      "minItems": 1
+    },
+    "outcomes": {
+      "type": "array",
+      "description": "What happens when this person resource is applied or used - the results, achievements, or deliverables",
+      "items": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "The outcome or result achieved"
+          },
+          "description": {
+            "type": "string",
+            "description": "How this person resource produces this outcome"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value or benefit of this outcome"
+          }
+        },
+        "required": ["result"]
+      }
+    },
+    "contact": {
+      "type": "object",
+      "description": "Contact information",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Primary email address"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Primary phone number"
+        },
+        "mobile": {
+          "type": "string",
+          "description": "Mobile phone number"
+        },
+        "address": {
+          "type": "object",
+          "properties": {
+            "street": {
+              "type": "string",
+              "description": "Street address"
+            },
+            "city": {
+              "type": "string",
+              "description": "City"
+            },
+            "state": {
+              "type": "string",
+              "description": "State or province"
+            },
+            "zip": {
+              "type": "string",
+              "description": "ZIP or postal code"
+            },
+            "country": {
+              "type": "string",
+              "description": "Country"
+            }
+          }
+        },
+        "website": {
+          "type": "string",
+          "format": "uri",
+          "description": "Personal or professional website"
+        },
+        "social": {
+          "type": "object",
+          "properties": {
+            "linkedin": {
+              "type": "string",
+              "format": "uri"
+            },
+            "twitter": {
+              "type": "string",
+              "format": "uri"
+            },
+            "github": {
+              "type": "string",
+              "format": "uri"
+            },
+            "other": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "description": "What this person can do or provide - their core capabilities and functions",
+      "items": {
+        "type": "object",
+        "properties": {
+          "capability": {
+            "type": "string",
+            "description": "What they can do"
+          },
+          "level": {
+            "type": "string",
+            "enum": ["expert", "proficient", "competent", "beginner"],
+            "description": "Skill level"
+          },
+          "description": {
+            "type": "string",
+            "description": "Details about this capability"
+          }
+        },
+        "required": ["capability"]
+      }
+    },
+    "abilities": {
+      "type": "array",
+      "description": "Specific abilities, skills, or features this person resource possesses",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ability": {
+            "type": "string",
+            "description": "The specific ability or skill"
+          },
+          "level": {
+            "type": "string",
+            "enum": ["basic", "intermediate", "advanced", "expert"],
+            "description": "Proficiency or capability level"
+          },
+          "description": {
+            "type": "string",
+            "description": "How this ability is applied or used"
+          }
+        },
+        "required": ["ability"]
+      }
+    },
+    "canProduceWith": {
+      "type": "array",
+      "description": "What can be accomplished through this relationship",
+      "items": {
+        "type": "object",
+        "properties": {
+          "output": {
+            "type": "string",
+            "description": "What can be produced/achieved"
+          },
+          "description": {
+            "type": "string",
+            "description": "How this relationship enables the output"
+          },
+          "requires": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "What else is needed"
+          }
+        },
+        "required": ["output"]
+      }
+    },
+    "history": {
+      "type": "array",
+      "description": "Interaction history or timeline",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of interaction (YYYY-MM-DD)"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["meeting", "project", "communication", "referral", "other"],
+            "description": "Type of interaction"
+          },
+          "description": {
+            "type": "string",
+            "description": "What happened"
+          },
+          "outcome": {
+            "type": "string",
+            "description": "Result or outcome"
+          }
+        },
+        "required": ["date", "type", "description"]
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "inactive", "archived"],
+      "description": "Current relationship status",
+      "default": "active"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this person entry was created (ISO 8601)"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this person entry was last updated (ISO 8601)"
+    }
+  }
+}
+

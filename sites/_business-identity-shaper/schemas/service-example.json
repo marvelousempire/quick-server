@@ -1,0 +1,115 @@
+{
+  "id": "furniture-assembly",
+  "title": "Furniture Assembly",
+  "meta": {
+    "serviceCode": "FA-001",
+    "category": "assembly",
+    "tags": ["furniture", "ikea", "flat-pack", "assembly"],
+    "availability": "available",
+    "estimatedDuration": "2-4 hours",
+    "pricingModel": "fixed"
+  },
+  "category": "assembly",
+  "purpose": "Assemble flat-pack and ready-to-assemble furniture quickly, securely, and with attention to detail. Ensures proper construction, stability, and professional finish.",
+  "description": "Complete assembly service for furniture including desks, chairs, shelves, bed frames, and more. Includes proper tool usage, hardware organization, and quality checks. Can handle complex multi-piece assemblies and provide tips for future maintenance.",
+  "useCases": [
+    {
+      "scenario": "IKEA and similar flat-pack furniture assembly",
+      "frequency": "weekly",
+      "typicalClient": "Homeowners, renters, small businesses"
+    },
+    {
+      "scenario": "Office furniture setup",
+      "frequency": "monthly",
+      "typicalClient": "Small businesses, home offices"
+    },
+    {
+      "scenario": "Bedroom furniture assembly (beds, dressers, nightstands)",
+      "frequency": "occasional",
+      "typicalClient": "New homeowners, people moving"
+    }
+  ],
+  "canProduceWith": [
+    {
+      "output": "Fully assembled, ready-to-use furniture",
+      "description": "Transforms flat-pack boxes into functional furniture pieces",
+      "requires": ["furniture pieces", "hardware (included)", "assembly tools"],
+      "value": "Saves time, ensures proper assembly, prevents damage"
+    },
+    {
+      "output": "Properly secured furniture that won't wobble or fail",
+      "description": "Uses correct techniques and checks for stability",
+      "requires": ["quality hardware", "proper tools"],
+      "value": "Safety, durability, peace of mind"
+    }
+  ],
+  "requirements": {
+    "tools": [
+      "Cordless drill/driver",
+      "Screwdrivers (various sizes)",
+      "Rubber mallet",
+      "Level",
+      "Measuring tape"
+    ],
+    "materials": [
+      "Furniture pieces (client provides)",
+      "Hardware (usually included)"
+    ],
+    "skills": [
+      "Furniture assembly experience",
+      "Attention to detail",
+      "Problem-solving",
+      "Quality checking"
+    ],
+    "certifications": [],
+    "clientProvides": [
+      "Furniture in original packaging",
+      "Clear workspace",
+      "Access to assembly location"
+    ]
+  },
+  "pricing": {
+    "basePrice": 75,
+    "priceRange": "$50-$200",
+    "notes": "Price varies by complexity and number of pieces. Additional charges for very large items or complex assemblies."
+  },
+  "process": [
+    {
+      "step": "1",
+      "description": "Unbox and organize all pieces and hardware",
+      "duration": "15-30 min"
+    },
+    {
+      "step": "2",
+      "description": "Review instructions and plan assembly sequence",
+      "duration": "10-15 min"
+    },
+    {
+      "step": "3",
+      "description": "Assemble main structure following manufacturer guidelines",
+      "duration": "1-2 hours"
+    },
+    {
+      "step": "4",
+      "description": "Attach hardware, doors, drawers, and accessories",
+      "duration": "30-60 min"
+    },
+    {
+      "step": "5",
+      "description": "Quality check: stability, alignment, function test",
+      "duration": "10-15 min"
+    }
+  ],
+  "status": "active",
+  "notes": "Most popular service. Can handle most major furniture brands. Specializes in IKEA, Wayfair, Amazon Basics, and similar.",
+  "links": [
+    {
+      "label": "Service Portfolio",
+      "url": "https://taskrabbit.com/profile/marvin-h--14",
+      "type": "portfolio"
+    }
+  ],
+  "createdAt": "2023-01-15T10:00:00Z",
+  "updatedAt": "2024-11-08T14:30:00Z"
+}
+

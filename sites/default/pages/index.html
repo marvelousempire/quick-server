@@ -1,0 +1,2226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Server App — LearnMappers</title>
+<link rel="manifest" href="../../learnmappers/manifest.webmanifest"><meta name="theme-color" content="#0b0c10">
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; }
+[data-theme="light"]{ --bg:#ffffff; --card:#f8fafc; --ink:#0f172a; --muted:#64748b; --brand:#0ea5e9; --brand2:#10b981; --line:#e2e8f0; --shadow:rgba(15,23,42,.1); }
+*{box-sizing:border-box} html,body{background:radial-gradient(1200px 500px at 15% -10%, rgba(124,227,255,.14), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(96,255,168,.09), transparent 60%), var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6;min-height:100vh;transition:background-color 0.3s ease,color 0.3s ease}
+[data-theme="light"] html,[data-theme="light"] body{background:radial-gradient(1200px 500px at 15% -10%, rgba(14,165,233,.08), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(16,185,129,.06), transparent 60%), var(--bg)}
+.header{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border-bottom:1px solid var(--line);padding:24px 32px}
+.header-content{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.header h1{margin:0;font-size:24px;font-weight:900;display:flex;align-items:center;gap:12px}
+.header h1 .logo-dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+.header .status{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.header-actions{display:flex;align-items:center;gap:12px}
+.header-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:700;text-decoration:none;transition:all 0.2s ease;cursor:pointer}
+.header-btn:hover{background:color-mix(in srgb, var(--brand) 20%, transparent);border-color:var(--brand);color:var(--brand);transform:translateY(-1px)}
+.header-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.header-btn.settings{background:color-mix(in srgb, var(--brand) 15%, transparent);border-color:var(--brand);color:var(--brand)}
+.header-btn.settings:hover{background:color-mix(in srgb, var(--brand) 25%, transparent);transform:translateY(-2px);box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 20%, transparent)}
+@media (prefers-reduced-motion: reduce){
+  .header-btn{transition:none}
+  .header-btn:hover{transform:none}
+}
+@keyframes pulse{
+  0%,100%{opacity:1}
+  50%{opacity:0.5}
+}
+@media (max-width: 768px){
+  .container > div:first-child{grid-template-columns:1fr}
+}
+.tab-btn.active{color:var(--brand);border-bottom-color:var(--brand)}
+.tab-btn:hover{color:var(--ink);background:color-mix(in srgb, var(--card) 90%, transparent)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.status-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:color-mix(in srgb, var(--brand2) 20%, transparent);border:1px solid var(--brand2);color:var(--brand2);font-size:12px;font-weight:700}
+.status-badge::before{content:'●';font-size:8px}
+.access-info{display:flex;flex-direction:column;gap:8px;margin-top:12px;padding:16px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:12px}
+.access-info h4{margin:0 0 8px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted)}
+.access-urls{display:flex;flex-wrap:wrap;gap:8px}
+.access-url{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:6px;background:color-mix(in srgb, var(--card) 95%, transparent);border:1px solid var(--line);font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;color:var(--brand);text-decoration:none;transition:all 0.2s ease;word-break:break-all}
+.access-url:hover{background:color-mix(in srgb, var(--brand) 15%, transparent);border-color:var(--brand);transform:translateY(-1px)}
+@media (prefers-reduced-motion: reduce){
+  .access-url{transition:none}
+  .access-url:hover{transform:none}
+}
+.access-url .copy-btn{opacity:0;transition:opacity 0.15s;cursor:pointer;padding:2px 4px;border-radius:4px;background:color-mix(in srgb, var(--brand) 20%, transparent);border:1px solid var(--brand);font-size:9px}
+.access-url:hover .copy-btn{opacity:1}
+.access-url .copy-btn:hover{background:color-mix(in srgb, var(--brand) 30%, transparent)}
+.container{max-width:1400px;margin:0 auto;padding:32px}
+.sites-table{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.sites-table{padding:0 20px}
+.table-header{background:color-mix(in srgb, var(--card) 95%, transparent);border-bottom:1px solid var(--line);padding:16px 20px;display:grid;grid-template-columns:240px 6fr 60px 60px 60px 60px 120px;gap:24px;align-items:center}
+.table-header-cell{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);text-align:center;display:flex;align-items:center;justify-content:center}
+.table-header-cell:first-child{text-align:left;justify-content:flex-start}
+.table-header-cell:nth-child(2){text-align:left;justify-content:flex-start}
+.table-header-cell:last-child{text-align:right;justify-content:flex-end;padding-right:0}
+.table-row{display:grid;grid-template-columns:240px 6fr 60px 60px 60px 60px 120px;gap:24px;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);transition:all 0.2s ease;color:inherit}
+.table-row > *{display:flex;align-items:center}
+.table-row > *:last-child{justify-content:flex-end}
+.table-row:last-child{border-bottom:none}
+.table-row:hover{background:color-mix(in srgb, var(--brand) 12%, transparent);transform:translateX(4px)}
+@media (prefers-reduced-motion: reduce){
+  .table-row{transition:none}
+  .table-row:hover{transform:none}
+}
+.table-row.default{border-left:3px solid var(--brand2)}
+.site-name{font-weight:900;font-size:16px;color:var(--ink);display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.site-name .site-title{line-height:1.2}
+.site-name .badges{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.site-name .default-badge{font-size:10px;padding:3px 8px;background:var(--brand2);color:#041018;border-radius:4px;font-weight:800;text-transform:uppercase}
+.site-name .seed-badge{font-size:10px;padding:3px 8px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#041018;border-radius:4px;font-weight:800;text-transform:uppercase;box-shadow:0 2px 4px rgba(251,191,36,0.3)}
+.table-row.seed-model{border-left:3px solid #fbbf24;background:color-mix(in srgb, #fbbf24 5%, transparent)}
+.table-row.seed-model:hover{background:color-mix(in srgb, #fbbf24 15%, transparent)}
+.site-type{display:flex;align-items:center;justify-content:center}
+.type-badge{font-size:10px;padding:4px 10px;border-radius:6px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
+.type-badge.bis{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#ffffff;box-shadow:0 2px 4px rgba(99,102,241,0.3)}
+.type-badge.dashboard{background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#ffffff;box-shadow:0 2px 4px rgba(139,92,246,0.3)}
+.type-badge.app{background:linear-gradient(135deg,#06b6d4,#0891b2);color:#ffffff;box-shadow:0 2px 4px rgba(6,182,212,0.3)}
+.type-badge.wordpress{background:linear-gradient(135deg,#21759b,#135e96);color:#ffffff;box-shadow:0 2px 4px rgba(33,117,155,0.3)}
+.type-badge.vue{background:linear-gradient(135deg,#42b983,#35495e);color:#ffffff;box-shadow:0 2px 4px rgba(66,185,131,0.3)}
+.section-header{font-size:18px;font-weight:900;color:var(--ink);margin:32px 0 16px;padding-bottom:12px;border-bottom:2px solid var(--line);display:flex;align-items:center;gap:8px}
+.section-header:first-child{margin-top:0}
+.section-header .icon{font-size:20px}
+.section-header.seed-section{border-bottom-color:#fbbf24}
+.section-header.seed-section .icon{color:#fbbf24}
+.site-description{font-size:13px;color:var(--muted);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;max-height:3.2em;min-height:3.2em;position:relative;cursor:pointer;transition:color 0.2s ease;word-spacing:0.05em;letter-spacing:0.01em}
+.site-description:hover{color:var(--brand)}
+@media (prefers-reduced-motion: reduce){
+  .site-description{transition:none}
+}
+.description-modal{display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.2s ease}
+.description-modal.show{display:flex}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.description-modal-content{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:16px;padding:24px;max-width:600px;width:100%;max-height:80vh;overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:slideUp 0.3s ease}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.description-modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.description-modal-title{font-size:18px;font-weight:900;color:var(--ink);margin:0}
+.description-modal-close{width:32px;height:32px;border:none;background:color-mix(in srgb, var(--card) 95%, transparent);border:1px solid var(--line);border-radius:8px;color:var(--ink);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease}
+.description-modal-close:hover{background:color-mix(in srgb, var(--brand) 20%, transparent);border-color:var(--brand);color:var(--brand);transform:rotate(90deg)}
+.description-modal-body{font-size:14px;color:var(--muted);line-height:1.6;white-space:pre-wrap;word-wrap:break-word}
+@media (prefers-reduced-motion: reduce){
+  .description-modal,.description-modal-content{animation:none}
+  .description-modal-close:hover{transform:none}
+}
+.site-meta{display:flex;flex-direction:column;gap:4px}
+.site-meta-item{font-size:12px;color:var(--muted)}
+.site-meta-item strong{color:var(--ink);font-weight:700}
+.site-access{display:flex;flex-direction:column;gap:4px;justify-content:flex-end;align-items:flex-end;text-align:right}
+.access-link{font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;color:var(--brand);text-decoration:none;padding:4px 6px;border-radius:4px;background:color-mix(in srgb, var(--brand) 10%, transparent);border:1px solid var(--line);transition:all 0.15s;display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all}
+.access-link:hover{background:color-mix(in srgb, var(--brand) 20%, transparent);border-color:var(--brand)}
+.site-access{max-width:200px;overflow:hidden}
+.site-action{display:flex;align-items:center;justify-content:center;width:100%}
+.open-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:8px;background:color-mix(in srgb, var(--brand) 20%, transparent);border:1px solid var(--brand);color:var(--brand);font-size:12px;font-weight:700;text-decoration:none;transition:all 0.2s ease;white-space:nowrap;min-width:80px;cursor:pointer}
+.open-btn:hover{background:color-mix(in srgb, var(--brand) 30%, transparent);transform:translateY(-1px);box-shadow:0 2px 8px color-mix(in srgb, var(--brand) 20%, transparent)}
+.open-btn:active{transform:translateY(0);box-shadow:none}
+@media (prefers-reduced-motion: reduce){
+  .open-btn{transition:none}
+  .open-btn:hover{transform:none}
+}
+.empty-state{text-align:center;padding:80px 32px;color:var(--muted)}
+.empty-state h2{margin:0 0 12px;font-size:20px;font-weight:900;color:var(--ink)}
+.empty-state p{margin:0;font-size:14px;line-height:1.6}
+.loading{text-align:center;padding:80px 32px;color:var(--muted)}
+.error-state{text-align:center;padding:40px 32px;background:color-mix(in srgb, #f05a78 20%, transparent);border:1px solid #f05a78;border-radius:12px;margin:32px 0;color:#f05a78}
+.error-state h3{margin:0 0 8px;font-size:16px;font-weight:900}
+.error-state p{margin:0;font-size:13px;opacity:0.9}
+@media (max-width: 1024px){
+  .container{padding:20px}
+  .sites-table{padding:0 16px}
+  .table-header,.table-row{grid-template-columns:2fr 80px 3fr 60px 60px 60px 60px 200px;gap:20px;padding:12px 16px}
+  .table-header-cell,.site-meta{font-size:10px}
+  .site-name{font-size:14px}
+  .site-description{font-size:12px}
+  .open-btn{font-size:11px;padding:6px 12px;min-width:70px}
+  .access-link{font-size:10px}
+}
+@media (max-width: 768px){
+  .header{padding:16px 20px}
+  .header h1{font-size:20px}
+  .header-content{flex-direction:column;align-items:flex-start;gap:12px}
+  .header-btn span:last-child{display:none}
+  .header-btn{padding:8px 12px;min-width:40px;justify-content:center}
+  .container{padding:16px}
+  .sites-table{border-radius:12px;padding:0 12px}
+  .table-header,.table-row{grid-template-columns:2fr 60px 50px 50px 50px 50px 150px;gap:16px;padding:10px 12px}
+  .table-header-cell:nth-child(3),.table-row > *:nth-child(3){display:none}
+  .table-header-cell:nth-child(8),.table-row > *:nth-child(8){display:none}
+  .site-name{font-size:16px;flex-wrap:wrap}
+  .site-description{display:none}
+  .site-meta{font-size:10px}
+  .site-access{display:none}
+  .open-btn{font-size:11px;padding:6px 10px;min-width:60px}
+  .access-info{padding:12px}
+  .access-urls{flex-direction:column;gap:6px}
+  .access-url{font-size:10px;padding:5px 8px;width:100%;overflow-x:auto}
+}
+@media (max-width: 480px){
+  .header{padding:12px 16px}
+  .header h1{font-size:18px;gap:8px}
+  .status-badge{font-size:10px;padding:4px 8px}
+  .container{padding:12px}
+  .sites-table{padding:0 8px}
+  .table-header,.table-row{grid-template-columns:2fr 40px 40px 40px 80px;gap:12px;padding:8px 10px}
+  .table-header-cell{font-size:9px}
+  .site-name{font-size:14px}
+  .site-meta{font-size:9px}
+  .open-btn{font-size:10px;padding:5px 8px;min-width:50px}
+  .access-info h4{font-size:11px}
+  .table-header-cell:nth-child(2),.table-row > *:nth-child(2){display:none}
+  .table-header-cell:nth-child(6),.table-row > *:nth-child(6){display:none}
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-content">
+    <h1><span class="logo-dot"></span> Server App</h1>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="status">
+      </div>
+      <button id="themeToggle" class="header-btn" title="Toggle theme" onclick="toggleTheme()" style="min-width:auto;padding:8px 12px">
+        <span id="themeIcon">🌙</span>
+      </button>
+      <button id="restartBtn" class="header-btn" title="Restart Server" onclick="restartServer()" style="min-width:auto;padding:8px 12px;background:color-mix(in srgb, #f59e0b 20%, transparent);border:1px solid #f59e0b;color:#f59e0b">
+        <span>🔄</span>
+      </button>
+      <div class="header-actions">
+        <a href="/settings.html" class="header-btn settings" title="Server Settings" onclick="navigateToSettings(event)">
+          <span>⚙️</span>
+          <span>Settings</span>
+        </a>
+  </div>
+      </div>
+  </div>
+  <!-- Tabs Navigation -->
+  <div class="tabs-container" style="max-width:1400px;margin:0 auto;padding:0 32px;border-top:1px solid var(--line);margin-top:16px">
+    <div class="tabs" style="display:flex;gap:8px;padding-top:12px">
+      <button class="tab-btn active" data-tab="overview" onclick="switchTab('overview')" style="padding:10px 20px;border:none;background:transparent;color:var(--muted);font-size:14px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s ease">
+        📊 Overview
+      </button>
+      <button class="tab-btn" data-tab="sites" onclick="switchTab('sites')" style="padding:10px 20px;border:none;background:transparent;color:var(--muted);font-size:14px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s ease">
+        🌐 Sites
+      </button>
+      <button class="tab-btn" data-tab="seeds" onclick="switchTab('seeds')" style="padding:10px 20px;border:none;background:transparent;color:var(--muted);font-size:14px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s ease">
+        🌱 Seeds
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Tab Content -->
+  <div id="tabContent">
+    <!-- Overview Tab -->
+    <div id="overviewTab" class="tab-content active">
+      <!-- Server Access, Status, Deployment, and System Tools Cards -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+    <!-- Left Column: Server Access, Status, and Deployment Options (Stacked) -->
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <!-- Server Access Card -->
+      <div class="server-access-card" style="background:color-mix(in srgb, var(--card) 95%, transparent);border:1px solid var(--line);border-radius:12px;padding:20px">
+        <h2 style="margin:0 0 16px 0;font-size:16px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px">
+          <span>🌐</span>
+          <span>Server Access</span>
+        </h2>
+        <div id="accessUrlsContainer" style="display:flex;flex-direction:column;gap:10px;font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace">
+          <div style="color:var(--muted)">Local: <a id="localUrl" href="#" style="color:var(--brand);font-weight:600;text-decoration:none;cursor:pointer" title="Click to open local URL">—</a></div>
+          <div style="color:var(--muted)">Network: <a id="networkUrl" href="#" style="color:var(--brand);font-weight:600;text-decoration:none;cursor:pointer" title="Click to open network URL">—</a></div>
+    </div>
+      </div>
+      
+      <!-- Server Status Card -->
+      <div class="server-status-card" style="background:color-mix(in srgb, var(--card) 95%, transparent);border:1px solid var(--line);border-radius:12px;padding:20px">
+        <h2 style="margin:0 0 16px 0;font-size:16px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px">
+          <span>📊</span>
+          <span>Server Status</span>
+          <button id="refreshHealthBtn" onclick="refreshHealthStatus()" style="margin-left:auto;padding:4px 8px;font-size:10px;background:color-mix(in srgb, var(--brand) 15%, transparent);border:1px solid var(--brand);border-radius:4px;color:var(--brand);cursor:pointer" title="Refresh health status">🔄</button>
+        </h2>
+        <div id="statusItemsContainer" style="display:flex;flex-direction:column;gap:10px;font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace">
+          <div style="color:var(--muted)">OS: <span id="osStatus" style="color:var(--brand);font-weight:600;display:inline-flex;align-items:center;gap:6px"><span id="osIcon">💻</span><span id="osName">Detecting...</span></span></div>
+          <div style="color:var(--muted)">Health: <span id="healthStatus" style="color:#10b981;font-weight:600;display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#10b981;border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span><span>Checking...</span></span></div>
+          <div style="color:var(--muted)">Status: <span id="serverStatus" style="color:#10b981;font-weight:600;display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;background:#10b981;border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span><span>Server Running</span></span></div>
+          <div id="issuesContainer" style="margin-top:8px;display:none">
+            <div style="color:var(--muted);font-size:11px;margin-bottom:6px">Issues:</div>
+            <div id="issuesList" style="display:flex;flex-direction:column;gap:4px"></div>
+    </div>
+          <div id="sitesStatusContainer" style="margin-top:8px;display:none">
+            <div style="color:var(--muted);font-size:11px;margin-bottom:6px">Sites:</div>
+            <div id="sitesStatusList" style="display:flex;flex-direction:column;gap:4px"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deployment Options Card -->
+      <div class="deployment-card" style="background:color-mix(in srgb, var(--card) 95%, transparent);border:1px solid var(--line);border-radius:12px;padding:20px">
+        <h2 style="margin:0 0 16px 0;font-size:16px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px">
+          <span>🚀</span>
+          <span>Deployment Options</span>
+        </h2>
+        <div id="deploymentContainer" style="display:flex;flex-direction:column;gap:12px;font-size:12px">
+        <div id="dockerStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">🐳</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">Docker</div>
+              <div style="font-size:11px;color:var(--muted)" id="dockerDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="dockerBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="caddyStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">🌐</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">Caddy</div>
+              <div style="font-size:11px;color:var(--muted)" id="caddyDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="caddyBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="traefikStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">🔀</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">Traefik</div>
+              <div style="font-size:11px;color:var(--muted)" id="traefikDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="traefikBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: System Tools Card -->
+    <div class="system-tools-card" style="background:color-mix(in srgb, var(--card) 95%, transparent);border:1px solid var(--line);border-radius:12px;padding:20px">
+      <h2 style="margin:0 0 16px 0;font-size:16px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px">
+        <span>🛠️</span>
+        <span>System Tools</span>
+      </h2>
+      <div id="systemToolsContainer" style="display:flex;flex-direction:column;gap:12px;font-size:12px">
+        <div id="nodejsStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">🟢</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">Node.js</div>
+              <div style="font-size:11px;color:var(--muted)" id="nodejsDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="nodejsBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="pythonStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">🐍</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">Python</div>
+              <div style="font-size:11px;color:var(--muted)" id="pythonDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="pythonBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="uvStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">⚡</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">UV</div>
+              <div style="font-size:11px;color:var(--muted)" id="uvDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="uvBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="sslStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">🔒</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">SSL Certificates</div>
+              <div style="font-size:11px;color:var(--muted)" id="sslDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="sslBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="mysqlStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">🗄️</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">MySQL</div>
+              <div style="font-size:11px;color:var(--muted)" id="mysqlDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="mysqlBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="postgresqlStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">🐘</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">PostgreSQL</div>
+              <div style="font-size:11px;color:var(--muted)" id="postgresqlDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="postgresqlBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="redisStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">📦</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">Redis</div>
+              <div style="font-size:11px;color:var(--muted)" id="redisDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="redisBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="wordpressStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">📝</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">WordPress</div>
+              <div style="font-size:11px;color:var(--muted)" id="wordpressDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="wordpressBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="viteStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">⚡</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">Vite</div>
+              <div style="font-size:11px;color:var(--muted)" id="viteDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="viteBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="vueStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">💚</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">Vue</div>
+              <div style="font-size:11px;color:var(--muted)" id="vueDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="vueBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="reactStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">⚛️</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">React</div>
+              <div style="font-size:11px;color:var(--muted)" id="reactDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="reactBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+        <div id="pnpmStatus" style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px">📦</span>
+            <div>
+              <div style="font-weight:700;color:var(--ink)">PNPM</div>
+              <div style="font-size:11px;color:var(--muted)" id="pnpmDetails">Checking...</div>
+            </div>
+          </div>
+          <span id="pnpmBadge" class="deployment-badge" style="padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase">—</span>
+        </div>
+      </div>
+      </div>
+    </div>
+    
+    <!-- Sites Tab -->
+    <div id="sitesTab" class="tab-content" style="display:none">
+      <div class="sites-table" id="sitesTable">
+        <div class="loading">Loading sites...</div>
+      </div>
+    </div>
+    
+    <!-- Seeds Tab -->
+    <div id="seedsTab" class="tab-content" style="display:none">
+      <div class="sites-table" id="seedsTable">
+        <div class="loading">Loading seeds...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Description Modal -->
+<div class="description-modal" id="descriptionModal">
+  <div class="description-modal-content">
+    <div class="description-modal-header">
+      <h3 class="description-modal-title" id="modalTitle">Site Description</h3>
+      <button class="description-modal-close" onclick="closeDescriptionModal()" aria-label="Close">×</button>
+    </div>
+    <div class="description-modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Schemas Modal -->
+<div class="description-modal" id="schemasModal" style="display:none">
+  <div class="description-modal-content">
+    <div class="description-modal-header">
+      <h3 class="description-modal-title" id="schemasModalTitle">Schemas</h3>
+      <button class="description-modal-close" onclick="closeSchemasModal()" aria-label="Close">×</button>
+    </div>
+    <div class="description-modal-body" id="schemasModalBody"></div>
+  </div>
+</div>
+
+<!-- Pages Modal -->
+<div class="description-modal" id="pagesModal" style="display:none">
+  <div class="description-modal-content">
+    <div class="description-modal-header">
+      <h3 class="description-modal-title" id="pagesModalTitle">Pages</h3>
+      <button class="description-modal-close" onclick="closePagesModal()" aria-label="Close">×</button>
+    </div>
+    <div class="description-modal-body" id="pagesModalBody"></div>
+  </div>
+</div>
+
+<!-- Services Modal -->
+<div class="description-modal" id="servicesModal" style="display:none">
+  <div class="description-modal-content">
+    <div class="description-modal-header">
+      <h3 class="description-modal-title" id="servicesModalTitle">Services</h3>
+      <button class="description-modal-close" onclick="closeServicesModal()" aria-label="Close">×</button>
+    </div>
+    <div class="description-modal-body" id="servicesModalBody"></div>
+  </div>
+</div>
+
+<!-- Resources Modal -->
+  <div class="description-modal" id="resourcesModal" style="display:none">
+    <div class="description-modal-content">
+      <div class="description-modal-header">
+        <h3 class="description-modal-title" id="resourcesModalTitle">Resources</h3>
+        <button class="description-modal-close" onclick="closeResourcesModal()" aria-label="Close">×</button>
+      </div>
+      <div class="description-modal-body" id="resourcesModalBody"></div>
+    </div>
+  </div>
+
+  <!-- Clone Seed Modal -->
+  <div class="description-modal" id="cloneSeedModal" style="display:none">
+    <div class="description-modal-content" style="max-width:500px">
+      <div class="description-modal-header">
+        <h3 class="description-modal-title">🌱 Create Site from Seed</h3>
+        <button class="description-modal-close" onclick="closeCloneModal()" aria-label="Close">×</button>
+      </div>
+      <div class="description-modal-body">
+        <p style="color:var(--muted);margin-bottom:20px;line-height:1.6">Create a new Business Identity Shaper site by cloning the seed template. Enter a name for your new site:</p>
+        <div class="form-group" style="margin-bottom:20px">
+          <label style="display:block;margin-bottom:8px;font-weight:600;color:var(--ink);font-size:14px">Site Name</label>
+          <input type="text" id="newSiteName" placeholder="my-new-site" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:14px;font-family:inherit" autofocus>
+          <small style="display:block;margin-top:6px;color:var(--muted);font-size:12px">Lowercase letters, numbers, and hyphens only. This will be the folder name.</small>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:flex-end">
+          <button onclick="closeCloneModal()" style="padding:10px 20px;border-radius:8px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);color:var(--ink);font-size:14px;font-weight:600;cursor:pointer">Cancel</button>
+          <button onclick="confirmCloneSeed()" style="padding:10px 20px;border-radius:8px;background:linear-gradient(135deg,#fbbf24,#f59e0b);border:none;color:#041018;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 2px 4px rgba(251,191,36,0.3)">Create Site</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+// Theme management
+(function() {
+  function getThemeMode() {
+    const stored = localStorage.getItem('themeMode');
+    if (stored) return stored;
+    // Check system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  }
+  
+  function applyTheme(mode) {
+    const html = document.documentElement;
+    if (mode === 'auto') {
+      const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      html.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
+    } else {
+      html.setAttribute('data-theme', mode);
+    }
+    localStorage.setItem('themeMode', mode);
+    updateThemeIcon(mode);
+  }
+  
+  function updateThemeIcon(mode) {
+    const icon = document.getElementById('themeIcon');
+    if (icon) {
+      const icons = { dark: '🌙', light: '☀️', auto: '🔄' };
+      icon.textContent = icons[mode] || '🌙';
+      icon.parentElement.title = `Theme: ${mode} (click to toggle)`;
+    }
+  }
+  
+  function toggleTheme() {
+    const current = getThemeMode();
+    const modes = ['dark', 'light', 'auto'];
+    const currentIndex = modes.indexOf(current);
+    const nextIndex = (currentIndex + 1) % modes.length;
+    const nextMode = modes[nextIndex];
+    applyTheme(nextMode);
+  }
+  
+  // Initialize theme
+  const initialMode = getThemeMode();
+  applyTheme(initialMode);
+  
+  // Listen for system theme changes
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (getThemeMode() === 'auto') {
+        applyTheme('auto');
+      }
+    });
+  }
+  
+  // Expose globally
+  window.toggleTheme = toggleTheme;
+  window.applyTheme = applyTheme;
+})();
+
+// Tab switching function (outside IIFE so it's globally accessible)
+function switchTab(tabName) {
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.classList.remove('active');
+    tab.style.display = 'none';
+  });
+  
+  // Remove active class from all buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  // Show selected tab
+  const selectedTab = document.getElementById(tabName + 'Tab');
+  if (selectedTab) {
+    selectedTab.classList.add('active');
+    selectedTab.style.display = 'block';
+  }
+  
+  // Add active class to selected button
+  const selectedBtn = document.querySelector(`[data-tab="${tabName}"]`);
+  if (selectedBtn) {
+    selectedBtn.classList.add('active');
+  }
+  
+  // Load content for the selected tab
+  if (tabName === 'sites') {
+    loadSites();
+  } else if (tabName === 'seeds') {
+    loadSeeds();
+  }
+}
+
+// Expose switchTab globally
+window.switchTab = switchTab;
+
+// Load sites function (for Sites tab)
+async function loadSites() {
+    const table = document.getElementById('sitesTable');
+    if (!table) return;
+    
+    try {
+      const response = await fetch('/api/sites');
+      if (!response.ok) {
+        throw new Error('Failed to fetch sites');
+      }
+      const data = await response.json();
+      
+        // No sites detected - show helpful info
+      if (!data.sites || data.sites.length === 0) {
+        table.innerHTML = `
+          <div class="empty-state">
+            <h2>🚀 Server App</h2>
+            <div style="background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:12px;padding:30px;max-width:700px;margin:0 auto;text-align:left">
+              <h3 style="color:#f05a78;margin-top:0">No Sites Detected</h3>
+            <p>No sites were found in the <code style="background:color-mix(in srgb, var(--card) 95%, transparent);padding:2px 6px;border-radius:4px">sites/</code> directory.</p>
+            
+            <h4 style="color:var(--ink);margin-top:25px;margin-bottom:10px">To add a site:</h4>
+            <ol style="margin:15px 0;padding-left:25px">
+              <li style="margin:8px 0">Create a folder in <code style="background:color-mix(in srgb, var(--card) 95%, transparent);padding:2px 6px;border-radius:4px">sites/</code> (e.g., <code style="background:color-mix(in srgb, var(--card) 95%, transparent);padding:2px 6px;border-radius:4px">sites/my-site/</code>)</li>
+              <li style="margin:8px 0">Add your site files:
+                <ul style="margin:8px 0;padding-left:20px">
+                  <li><code style="background:color-mix(in srgb, var(--card) 95%, transparent);padding:2px 6px;border-radius:4px">pages/index.html</code> - Main page (recommended)</li>
+                  <li>OR <code style="background:color-mix(in srgb, var(--card) 95%, transparent);padding:2px 6px;border-radius:4px">index.html</code> - Root index file</li>
+                </ul>
+              </li>
+              <li style="margin:8px 0">Restart the server</li>
+            </ol>
+            
+            <h4 style="color:var(--ink);margin-top:25px;margin-bottom:10px">Example structure:</h4>
+            <pre style="background:#2d2d2d;color:#f8f8f2;padding:15px;border-radius:6px;overflow-x:auto;margin:15px 0"><code style="background:none;padding:0;color:inherit">sites/
+  my-site/
+    pages/
+      index.html
+    css/
+    js/</code></pre>
+            
+            <h4 style="color:var(--ink);margin-top:25px;margin-bottom:10px">Quick Start:</h4>
+            <pre style="background:#2d2d2d;color:#f8f8f2;padding:15px;border-radius:6px;overflow-x:auto;margin:15px 0"><code style="background:none;padding:0;color:inherit">mkdir -p sites/my-site/pages
+# Add your index.html to sites/my-site/pages/
+# Then restart the server</code></pre>
+          </div>
+    </div>
+      `;
+        return;
+      }
+    // (This shouldn't happen, but handle gracefully)
+    if (data.sites.length === 1) {
+      const site = data.sites[0];
+      // Server routes: /sites/:siteName/* tries content/pages/index.html first, then pages/index.html, then index.html
+      // Use explicit path to content/pages/index.html (sites have this structure)
+      window.location.href = `/sites/${site.name}/content/pages/index.html`;
+      return;
+    }
+    
+    // Update page title with site count
+    const totalSiteCount = data.sites?.length || 0;
+    if (totalSiteCount > 0) {
+      const siteNames = data.sites.map(s => s.displayName || s.name).join(', ');
+      document.title = `Server App — ${totalSiteCount} Site${totalSiteCount > 1 ? 's' : ''}`;
+    } else {
+      document.title = 'Server App — LearnMappers';
+    }
+    
+    // Get access information
+    const access = data.access || {};
+    const protocol = window.location.protocol;
+    const isHttps = protocol === 'https:';
+    const port = window.location.port || (isHttps ? '8443' : '8000');
+    const host = window.location.hostname;
+    
+    // Build current base URL (use the URL we're currently viewing from)
+    const currentBaseUrl = `${protocol}//${host}${port ? ':' + port : ''}`;
+    
+    // Helper function to get site type badge
+    function getSiteTypeBadge(type) {
+      const typeMap = {
+        'BIS': { label: 'BIS', class: 'bis', icon: '🎯', title: 'Business Identity Shaper' },
+        'Dashboard': { label: 'Dashboard', class: 'dashboard', icon: '📊', title: 'Dashboard Site' },
+        'App': { label: 'App', class: 'app', icon: '⚡', title: 'TypeScript/React Application' },
+        'wordpress': { label: 'WordPress', class: 'wordpress', icon: '📝', title: 'WordPress Site' },
+        'vue': { label: 'Vue', class: 'vue', icon: '💚', title: 'Vue.js Site' }
+      };
+      // Normalize type (case-insensitive)
+      const normalizedType = type ? type.toLowerCase() : '';
+      const typeInfo = typeMap[type] || typeMap[normalizedType] || { label: type || 'Site', class: 'app', icon: '🌐', title: type || 'Site' };
+      return `<span class="type-badge ${typeInfo.class}" title="${typeInfo.title}">${typeInfo.icon} ${typeInfo.label}</span>`;
+    }
+    
+    // Filter to only regular sites (not seed models)
+    const regularSites = data.sites.filter(site => !site.isSeedModel);
+    
+    // Build table
+    let html = '';
+    
+    // Regular Sites Section
+    if (regularSites.length > 0) {
+      html += `<div class="section-header"><span class="icon">🌐</span><span>Sites</span></div>`;
+      html += `
+        <div class="table-header">
+          <div class="table-header-cell">Site Name</div>
+          <div class="table-header-cell">Description</div>
+          <div class="table-header-cell">Pages</div>
+          <div class="table-header-cell">Services</div>
+          <div class="table-header-cell">Resources</div>
+          <div class="table-header-cell">Schemas</div>
+          <div class="table-header-cell" style="text-align:right;padding-right:0">Action</div>
+        </div>
+      `;
+      
+      regularSites.forEach(site => {
+      // Server routes: /sites/:siteName/* tries content/pages/index.html first, then pages/index.html, then index.html
+      // Use explicit path to content/pages/index.html (sites have this structure)
+      const sitePath = `/sites/${site.name}/content/pages/index.html`;
+      const isDefault = site.name === 'learnmappers';
+      
+      // Build access URL (use current URL we're viewing from)
+      const siteAccessUrl = currentBaseUrl.replace(/\/$/, '') + sitePath;
+      
+      // Get counts for separate columns
+      const pageCount = site.pages || 0;
+      const serviceCount = site.pagesBreakdown?.serviceCards || 0;
+      const resourceCount = site.pagesBreakdown?.resourceCards || 0;
+      const schemaCount = site.schemas || 0;
+      const actualPages = pageCount - serviceCount - resourceCount; // Pages excluding cards
+      const isSeedModel = site.isSeedModel || false;
+      const siteType = site.siteType || 'BIS';
+      const typeBadge = getSiteTypeBadge(siteType);
+      
+      // Column order must match grid-template-columns: 240px 6fr 60px 60px 60px 60px 120px
+      // 1. Site Name, 2. Description, 3. Pages, 4. Services, 5. Resources, 6. Schemas, 7. Access
+      const badges = [];
+      if (isDefault) badges.push('<span class="default-badge">Default</span>');
+      if (site.isSeedModel) badges.push('<span class="seed-badge" title="Seed Model: Clone this to create a new Business Identity Shaper site">🌱 Seed</span>');
+      
+      // Prepare schemas data for modal
+      const schemasData = site.schemasList || [];
+      const schemasJson = JSON.stringify(schemasData).replace(/"/g, '&quot;');
+      
+      // Prepare pages data for modal
+      const pagesData = site.pagesList || [];
+      const pagesJson = JSON.stringify(pagesData).replace(/"/g, '&quot;');
+      
+      html += `
+        <div class="table-row ${isDefault ? 'default' : ''} ${isSeedModel ? 'seed-model' : ''}">
+          <div class="site-name">
+            <div class="site-title">${site.displayName ? site.displayName.charAt(0).toUpperCase() + site.displayName.slice(1) : (site.name.charAt(0).toUpperCase() + site.name.slice(1))}</div>
+            <div class="badges" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px">
+              ${badges.length > 0 ? badges.join('') : ''}
+              ${typeBadge}
+            </div>
+          </div>
+          <div class="site-description" data-site-name="${site.name}" data-description="${(site.description || 'No description').replace(/"/g, '&quot;')}" style="text-align:left;display:-webkit-box">
+            ${site.description || 'No description'}
+          </div>
+          <div class="site-meta" style="text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="showPagesModal('${site.name}', ${actualPages}, '${pagesJson}')" title="Click to view all pages">
+            <strong style="color:var(--brand);text-decoration:underline">${actualPages}</strong>
+          </div>
+          <div class="site-meta" style="text-align:center;display:flex;align-items:center;justify-content:center">
+            <strong>${serviceCount}</strong>
+          </div>
+          <div class="site-meta" style="text-align:center;display:flex;align-items:center;justify-content:center">
+            <strong>${resourceCount}</strong>
+          </div>
+          <div class="site-schemas" style="text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="showSchemasModal('${site.name}', ${schemaCount}, '${schemasJson}')" title="Click to view all schemas">
+            <strong style="color:var(--brand);text-decoration:underline">${schemaCount}</strong>
+          </div>
+          <div class="site-access" style="text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding-right:0">
+            <a href="${siteAccessUrl || '#'}" onclick="event.stopPropagation()" target="_blank" title="Go to ${site.name}" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--brand2));border:none;color:#041018;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s ease;white-space:nowrap;text-decoration:none;box-shadow:0 2px 4px color-mix(in srgb, var(--brand) 30%, transparent)">Go To Site <span style="font-size:10px">↗</span></a>
+          </div>
+        </div>
+      `;
+      });
+    } else {
+      html = '<div style="padding:40px;text-align:center;color:var(--muted)">No sites found.</div>';
+    }
+    
+    table.innerHTML = html;
+    
+    // Add copy functionality
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const url = btn.dataset.url;
+        navigator.clipboard.writeText(url).then(() => {
+          const original = btn.textContent;
+          btn.textContent = '✓';
+          setTimeout(() => {
+            btn.textContent = original;
+          }, 2000);
+        });
+      });
+    });
+    
+    // Add description click handlers
+    document.querySelectorAll('.site-description').forEach(desc => {
+      desc.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const siteName = desc.dataset.siteName || 'Site';
+        const description = desc.dataset.description || 'No description';
+        showDescriptionModal(siteName, description);
+      });
+    });
+    
+    // Update status with site count
+    const siteCount = data.sites.length;
+    const serverStatusEl = document.getElementById('serverStatus');
+    if (serverStatusEl) {
+      const statusText = serverStatusEl.querySelector('span:last-child');
+      if (statusText) {
+        statusText.textContent = `${siteCount} Site${siteCount !== 1 ? 's' : ''} Running`;
+      }
+    }
+  } catch(e) {
+    table.innerHTML = `
+      <div class="error-state">
+        <h3>⚠️ Error Loading Sites</h3>
+        <p>${e.message}</p>
+        <p style="margin-top:12px"><a href="/sites/learnmappers/pages/index.html" style="color:var(--brand);text-decoration:underline">Go to LearnMappers site</a></p>
+      </div>
+    `;
+    const serverStatusEl = document.getElementById('serverStatus');
+    if (serverStatusEl) {
+      const statusText = serverStatusEl.querySelector('span:last-child');
+      if (statusText) {
+        statusText.textContent = 'Error';
+      }
+      const statusDot = serverStatusEl.querySelector('span:first-child');
+      if (statusDot) {
+        statusDot.style.background = '#f05a78';
+        statusDot.style.animation = 'none';
+      }
+      serverStatusEl.style.color = '#f05a78';
+    }
+  }
+}
+
+// Load seeds function
+async function loadSeeds() {
+    const table = document.getElementById('seedsTable');
+    if (!table) return;
+    
+    try {
+      const response = await fetch('/api/sites');
+      if (!response.ok) {
+        throw new Error('Failed to fetch sites');
+      }
+      const data = await response.json();
+      
+      // Filter to only seed models
+      const seedSites = data.sites.filter(site => site.isSeedModel);
+      
+      // Build current base URL
+      const protocol = window.location.protocol;
+      const host = window.location.hostname;
+      const port = window.location.port || (protocol === 'https:' ? '8443' : '8000');
+      const currentBaseUrl = `${protocol}//${host}${port ? ':' + port : ''}`;
+      
+      // Helper function to get site type badge
+      function getSiteTypeBadge(type) {
+        const typeMap = {
+          'BIS': { label: 'BIS', class: 'bis', icon: '🎯', title: 'Business Identity Shaper' },
+          'Dashboard': { label: 'Dashboard', class: 'dashboard', icon: '📊', title: 'Dashboard Site' },
+          'App': { label: 'App', class: 'app', icon: '⚡', title: 'TypeScript/React Application' },
+          'wordpress': { label: 'WordPress', class: 'wordpress', icon: '📝', title: 'WordPress Site' },
+          'vue': { label: 'Vue', class: 'vue', icon: '💚', title: 'Vue.js Site' }
+        };
+        const normalizedType = type ? type.toLowerCase() : '';
+        const typeInfo = typeMap[type] || typeMap[normalizedType] || { label: type || 'Site', class: 'app', icon: '🌐', title: type || 'Site' };
+        return `<span class="type-badge ${typeInfo.class}" title="${typeInfo.title}">${typeInfo.icon} ${typeInfo.label}</span>`;
+      }
+      
+      // Build table
+      let html = '';
+      
+      if (seedSites.length > 0) {
+        html += `<div class="section-header seed-section"><span class="icon">🌱</span><span>Seed Models</span></div>`;
+        html += `
+          <div class="table-header seed-header" style="grid-template-columns:240px 6fr 60px 60px 60px 60px 120px">
+            <div class="table-header-cell">Seed Name</div>
+            <div class="table-header-cell">Description</div>
+            <div class="table-header-cell">Pages</div>
+            <div class="table-header-cell">Services</div>
+            <div class="table-header-cell">Resources</div>
+            <div class="table-header-cell">Schemas</div>
+            <div class="table-header-cell" style="text-align:right;padding-right:0">Action</div>
+          </div>
+        `;
+        
+        seedSites.forEach(site => {
+          const sitePath = `/sites/${site.name}/content/pages/index.html`;
+          const isDefault = site.name === 'learnmappers';
+          const siteAccessUrl = currentBaseUrl.replace(/\/$/, '') + sitePath;
+          
+          const pageCount = site.pages || 0;
+          const serviceCount = site.pagesBreakdown?.serviceCards || 0;
+          const resourceCount = site.pagesBreakdown?.resourceCards || 0;
+          const schemaCount = site.schemas || 0;
+          const actualPages = pageCount - serviceCount - resourceCount;
+          const isSeedModel = site.isSeedModel || false;
+          const siteType = site.siteType || 'BIS';
+          const typeBadge = getSiteTypeBadge(siteType);
+          
+          const badges = [];
+          if (isDefault) badges.push('<span class="default-badge">Default</span>');
+          if (site.isSeedModel) badges.push('<span class="seed-badge" title="Seed Model: Clone this to create a new Business Identity Shaper site">🌱 Seed</span>');
+          
+          const schemasData = site.schemasList || [];
+          const schemasJson = JSON.stringify(schemasData).replace(/"/g, '&quot;');
+          const pagesData = site.pagesList || [];
+          const pagesJson = JSON.stringify(pagesData).replace(/"/g, '&quot;');
+          const servicesData = site.servicesList || [];
+          const servicesJson = JSON.stringify(servicesData).replace(/"/g, '&quot;');
+          const resourcesData = site.resourcesList || [];
+          const resourcesJson = JSON.stringify(resourcesData).replace(/"/g, '&quot;');
+          
+          html += `
+            <div class="table-row seed-row ${isDefault ? 'default' : ''} ${isSeedModel ? 'seed-model' : ''}" style="grid-template-columns:240px 6fr 60px 60px 60px 60px 120px">
+              <div class="site-name">
+                <div class="site-title">${site.displayName ? site.displayName.charAt(0).toUpperCase() + site.displayName.slice(1) : (site.name.charAt(0).toUpperCase() + site.name.slice(1))}</div>
+                <div class="badges" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px">
+                  ${badges.length > 0 ? badges.join('') : ''}
+                  ${typeBadge}
+                </div>
+              </div>
+              <div class="site-description" data-site-name="${site.name}" data-description="${(site.description || 'No description').replace(/"/g, '&quot;')}" style="text-align:left;display:-webkit-box">
+                ${site.description || 'No description'}
+                ${isSeedModel ? '<br><small style="color:#fbbf24;font-weight:600;margin-top:4px;display:block">💡 Clone this folder to create a new Business Identity Shaper site</small>' : ''}
+              </div>
+              <div class="site-meta" style="text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="showPagesModal('${site.name}', ${actualPages}, '${pagesJson}')" title="Click to view all pages">
+                <strong style="color:var(--brand);text-decoration:underline">${actualPages}</strong>
+              </div>
+              <div class="site-meta" style="text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="showServicesModal('${site.name}', ${serviceCount}, '${servicesJson}')" title="Click to view all services">
+                <strong style="color:var(--brand);text-decoration:underline">${serviceCount}</strong>
+              </div>
+              <div class="site-meta" style="text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="showResourcesModal('${site.name}', ${resourceCount}, '${resourcesJson}')" title="Click to view all resources">
+                <strong style="color:var(--brand);text-decoration:underline">${resourceCount}</strong>
+              </div>
+              <div class="site-schemas" style="text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="showSchemasModal('${site.name}', ${schemaCount}, '${schemasJson}')" title="Click to view all schemas">
+                <strong style="color:var(--brand);text-decoration:underline">${schemaCount}</strong>
+              </div>
+              <div class="site-access" style="text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding-right:0">
+                <button onclick="createSiteFromSeed('${site.name}')" class="clone-btn" title="Create a new site by cloning this seed" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:linear-gradient(135deg,#fbbf24,#f59e0b);border:none;color:#041018;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s ease;white-space:nowrap;box-shadow:0 2px 4px rgba(251,191,36,0.3)">🌱 Clone</button>
+              </div>
+            </div>
+          `;
+        });
+      } else {
+        html = '<div style="padding:40px;text-align:center;color:var(--muted)">No seed models found.</div>';
+      }
+      
+      table.innerHTML = html;
+    } catch (error) {
+      console.error('Error loading seeds:', error);
+      const table = document.getElementById('seedsTable');
+      if (table) {
+        table.innerHTML = `<div style="padding:40px;text-align:center;color:#f05a78">Error loading seeds: ${error.message}</div>`;
+      }
+    }
+}
+
+// Schemas Modal Functions
+    window.showSchemasModal = function(siteName, count, schemasJson) {
+      const modal = document.getElementById('schemasModal');
+      const title = document.getElementById('schemasModalTitle');
+      const body = document.getElementById('schemasModalBody');
+      
+      try {
+        const schemas = JSON.parse(schemasJson.replace(/&quot;/g, '"'));
+        title.textContent = `${siteName} — Schemas (${count})`;
+        
+        if (schemas.length === 0) {
+          body.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">No schemas found.</p>';
+        } else {
+          let schemasHtml = '<div style="display:grid;gap:12px;max-height:60vh;overflow-y:auto;padding:8px">';
+          schemas.forEach((schema, index) => {
+            const schemaName = schema.name || schema.path || `Schema ${index + 1}`;
+            schemasHtml += `
+              <div style="padding:12px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px">
+                <div style="font-weight:700;color:var(--ink);margin-bottom:4px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13px">${schemaName}</div>
+                ${schema.path ? `<div style="font-size:11px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace">${schema.path}</div>` : ''}
+              </div>
+            `;
+          });
+          schemasHtml += '</div>';
+          body.innerHTML = schemasHtml;
+        }
+        
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      } catch (e) {
+        console.error('Error parsing schemas:', e);
+        body.innerHTML = '<p style="color:#f05a78;text-align:center;padding:20px">Error loading schemas.</p>';
+        modal.style.display = 'flex';
+      }
+    };
+    
+    window.closeSchemasModal = function() {
+      const modal = document.getElementById('schemasModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    };
+    
+    // Close schemas modal on outside click
+    document.getElementById('schemasModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeSchemasModal();
+      }
+    });
+    
+    // Pages Modal Functions
+    window.showPagesModal = function(siteName, count, pagesJson) {
+      const modal = document.getElementById('pagesModal');
+      const title = document.getElementById('pagesModalTitle');
+      const body = document.getElementById('pagesModalBody');
+      
+      try {
+        const pages = JSON.parse(pagesJson.replace(/&quot;/g, '"'));
+        title.textContent = `${siteName} — Pages (${count})`;
+        
+        if (pages.length === 0) {
+          body.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">No pages found.</p>';
+        } else {
+          // Build current base URL for links
+          const protocol = window.location.protocol;
+          const hostname = window.location.hostname;
+          const port = window.location.port || (protocol === 'https:' ? '8443' : '8000');
+          const baseUrl = `${protocol}//${hostname}${port ? ':' + port : ''}`;
+          
+          let pagesHtml = '<div style="display:grid;gap:12px;max-height:60vh;overflow-y:auto;padding:8px">';
+          pages.forEach((page, index) => {
+            const pageName = page.name || page.path || `Page ${index + 1}`;
+            const pagePath = page.path || '';
+            const pageUrl = `${baseUrl}/sites/${siteName}/content/pages/${pagePath}`;
+            
+            pagesHtml += `
+              <div style="padding:12px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                <div style="flex:1;min-width:0">
+                  <div style="font-weight:700;color:var(--ink);margin-bottom:4px;font-size:14px">${pageName}</div>
+                  <div style="font-size:11px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;word-break:break-all">${pagePath}</div>
+                </div>
+                <a href="${pageUrl}" target="_blank" style="padding:6px 12px;background:color-mix(in srgb, var(--brand) 20%, transparent);border:1px solid var(--brand);border-radius:6px;color:var(--brand);text-decoration:none;font-size:11px;font-weight:700;white-space:nowrap;transition:all 0.2s ease" onmouseover="this.style.background='color-mix(in srgb, var(--brand) 30%, transparent)'" onmouseout="this.style.background='color-mix(in srgb, var(--brand) 20%, transparent)'">Open ↗</a>
+              </div>
+            `;
+          });
+          pagesHtml += '</div>';
+          body.innerHTML = pagesHtml;
+        }
+        
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      } catch (e) {
+        console.error('Error parsing pages:', e);
+        body.innerHTML = '<p style="color:#f05a78;text-align:center;padding:20px">Error loading pages.</p>';
+        modal.style.display = 'flex';
+      }
+    };
+    
+    window.closePagesModal = function() {
+      const modal = document.getElementById('pagesModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    };
+    
+    // Close pages modal on outside click
+    document.getElementById('pagesModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closePagesModal();
+      }
+    });
+    
+    // Services Modal Functions
+    window.showServicesModal = function(siteName, count, servicesJson) {
+      const modal = document.getElementById('servicesModal');
+      const title = document.getElementById('servicesModalTitle');
+      const body = document.getElementById('servicesModalBody');
+      
+      try {
+        const services = JSON.parse(servicesJson.replace(/&quot;/g, '"'));
+        title.textContent = `${siteName} — Services (${count})`;
+        
+        if (services.length === 0) {
+          body.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">No services found.</p>';
+        } else {
+          // Build current base URL for links
+          const protocol = window.location.protocol;
+          const hostname = window.location.hostname;
+          const port = window.location.port || (protocol === 'https:' ? '8443' : '8000');
+          const baseUrl = `${protocol}//${hostname}${port ? ':' + port : ''}`;
+          
+          let servicesHtml = '<div style="display:grid;gap:12px;max-height:60vh;overflow-y:auto;padding:8px">';
+          services.forEach((service, index) => {
+            const serviceName = service.name || service.path || `Service ${index + 1}`;
+            const servicePath = service.path || '';
+            const serviceId = serviceName.replace(/^service-/, '');
+            const serviceUrl = `${baseUrl}/sites/${siteName}/pages/service-cards/${serviceId}.html`;
+            const category = service.category || 'root';
+            
+            servicesHtml += `
+              <div style="padding:12px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                <div style="flex:1;min-width:0">
+                  <div style="font-weight:700;color:var(--ink);margin-bottom:4px;font-size:14px">${serviceName}</div>
+                  <div style="font-size:11px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;word-break:break-all">${servicePath}</div>
+                  ${category !== 'root' ? `<div style="font-size:10px;color:var(--brand2);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px">${category}</div>` : ''}
+                </div>
+                <a href="${serviceUrl}" target="_blank" style="padding:6px 12px;background:color-mix(in srgb, var(--brand) 20%, transparent);border:1px solid var(--brand);border-radius:6px;color:var(--brand);text-decoration:none;font-size:11px;font-weight:700;white-space:nowrap;transition:all 0.2s ease" onmouseover="this.style.background='color-mix(in srgb, var(--brand) 30%, transparent)'" onmouseout="this.style.background='color-mix(in srgb, var(--brand) 20%, transparent)'">Open ↗</a>
+              </div>
+            `;
+          });
+          servicesHtml += '</div>';
+          body.innerHTML = servicesHtml;
+        }
+        
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      } catch (e) {
+        console.error('Error parsing services:', e);
+        body.innerHTML = '<p style="color:#f05a78;text-align:center;padding:20px">Error loading services.</p>';
+        modal.style.display = 'flex';
+      }
+    };
+    
+    window.closeServicesModal = function() {
+      const modal = document.getElementById('servicesModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    };
+    
+    // Close services modal on outside click
+    document.getElementById('servicesModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeServicesModal();
+      }
+    });
+    
+    // Resources Modal Functions
+    window.showResourcesModal = function(siteName, count, resourcesJson) {
+      const modal = document.getElementById('resourcesModal');
+      const title = document.getElementById('resourcesModalTitle');
+      const body = document.getElementById('resourcesModalBody');
+      
+      try {
+        const resources = JSON.parse(resourcesJson.replace(/&quot;/g, '"'));
+        title.textContent = `${siteName} — Resources (${count})`;
+        
+        if (resources.length === 0) {
+          body.innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">No resources found.</p>';
+        } else {
+          // Build current base URL for links
+          const protocol = window.location.protocol;
+          const hostname = window.location.hostname;
+          const port = window.location.port || (protocol === 'https:' ? '8443' : '8000');
+          const baseUrl = `${protocol}//${hostname}${port ? ':' + port : ''}`;
+          
+          let resourcesHtml = '<div style="display:grid;gap:12px;max-height:60vh;overflow-y:auto;padding:8px">';
+          resources.forEach((resource, index) => {
+            const resourceName = resource.name || resource.path || `Resource ${index + 1}`;
+            const resourcePath = resource.path || '';
+            const resourceSlug = resourceName.replace(/^resource-/, '');
+            const resourceUrl = `${baseUrl}/sites/${siteName}/pages/resource-cards/${resourceSlug}.html`;
+            const resourceType = resource.type || 'other';
+            
+            resourcesHtml += `
+              <div style="padding:12px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+                <div style="flex:1;min-width:0">
+                  <div style="font-weight:700;color:var(--ink);margin-bottom:4px;font-size:14px">${resourceName}</div>
+                  <div style="font-size:11px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;word-break:break-all">${resourcePath}</div>
+                  <div style="font-size:10px;color:var(--brand2);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px">${resourceType}</div>
+                </div>
+                <a href="${resourceUrl}" target="_blank" style="padding:6px 12px;background:color-mix(in srgb, var(--brand) 20%, transparent);border:1px solid var(--brand);border-radius:6px;color:var(--brand);text-decoration:none;font-size:11px;font-weight:700;white-space:nowrap;transition:all 0.2s ease" onmouseover="this.style.background='color-mix(in srgb, var(--brand) 30%, transparent)'" onmouseout="this.style.background='color-mix(in srgb, var(--brand) 20%, transparent)'">Open ↗</a>
+              </div>
+            `;
+          });
+          resourcesHtml += '</div>';
+          body.innerHTML = resourcesHtml;
+        }
+        
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      } catch (e) {
+        console.error('Error parsing resources:', e);
+        body.innerHTML = '<p style="color:#f05a78;text-align:center;padding:20px">Error loading resources.</p>';
+        modal.style.display = 'flex';
+      }
+    };
+    
+    window.closeResourcesModal = function() {
+      const modal = document.getElementById('resourcesModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    };
+    
+    // Close resources modal on outside click
+    document.getElementById('resourcesModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeResourcesModal();
+      }
+    });
+
+// Description Modal Functions
+function showDescriptionModal(siteName, description) {
+  console.log('Opening modal for:', siteName, description);
+  const modal = document.getElementById('descriptionModal');
+  const title = document.getElementById('modalTitle');
+  const body = document.getElementById('modalBody');
+  
+  if (!modal || !title || !body) {
+    console.error('Modal elements not found');
+    return;
+  }
+  
+  const displayName = siteName.charAt(0).toUpperCase() + siteName.slice(1);
+  title.textContent = `${displayName} — Description`;
+  body.textContent = description.replace(/&quot;/g, '"');
+  
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+function closeDescriptionModal() {
+  const modal = document.getElementById('descriptionModal');
+  if (modal) {
+    modal.classList.remove('show');
+    document.body.style.overflow = ''; // Restore scrolling
+  }
+}
+
+// Close modal on background click
+const descriptionModal = document.getElementById('descriptionModal');
+if (descriptionModal) {
+  descriptionModal.addEventListener('click', (e) => {
+    if (e.target.id === 'descriptionModal') {
+      closeDescriptionModal();
+    }
+  });
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const descriptionModal = document.getElementById('descriptionModal');
+    const schemasModal = document.getElementById('schemasModal');
+    const pagesModal = document.getElementById('pagesModal');
+    const servicesModal = document.getElementById('servicesModal');
+    const resourcesModal = document.getElementById('resourcesModal');
+    if (descriptionModal && descriptionModal.classList.contains('show')) {
+      closeDescriptionModal();
+    }
+    if (schemasModal && schemasModal.style.display === 'flex') {
+      closeSchemasModal();
+    }
+    if (pagesModal && pagesModal.style.display === 'flex') {
+      closePagesModal();
+    }
+    if (servicesModal && servicesModal.style.display === 'flex') {
+      closeServicesModal();
+    }
+    if (resourcesModal && resourcesModal.style.display === 'flex') {
+      closeResourcesModal();
+    }
+  }
+});
+
+// Restart server function
+// Expose restartServer globally
+window.restartServer = async function restartServer() {
+  const restartBtn = document.getElementById('restartBtn');
+  
+  if (!confirm('Are you sure you want to restart the server? This will temporarily disconnect all users.')) {
+    return;
+  }
+  
+  // Disable button and show loading state
+  restartBtn.disabled = true;
+  restartBtn.style.opacity = '0.5';
+  restartBtn.style.cursor = 'not-allowed';
+  const serverStatusEl = document.getElementById('serverStatus');
+  if (serverStatusEl) {
+    const statusText = serverStatusEl.querySelector('span:last-child');
+    if (statusText) {
+      statusText.textContent = 'Restarting...';
+    }
+    const statusDot = serverStatusEl.querySelector('span:first-child');
+    if (statusDot) {
+      statusDot.style.background = '#f59e0b';
+      statusDot.style.animation = 'pulse 1s infinite';
+    }
+    serverStatusEl.style.color = '#f59e0b';
+  }
+  
+  try {
+    const response = await fetch('/api/server/restart', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      // Show success message
+      const serverStatusEl = document.getElementById('serverStatus');
+      if (serverStatusEl) {
+        const statusText = serverStatusEl.querySelector('span:last-child');
+        if (statusText) {
+          statusText.textContent = 'Restarting...';
+        }
+        const statusDot = serverStatusEl.querySelector('span:first-child');
+        if (statusDot) {
+          statusDot.style.background = '#f59e0b';
+          statusDot.style.animation = 'pulse 1s infinite';
+        }
+        serverStatusEl.style.color = '#f59e0b';
+      }
+      
+      // Wait a moment, then try to reconnect
+      setTimeout(() => {
+        // Try to reload the page after a delay
+        let attempts = 0;
+        const maxAttempts = 10;
+        
+        const checkServer = setInterval(() => {
+          attempts++;
+          fetch('/api/health')
+            .then(res => {
+              if (res.ok) {
+                clearInterval(checkServer);
+                const serverStatusEl = document.getElementById('serverStatus');
+                if (serverStatusEl) {
+                  const statusText = serverStatusEl.querySelector('span:last-child');
+                  if (statusText) {
+                    statusText.textContent = 'Server Running';
+                  }
+                  const statusDot = serverStatusEl.querySelector('span:first-child');
+                  if (statusDot) {
+                    statusDot.style.background = '#10b981';
+                    statusDot.style.animation = 'pulse 2s infinite';
+                  }
+                  serverStatusEl.style.color = '#10b981';
+                }
+                setTimeout(() => window.location.reload(), 500);
+              } else if (attempts >= maxAttempts) {
+                clearInterval(checkServer);
+                const serverStatusEl = document.getElementById('serverStatus');
+                if (serverStatusEl) {
+                  const statusText = serverStatusEl.querySelector('span:last-child');
+                  if (statusText) {
+                    statusText.textContent = 'Restart failed - please refresh';
+                  }
+                  const statusDot = serverStatusEl.querySelector('span:first-child');
+                  if (statusDot) {
+                    statusDot.style.background = '#f05a78';
+                    statusDot.style.animation = 'none';
+                  }
+                  serverStatusEl.style.color = '#f05a78';
+                }
+                restartBtn.disabled = false;
+                restartBtn.style.opacity = '1';
+                restartBtn.style.cursor = 'pointer';
+              }
+            })
+            .catch(() => {
+              if (attempts >= maxAttempts) {
+                clearInterval(checkServer);
+                const serverStatusEl = document.getElementById('serverStatus');
+                if (serverStatusEl) {
+                  const statusText = serverStatusEl.querySelector('span:last-child');
+                  if (statusText) {
+                    statusText.textContent = 'Restart failed - please refresh';
+                  }
+                  const statusDot = serverStatusEl.querySelector('span:first-child');
+                  if (statusDot) {
+                    statusDot.style.background = '#f05a78';
+                    statusDot.style.animation = 'none';
+                  }
+                  serverStatusEl.style.color = '#f05a78';
+                }
+                restartBtn.disabled = false;
+                restartBtn.style.opacity = '1';
+                restartBtn.style.cursor = 'pointer';
+              }
+            });
+        }, 2000); // Check every 2 seconds
+      }, 2000);
+    } else {
+      throw new Error(data.error || 'Restart failed');
+    }
+  } catch (error) {
+    console.error('Restart error:', error);
+    const serverStatusEl = document.getElementById('serverStatus');
+    if (serverStatusEl) {
+      const statusText = serverStatusEl.querySelector('span:last-child');
+      if (statusText) {
+        statusText.textContent = 'Restart failed';
+      }
+      const statusDot = serverStatusEl.querySelector('span:first-child');
+      if (statusDot) {
+        statusDot.style.background = '#f05a78';
+        statusDot.style.animation = 'none';
+      }
+      serverStatusEl.style.color = '#f05a78';
+    }
+    restartBtn.disabled = false;
+    restartBtn.style.opacity = '1';
+    restartBtn.style.cursor = 'pointer';
+    alert('Failed to restart server: ' + error.message);
+  }
+}
+
+// Smooth navigation to settings page
+function navigateToSettings(e) {
+  if (e) e.preventDefault();
+  
+  // Store current location for return navigation (pathname only, no origin)
+  const currentUrl = window.location.pathname + window.location.search;
+  
+  console.log('Navigating to settings from:', currentUrl);
+  
+  // Add fade-out animation
+  document.body.style.transition = 'opacity 0.2s ease';
+  document.body.style.opacity = '0';
+  
+  // Navigate after fade with return path
+  setTimeout(() => {
+    window.location.href = `/settings.html?from=${encodeURIComponent(currentUrl)}`;
+  }, 200);
+}
+
+// Load system information
+async function loadSystemInfo() {
+  try {
+    const response = await fetch('/api/system');
+    const data = await response.json();
+    
+    const osIcon = document.getElementById('osIcon');
+    const osName = document.getElementById('osName');
+    
+    if (osIcon && osName && data.os) {
+      osIcon.textContent = data.os.icon || '💻';
+      osName.textContent = data.os.name || 'Unknown';
+    } else if (osName) {
+      osName.textContent = 'Unknown';
+    }
+    
+    // Update Local and Network URLs with full paths (no duplicates)
+    const localUrlEl = document.getElementById('localUrl');
+    const networkUrlEl = document.getElementById('networkUrl');
+    const accessUrlsContainer = document.getElementById('accessUrlsContainer');
+    
+    if (localUrlEl) {
+      const protocol = window.location.protocol;
+      const hostname = window.location.hostname;
+      const port = window.location.port || (protocol === 'https:' ? '8443' : '8000');
+      
+      // Determine best local URL (prefer 127.0.0.1 over localhost)
+      let localHostname = hostname;
+      if (hostname === 'localhost') {
+        localHostname = '127.0.0.1';
+      }
+      const fullUrl = `${protocol}//${localHostname}:${port}`;
+      localUrlEl.textContent = fullUrl;
+      localUrlEl.href = fullUrl;
+      localUrlEl.title = `Open ${fullUrl}`;
+    }
+    
+    if (networkUrlEl && accessUrlsContainer) {
+      const protocol = window.location.protocol;
+      const hostname = window.location.hostname;
+      const port = window.location.port || (protocol === 'https:' ? '8443' : '8000');
+      
+      // Collect unique URLs
+      const uniqueUrls = new Set();
+      
+      // Add current URL if it's a network IP
+      if (/^\d+\.\d+\.\d+\.\d+$/.test(hostname) && hostname !== '127.0.0.1' && hostname !== 'localhost') {
+        uniqueUrls.add(`${protocol}//${hostname}:${port}`);
+      }
+      
+      // Try to get network IP from API
+      fetch('/api/sites')
+        .then(res => res.json())
+        .then(sitesData => {
+          if (sitesData.access) {
+            // Add network URLs from API
+            if (sitesData.access.network && sitesData.access.network.length > 0) {
+              sitesData.access.network.forEach(net => {
+                const netUrl = protocol === 'https:' ? (net.https || net.http) : net.http;
+                if (netUrl) uniqueUrls.add(netUrl);
+              });
+            }
+            
+            // Add DNS/TLD if available
+            if (sitesData.access.dns) {
+              const dnsUrl = protocol === 'https:' ? (sitesData.access.dns.https || sitesData.access.dns.http) : sitesData.access.dns.http;
+              if (dnsUrl) uniqueUrls.add(dnsUrl);
+            }
+          }
+          
+          // Update network URL display
+          if (uniqueUrls.size > 0) {
+            const networkUrls = Array.from(uniqueUrls);
+            // Show first network URL
+            networkUrlEl.textContent = networkUrls[0];
+            networkUrlEl.href = networkUrls[0];
+            networkUrlEl.title = `Open ${networkUrls[0]}`;
+            networkUrlEl.style.color = 'var(--brand)';
+            networkUrlEl.style.cursor = 'pointer';
+            
+            // Add additional URLs if there are more
+            if (networkUrls.length > 1) {
+              for (let i = 1; i < networkUrls.length; i++) {
+                const additionalUrl = document.createElement('div');
+                additionalUrl.style.color = 'var(--muted)';
+                additionalUrl.innerHTML = `<a href="${networkUrls[i]}" style="color:var(--brand);font-weight:600;text-decoration:none;cursor:pointer" target="_blank" title="Open ${networkUrls[i]}">${networkUrls[i]}</a>`;
+                accessUrlsContainer.appendChild(additionalUrl);
+              }
+            }
+          } else {
+            // No network IP detected
+            networkUrlEl.textContent = `[Network IP]:${port}`;
+            networkUrlEl.href = '#';
+            networkUrlEl.title = 'Network IP not detected';
+            networkUrlEl.style.cursor = 'default';
+            networkUrlEl.style.color = 'var(--muted)';
+          }
+        })
+        .catch(() => {
+          // Fallback
+          if (hostname === '127.0.0.1' || hostname === 'localhost') {
+            networkUrlEl.textContent = `[Network IP]:${port}`;
+            networkUrlEl.href = '#';
+            networkUrlEl.title = 'Network IP not detected';
+            networkUrlEl.style.cursor = 'default';
+            networkUrlEl.style.color = 'var(--muted)';
+          } else {
+            const fullUrl = `${protocol}//${hostname}:${port}`;
+            networkUrlEl.textContent = fullUrl;
+            networkUrlEl.href = fullUrl;
+            networkUrlEl.title = `Open ${fullUrl}`;
+          }
+        });
+    }
+    
+  } catch (error) {
+    console.error('Error loading system info:', error);
+    const osName = document.getElementById('osName');
+    if (osName) osName.textContent = 'Unknown';
+  }
+}
+
+// Fade-in on page load
+window.addEventListener('load', () => {
+  loadSystemInfo();
+  loadHealthStatus(); // Load health status on page load
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity 0.3s ease';
+  setTimeout(() => {
+    document.body.style.opacity = '1';
+  }, 50);
+});
+
+// Auto-refresh health status every 30 seconds
+setInterval(loadHealthStatus, 30000);
+// Load and display health status
+async function loadHealthStatus() {
+  try {
+    const apiUrl = window.location.origin + '/api/health/status';
+    console.log('📡 Loading health status from:', apiUrl);
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch health status: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    
+    if (data.success && data.status) {
+      updateHealthStatus(data.status);
+    } else {
+      console.error('❌ Invalid health status response:', data);
+      updateHealthStatusError('Invalid response format');
+    }
+  } catch (error) {
+    console.error('Error loading health status:', error);
+    updateHealthStatusError(error.message || 'Load failed');
+  }
+}
+
+function updateHealthStatus(status) {
+  // Update health indicator
+  const healthEl = document.getElementById('healthStatus');
+  if (healthEl) {
+    const health = status.health || {};
+    const overall = health.overall || 'unknown';
+    const score = health.score || 0;
+    const message = health.message || 'Unknown status';
+    
+    let color = '#10b981'; // green
+    let icon = '●';
+    if (overall === 'critical') {
+      color = '#f05a78'; // red
+      icon = '⚠';
+    } else if (overall === 'degraded') {
+      color = '#f59e0b'; // orange
+      icon = '⚠';
+    } else if (overall === 'warning') {
+      color = '#fbbf24'; // yellow
+      icon = '●';
+    }
+    
+    const dot = healthEl.querySelector('span:first-child');
+    const text = healthEl.querySelector('span:last-child');
+    if (dot) {
+      dot.style.background = color;
+      dot.style.animation = overall === 'healthy' ? 'pulse 2s infinite' : 'none';
+    }
+    if (text) {
+      text.textContent = `${overall.toUpperCase()} (${score}%) - ${message}`;
+    }
+    healthEl.style.color = color;
+  }
+  
+  // Update server status
+  const serverStatusEl = document.getElementById('serverStatus');
+  if (serverStatusEl && status.server) {
+    const running = status.server.running;
+    const dot = serverStatusEl.querySelector('span:first-child');
+    const text = serverStatusEl.querySelector('span:last-child');
+    if (dot) {
+      dot.style.background = running ? '#10b981' : '#f05a78';
+      dot.style.animation = running ? 'pulse 2s infinite' : 'none';
+    }
+    if (text) {
+      text.textContent = running ? `Server Running (PID: ${status.server.pid || 'N/A'})` : 'Server Not Running';
+    }
+    serverStatusEl.style.color = running ? '#10b981' : '#f05a78';
+  }
+  
+  // Update deployment options
+  if (status.deployment) {
+    updateDeploymentStatus(status.deployment);
+  }
+  
+  // Update system tools
+  if (status.systemTools) {
+    updateSystemToolsStatus(status.systemTools);
+  }
+  
+  // Display issues
+  const issuesContainer = document.getElementById('issuesContainer');
+  const issuesList = document.getElementById('issuesList');
+  if (issuesContainer && issuesList && status.issues && status.issues.length > 0) {
+    issuesContainer.style.display = 'block';
+    issuesList.innerHTML = '';
+    
+    status.issues.forEach(issue => {
+      let severityColor = '#fbbf24';
+      if (issue.severity === 'critical') severityColor = '#f05a78';
+      else if (issue.severity === 'error') severityColor = '#f59e0b';
+      
+      const issueEl = document.createElement('div');
+      issueEl.style.cssText = `padding:6px 10px;background:color-mix(in srgb, ${severityColor} 15%, transparent);border:1px solid ${severityColor};border-radius:6px;font-size:11px;color:${severityColor}`;
+      issueEl.innerHTML = `<strong>${issue.name}:</strong> ${issue.description}<br><small style="opacity:0.8;margin-top:4px;display:block">Fix: ${issue.fix}</small>`;
+      issuesList.appendChild(issueEl);
+    });
+  } else if (issuesContainer) {
+    issuesContainer.style.display = 'none';
+  }
+  
+  // Display site status
+  const sitesStatusContainer = document.getElementById('sitesStatusContainer');
+  const sitesStatusList = document.getElementById('sitesStatusList');
+  if (sitesStatusContainer && sitesStatusList && status.sites && status.sites.length > 0) {
+    sitesStatusContainer.style.display = 'block';
+    sitesStatusList.innerHTML = '';
+    
+    status.sites.forEach(site => {
+      const working = site.working;
+      const color = working ? '#10b981' : '#f05a78';
+      const icon = working ? '✓' : '✗';
+      
+      const siteEl = document.createElement('div');
+      siteEl.style.cssText = `padding:4px 8px;background:color-mix(in srgb, ${color} 10%, transparent);border:1px solid ${color};border-radius:4px;font-size:11px;color:${color};display:flex;align-items:center;gap:6px`;
+      siteEl.innerHTML = `<span>${icon}</span><span><strong>${site.name}:</strong> ${working ? 'Working' : 'Not Working'}</span>${site.issues.length > 0 ? `<span style="opacity:0.7">(${site.issues.length} issue${site.issues.length > 1 ? 's' : ''})</span>` : ''}`;
+      sitesStatusList.appendChild(siteEl);
+    });
+  } else if (sitesStatusContainer) {
+    sitesStatusContainer.style.display = 'none';
+  }
+}
+
+function updateHealthStatusError(errorMessage) {
+  const healthEl = document.getElementById('healthStatus');
+  if (healthEl) {
+    const dot = healthEl.querySelector('span:first-child');
+    const text = healthEl.querySelector('span:last-child');
+    if (dot) {
+      dot.style.background = '#f05a78';
+      dot.style.animation = 'none';
+    }
+    if (text) {
+      text.textContent = `Error: ${errorMessage}`;
+    }
+    healthEl.style.color = '#f05a78';
+  }
+}
+
+function updateDeploymentStatus(deployment) {
+  // Docker
+  const docker = deployment.docker || {};
+  const dockerBadge = document.getElementById('dockerBadge');
+  const dockerDetails = document.getElementById('dockerDetails');
+  if (dockerBadge && dockerDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'Docker not available';
+    
+    if (docker.available) {
+      if (docker.containersRunning) {
+        badgeText = 'Running';
+        badgeColor = '#10b981';
+        details = `${docker.version} • Containers active`;
+      } else if (docker.daemonRunning) {
+        badgeText = 'Available';
+        badgeColor = '#fbbf24';
+        details = `${docker.version} • Daemon running`;
+      } else {
+        badgeText = 'Not Running';
+        badgeColor = '#f59e0b';
+        details = `${docker.version} • Daemon stopped`;
+      }
+      if (docker.configExists) {
+        details += ' • Config found';
+      }
+    } else if (docker.configExists) {
+      badgeText = 'Configured';
+      badgeColor = '#8b5cf6';
+      details = 'docker-compose.yml found';
+    }
+    
+    dockerBadge.textContent = badgeText;
+    dockerBadge.style.background = badgeColor;
+    dockerBadge.style.color = '#ffffff';
+    dockerDetails.textContent = details;
+  }
+  
+  // Caddy
+  const caddy = deployment.caddy || {};
+  const caddyBadge = document.getElementById('caddyBadge');
+  const caddyDetails = document.getElementById('caddyDetails');
+  if (caddyBadge && caddyDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'Caddy not available';
+    
+    if (caddy.available) {
+      if (caddy.running) {
+        badgeText = 'Running';
+        badgeColor = '#10b981';
+        details = `${caddy.version} • Active`;
+      } else if (caddy.configExists) {
+        badgeText = 'Configured';
+        badgeColor = '#8b5cf6';
+        details = `${caddy.version} • Caddyfile found`;
+      } else {
+        badgeText = 'Available';
+        badgeColor = '#fbbf24';
+        details = `${caddy.version} • Not configured`;
+      }
+    } else if (caddy.configExists) {
+      badgeText = 'Configured';
+      badgeColor = '#8b5cf6';
+      details = 'Caddyfile found';
+    }
+    
+    caddyBadge.textContent = badgeText;
+    caddyBadge.style.background = badgeColor;
+    caddyBadge.style.color = '#ffffff';
+    caddyDetails.textContent = details;
+  }
+  
+  // Traefik
+  const traefik = deployment.traefik || {};
+  const traefikBadge = document.getElementById('traefikBadge');
+  const traefikDetails = document.getElementById('traefikDetails');
+  if (traefikBadge && traefikDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'Traefik not available';
+    
+    if (traefik.available) {
+      if (traefik.running) {
+        badgeText = 'Running';
+        badgeColor = '#10b981';
+        details = `${traefik.version} • Active`;
+      } else if (traefik.configExists) {
+        badgeText = 'Configured';
+        badgeColor = '#8b5cf6';
+        details = `${traefik.version} • Config found`;
+      } else {
+        badgeText = 'Available';
+        badgeColor = '#fbbf24';
+        details = `${traefik.version} • Not configured`;
+      }
+    } else if (traefik.configExists) {
+      badgeText = 'Configured';
+      badgeColor = '#8b5cf6';
+      details = 'Config found in docker-compose.yml';
+    }
+    
+    traefikBadge.textContent = badgeText;
+    traefikBadge.style.background = badgeColor;
+    traefikBadge.style.color = '#ffffff';
+    traefikDetails.textContent = details;
+  }
+}
+
+function updateSystemToolsStatus(systemTools) {
+  // Node.js
+  const nodejs = systemTools.nodejs || {};
+  const nodejsBadge = document.getElementById('nodejsBadge');
+  const nodejsDetails = document.getElementById('nodejsDetails');
+  if (nodejsBadge && nodejsDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'Node.js not available';
+    
+    if (nodejs.available) {
+      badgeText = 'Installed';
+      badgeColor = '#10b981';
+      details = nodejs.version || 'Installed';
+    }
+    
+    nodejsBadge.textContent = badgeText;
+    nodejsBadge.style.background = badgeColor;
+    nodejsBadge.style.color = '#ffffff';
+    nodejsDetails.textContent = details;
+  }
+  
+  // Python
+  const python = systemTools.python || {};
+  const pythonBadge = document.getElementById('pythonBadge');
+  const pythonDetails = document.getElementById('pythonDetails');
+  if (pythonBadge && pythonDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'Python not available';
+    
+    if (python.available) {
+      badgeText = 'Installed';
+      badgeColor = '#10b981';
+      details = python.version || 'Installed';
+    }
+    
+    pythonBadge.textContent = badgeText;
+    pythonBadge.style.background = badgeColor;
+    pythonBadge.style.color = '#ffffff';
+    pythonDetails.textContent = details;
+  }
+  
+  // UV
+  const uv = systemTools.uv || {};
+  const uvBadge = document.getElementById('uvBadge');
+  const uvDetails = document.getElementById('uvDetails');
+  if (uvBadge && uvDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'UV not available';
+    
+    if (uv.available) {
+      badgeText = 'Installed';
+      badgeColor = '#10b981';
+      details = uv.version || 'Installed';
+    }
+    
+    uvBadge.textContent = badgeText;
+    uvBadge.style.background = badgeColor;
+    uvBadge.style.color = '#ffffff';
+    uvDetails.textContent = details;
+  }
+  
+  // SSL Certificates
+  const ssl = systemTools.ssl || {};
+  const sslBadge = document.getElementById('sslBadge');
+  const sslDetails = document.getElementById('sslDetails');
+  if (sslBadge && sslDetails) {
+    let badgeText = 'Not Found';
+    let badgeColor = '#64748b';
+    let details = 'SSL certificates not found';
+    
+    if (ssl.valid) {
+      badgeText = 'Valid';
+      badgeColor = '#10b981';
+      details = 'Certificates valid and ready';
+    } else if (ssl.certExists || ssl.keyExists) {
+      badgeText = 'Invalid';
+      badgeColor = '#f59e0b';
+      details = 'Certificates found but invalid';
+    } else if (ssl.available) {
+      badgeText = 'Found';
+      badgeColor = '#fbbf24';
+      details = 'Certificates found';
+    }
+    
+    sslBadge.textContent = badgeText;
+    sslBadge.style.background = badgeColor;
+    sslBadge.style.color = '#ffffff';
+    sslDetails.textContent = details;
+  }
+  
+  // MySQL
+  const mysql = systemTools.mysql || {};
+  const mysqlBadge = document.getElementById('mysqlBadge');
+  const mysqlDetails = document.getElementById('mysqlDetails');
+  if (mysqlBadge && mysqlDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'MySQL not available';
+    
+    if (mysql.running) {
+      badgeText = 'Running';
+      badgeColor = '#10b981';
+      details = mysql.version || 'MySQL server running';
+    } else if (mysql.available) {
+      badgeText = 'Installed';
+      badgeColor = '#10b981';
+      details = mysql.version || 'MySQL installed';
+    } else if (mysql.status === 'configured') {
+      badgeText = 'Configured';
+      badgeColor = '#fbbf24';
+      details = 'Configured in Docker';
+    }
+    
+    mysqlBadge.textContent = badgeText;
+    mysqlBadge.style.background = badgeColor;
+    mysqlBadge.style.color = '#ffffff';
+    mysqlDetails.textContent = details;
+  }
+  
+  // PostgreSQL
+  const postgresql = systemTools.postgresql || {};
+  const postgresqlBadge = document.getElementById('postgresqlBadge');
+  const postgresqlDetails = document.getElementById('postgresqlDetails');
+  if (postgresqlBadge && postgresqlDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'PostgreSQL not available';
+    
+    if (postgresql.running) {
+      badgeText = 'Running';
+      badgeColor = '#10b981';
+      details = postgresql.version || 'PostgreSQL server running';
+    } else if (postgresql.available) {
+      badgeText = 'Installed';
+      badgeColor = '#10b981';
+      details = postgresql.version || 'PostgreSQL installed';
+    } else if (postgresql.status === 'configured') {
+      badgeText = 'Configured';
+      badgeColor = '#fbbf24';
+      details = 'Configured in Docker';
+    }
+    
+    postgresqlBadge.textContent = badgeText;
+    postgresqlBadge.style.background = badgeColor;
+    postgresqlBadge.style.color = '#ffffff';
+    postgresqlDetails.textContent = details;
+  }
+  
+  // Redis
+  const redis = systemTools.redis || {};
+  const redisBadge = document.getElementById('redisBadge');
+  const redisDetails = document.getElementById('redisDetails');
+  if (redisBadge && redisDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'Redis not available';
+    
+    if (redis.running) {
+      badgeText = 'Running';
+      badgeColor = '#10b981';
+      details = redis.version || 'Redis server running';
+    } else if (redis.available) {
+      badgeText = 'Installed';
+      badgeColor = '#10b981';
+      details = redis.version || 'Redis installed';
+    } else if (redis.status === 'configured') {
+      badgeText = 'Configured';
+      badgeColor = '#fbbf24';
+      details = 'Configured in Docker';
+    }
+    
+    redisBadge.textContent = badgeText;
+    redisBadge.style.background = badgeColor;
+    redisBadge.style.color = '#ffffff';
+    redisDetails.textContent = details;
+  }
+  
+  // WordPress
+  const wordpress = systemTools.wordpress || {};
+  const wordpressBadge = document.getElementById('wordpressBadge');
+  const wordpressDetails = document.getElementById('wordpressDetails');
+  if (wordpressBadge && wordpressDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'WordPress not found';
+    
+    if (wordpress.installed) {
+      badgeText = 'Installed';
+      badgeColor = '#10b981';
+      details = wordpress.path ? `Found at ${wordpress.path.split('/').pop()}` : 'WordPress installed';
+    }
+    
+    wordpressBadge.textContent = badgeText;
+    wordpressBadge.style.background = badgeColor;
+    wordpressBadge.style.color = '#ffffff';
+    wordpressDetails.textContent = details;
+  }
+  
+  // Vite
+  const vite = systemTools.vite || {};
+  const viteBadge = document.getElementById('viteBadge');
+  const viteDetails = document.getElementById('viteDetails');
+  if (viteBadge && viteDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'Vite not available';
+    
+    if (vite.running) {
+      badgeText = 'Running';
+      badgeColor = '#10b981';
+      details = 'Vite dev server running (HMR active)';
+    } else if (vite.available) {
+      badgeText = 'Installed';
+      badgeColor = '#10b981';
+      details = vite.version || 'Vite installed';
+    } else if (vite.status === 'configured') {
+      badgeText = 'Configured';
+      badgeColor = '#fbbf24';
+      details = 'Vite config found';
+    }
+    
+    viteBadge.textContent = badgeText;
+    viteBadge.style.background = badgeColor;
+    viteBadge.style.color = '#ffffff';
+    viteDetails.textContent = details;
+  }
+  
+  // Vue
+  const vue = systemTools.vue || {};
+  const vueBadge = document.getElementById('vueBadge');
+  const vueDetails = document.getElementById('vueDetails');
+  if (vueBadge && vueDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'Vue not available';
+    
+    if (vue.available) {
+      badgeText = 'Installed';
+      badgeColor = '#10b981';
+      details = vue.version ? `Vue ${vue.version}` : 'Vue installed';
+    }
+    
+    vueBadge.textContent = badgeText;
+    vueBadge.style.background = badgeColor;
+    vueBadge.style.color = '#ffffff';
+    vueDetails.textContent = details;
+  }
+  
+  // React
+  const react = systemTools.react || {};
+  const reactBadge = document.getElementById('reactBadge');
+  const reactDetails = document.getElementById('reactDetails');
+  if (reactBadge && reactDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'React not available';
+    
+    if (react.available) {
+      badgeText = 'Installed';
+      badgeColor = '#10b981';
+      details = react.version ? `React ${react.version}` : 'React installed';
+    }
+    
+    reactBadge.textContent = badgeText;
+    reactBadge.style.background = badgeColor;
+    reactBadge.style.color = '#ffffff';
+    reactDetails.textContent = details;
+  }
+  
+  // PNPM
+  const pnpm = systemTools.pnpm || {};
+  const pnpmBadge = document.getElementById('pnpmBadge');
+  const pnpmDetails = document.getElementById('pnpmDetails');
+  if (pnpmBadge && pnpmDetails) {
+    let badgeText = 'Not Installed';
+    let badgeColor = '#64748b';
+    let details = 'PNPM not available';
+    
+    if (pnpm.available) {
+      badgeText = 'Installed';
+      badgeColor = '#10b981';
+      details = pnpm.version || 'PNPM installed';
+    }
+    
+    pnpmBadge.textContent = badgeText;
+    pnpmBadge.style.background = badgeColor;
+    pnpmBadge.style.color = '#ffffff';
+    pnpmDetails.textContent = details;
+  }
+}
+
+function refreshHealthStatus() {
+  const btn = document.getElementById('refreshHealthBtn');
+  if (btn) {
+    btn.style.opacity = '0.5';
+    btn.disabled = true;
+  }
+  loadHealthStatus();
+  setTimeout(() => {
+    if (btn) {
+      btn.style.opacity = '1';
+      btn.disabled = false;
+    }
+  }, 1000);
+}
+
+// Clone Seed Functions
+let currentSeedName = null;
+
+window.createSiteFromSeed = function(seedName) {
+  currentSeedName = seedName;
+  const modal = document.getElementById('cloneSeedModal');
+  const input = document.getElementById('newSiteName');
+  input.value = '';
+  modal.style.display = 'flex';
+  setTimeout(() => input.focus(), 100);
+};
+
+window.closeCloneModal = function() {
+  document.getElementById('cloneSeedModal').style.display = 'none';
+  currentSeedName = null;
+};
+
+window.confirmCloneSeed = async function() {
+  const siteName = document.getElementById('newSiteName').value.trim();
+  
+  if (!siteName) {
+    alert('Please enter a site name');
+    return;
+  }
+  
+  // Validate site name (lowercase, numbers, hyphens only)
+  if (!/^[a-z0-9-]+$/.test(siteName)) {
+    alert('Site name can only contain lowercase letters, numbers, and hyphens');
+    return;
+  }
+  
+  if (!currentSeedName) {
+    alert('No seed selected');
+    return;
+  }
+  
+  try {
+    const response = await fetch('/api/sites/clone', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        seedName: currentSeedName,
+        newSiteName: siteName
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(result.error || 'Failed to create site');
+    }
+    
+    // Show success message
+    alert(`✅ Site "${siteName}" created successfully!\n\nIt will appear in the sites list after the page refreshes.`);
+    
+    // Close modal and refresh page
+    closeCloneModal();
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+    
+  } catch (error) {
+    console.error('Error cloning seed:', error);
+    alert(`❌ Error: ${error.message}`);
+  }
+};
+
+// Close modal on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeCloneModal();
+  }
+});
+</script>
+</body>
+</html>

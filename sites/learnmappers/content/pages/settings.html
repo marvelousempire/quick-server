@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../../config.js"></script>
+<script>
+  document.title = window.CONFIG?.site?.title ? `${window.CONFIG.site.name} — Settings` : 'LearnMappers — Settings';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', window.CONFIG?.site?.themeColor || '#0b0c10');
+</script>
+<title>LearnMappers — Settings</title>
+<link rel="manifest" href="../../manifest.webmanifest"><meta name="theme-color" content="#0b0c10">
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; }
+*{box-sizing:border-box} html,body{background:radial-gradient(1200px 500px at 15% -10%, rgba(124,227,255,.14), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(96,255,168,.09), transparent 60%), var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6}
+a{color:var(--brand);text-decoration:none}
+main[data-page]{padding:0}
+.wrap{max-width:1440px;margin:0 auto;padding:clamp(18px,4vw,60px)}
+nav.stick{position:sticky;top:0;z-index:90;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter: blur(10px);border-bottom:1px solid var(--line)}
+nav .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900}
+.logo .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+nav .links{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+nav .links a{padding:10px 12px;border-radius:12px}
+nav .links a:hover{background:color-mix(in srgb, var(--brand) 18%, transparent)}
+.pill{display:inline-flex;align-items:center;gap:6px;margin-right:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 90%, transparent), color-mix(in srgb, var(--card) 96%, transparent));font-size:12px}
+.pill.online{color:#073b18;border-color:#0ea35a;background:linear-gradient(180deg,#d6ffe9,#f1fff7)}
+.pill.offline{color:#4b1a1a;border-color:#cc5151;background:linear-gradient(180deg,#ffe3e3,#fff7f7)}
+header{margin-bottom:40px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+h1{font-size:clamp(36px,5vw,56px);margin:0 0 12px;font-weight:900;background:linear-gradient(135deg,var(--ink) 0%,var(--brand) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtitle{color:var(--muted);font-size:clamp(16px,2.2vw,19px);margin:0 0 20px}
+.controls{display:flex;gap:12px;margin-bottom:30px;flex-wrap:wrap}
+.btn{padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 85%, transparent), color-mix(in srgb, var(--card) 95%, transparent));color:var(--ink);font-weight:800;cursor:pointer;transition:.18s ease;box-shadow:0 14px 40px -20px var(--shadow);text-decoration:none;display:inline-block;font-size:14px}
+.btn:hover{transform:translateY(-2px)}
+.btn-success{background:linear-gradient(135deg,#10b981,#34d399);color:#041018;border:none}
+.btn-secondary{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 85%, transparent), color-mix(in srgb, var(--card) 95%, transparent));color:var(--ink);border:1px solid var(--line)}
+.btn-danger{background:linear-gradient(135deg,#ef4444,#f87171);color:#fff;border:none}
+.status{padding:12px 20px;border-radius:8px;margin-bottom:20px;display:none}
+.status.success{background:rgba(16,185,129,0.2);border:1px solid #10b981;color:#10b981;display:block}
+.status.error{background:rgba(239,68,68,0.2);border:1px solid #ef4444;color:#ef4444;display:block}
+.config-editor{display:grid;grid-template-columns:250px 1fr;gap:20px}
+.sidebar{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:var(--radius);padding:20px;height:fit-content;position:sticky;top:20px}
+.sidebar h3{margin-bottom:16px;font-size:1.1rem;color:var(--brand);font-weight:900}
+.nav-link{display:block;padding:10px 12px;margin-bottom:6px;border-radius:8px;color:var(--muted);text-decoration:none;transition:all 0.2s;cursor:pointer}
+.nav-link:hover{background:color-mix(in srgb, var(--brand) 18%, transparent);color:var(--ink)}
+.nav-link.active{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#041018;font-weight:800}
+.content{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:var(--radius);padding:30px}
+.section{display:none}
+.section.active{display:block}
+.section h2{font-size:32px;font-weight:900;margin:0 0 24px;padding-top:16px;border-top:1px solid var(--line);margin-top:32px;color:var(--brand);background:linear-gradient(135deg,var(--ink) 0%,var(--brand) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section h2:first-child{border-top:none;margin-top:0;padding-top:0}
+.form-group{margin-bottom:24px}
+.form-group label{display:block;margin-bottom:8px;font-weight:600;color:var(--ink);font-size:14px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(180deg, color-mix(in srgb, var(--bg) 88%, transparent), color-mix(in srgb, var(--bg) 97%, transparent));color:var(--ink);font-size:14px;font-family:inherit}
+.form-group textarea{min-height:100px;resize:vertical}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb, var(--brand) 20%, transparent)}
+.form-group small{display:block;margin-top:6px;color:var(--muted);font-size:12px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.checkbox-group{display:flex;align-items:center;gap:8px}
+.checkbox-group input[type="checkbox"]{width:auto;cursor:pointer}
+.array-item{background:linear-gradient(180deg, color-mix(in srgb, var(--bg) 88%, transparent), color-mix(in srgb, var(--bg) 97%, transparent));border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:12px;position:relative}
+.array-item-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.array-item-title{font-weight:600;color:var(--brand)}
+.btn-remove{padding:6px 12px;background:linear-gradient(135deg,#ef4444,#f87171);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600}
+.btn-add{padding:10px 20px;background:linear-gradient(135deg,#10b981,#34d399);color:#041018;border:none;border-radius:8px;cursor:pointer;font-size:14px;margin-top:12px;font-weight:600}
+.json-viewer{background:linear-gradient(180deg, color-mix(in srgb, var(--bg) 88%, transparent), color-mix(in srgb, var(--bg) 97%, transparent));border:1px solid var(--line);border-radius:8px;padding:20px;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:13px;line-height:1.6;max-height:600px;overflow:auto;white-space:pre-wrap;word-wrap:break-word}
+.json-viewer code{color:var(--ink)}
+@media (max-width: 768px) {
+  .config-editor {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    position: static;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+<nav class="stick">
+  <div class="wrap">
+    <div class="row">
+      <a href="/" class="logo" id="logo">
+        <span class="dot"></span>
+        <span>LearnMappers</span>
+      </a>
+      <div class="links">
+        <span id="netPill" class="pill" title="Connection status">● offline</span>
+        <div id="navLinks">
+          <!-- Navigation links will be populated from config.json -->
+          <a href="index.html" data-nav>Home</a>
+          <a href="about.html" data-nav>About</a>
+          <a href="inventory.html" data-nav>Resources</a>
+          <a href="service-menu.html" data-nav>Services</a>
+          <a href="settings.html" data-nav>Settings</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header>
+    <h1>⚙️ Site Settings</h1>
+    <p class="subtitle">Edit your site configuration</p>
+  </header>
+
+  <div class="controls">
+    <button class="btn btn-success" onclick="saveConfig()">💾 Save Changes</button>
+    <button class="btn btn-secondary" onclick="loadConfig()">🔄 Reload</button>
+    <button class="btn btn-secondary" onclick="exportConfig()">📥 Export JSON</button>
+    <button class="btn btn-secondary" onclick="importConfig()">📤 Import JSON</button>
+    <button class="btn btn-danger" onclick="resetConfig()">↩️ Reset to Default</button>
+  </div>
+
+  <div id="status" class="status"></div>
+
+  <div class="config-editor">
+    <div class="sidebar">
+      <h3>Navigation</h3>
+      <a href="#" class="nav-link active" data-section="site">Site Info</a>
+      <a href="#" class="nav-link" data-section="seo">SEO</a>
+      <a href="#" class="nav-link" data-section="navigation">Navigation</a>
+      <a href="#" class="nav-link" data-section="theme">Theme</a>
+      <a href="#" class="nav-link" data-section="layout">Layout</a>
+      <a href="#" class="nav-link" data-section="content">Content</a>
+      <a href="#" class="nav-link" data-section="contact">Contact</a>
+      <a href="#" class="nav-link" data-section="inventory">Inventory</a>
+      <a href="#" class="nav-link" data-section="api">API</a>
+      <a href="#" class="nav-link" data-section="pwa">PWA</a>
+      <a href="#" class="nav-link" data-section="integrations">Integrations</a>
+      <a href="#" class="nav-link" data-section="settings">Settings</a>
+      <a href="#" class="nav-link" data-section="json">JSON View</a>
+    </div>
+
+    <div class="content">
+      <!-- Site Info Section -->
+      <div class="section active" id="section-site">
+        <h2>Site Information</h2>
+        <div class="form-group">
+          <label>Site Name</label>
+          <input type="text" id="site-name" placeholder="Your Site Name">
+        </div>
+        <div class="form-group">
+          <label>Site Title</label>
+          <input type="text" id="site-title" placeholder="Your Site Title">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="site-description" placeholder="Site description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Tagline</label>
+          <input type="text" id="site-tagline" placeholder="Your tagline">
+        </div>
+        <div class="form-group">
+          <label>Mission</label>
+          <textarea id="site-mission" placeholder="Your mission statement"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Version</label>
+            <input type="text" id="site-version" placeholder="1.0.0">
+          </div>
+          <div class="form-group">
+            <label>Author</label>
+            <input type="text" id="site-author" placeholder="Your Name">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Theme Color</label>
+            <input type="color" id="site-themeColor" value="#6366f1">
+          </div>
+          <div class="form-group">
+            <label>Language</label>
+            <input type="text" id="site-language" value="en">
+          </div>
+        </div>
+      </div>
+
+      <!-- SEO Section -->
+      <div class="section" id="section-seo">
+        <h2>SEO Settings</h2>
+        <div class="form-group">
+          <label>Meta Title</label>
+          <input type="text" id="seo-metaTitle" placeholder="SEO title">
+        </div>
+        <div class="form-group">
+          <label>Meta Description</label>
+          <textarea id="seo-metaDescription" placeholder="SEO description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Meta Keywords</label>
+          <input type="text" id="seo-metaKeywords" placeholder="keyword1, keyword2, keyword3">
+        </div>
+        <div class="form-group">
+          <label>Open Graph Title</label>
+          <input type="text" id="seo-ogTitle" placeholder="OG title">
+        </div>
+        <div class="form-group">
+          <label>Open Graph Description</label>
+          <textarea id="seo-ogDescription" placeholder="OG description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Canonical URL</label>
+          <input type="url" id="seo-canonicalUrl" placeholder="https://yoursite.com">
+        </div>
+      </div>
+
+      <!-- Navigation Section -->
+      <div class="section" id="section-navigation">
+        <h2>Navigation</h2>
+        <div class="form-group">
+          <label>Logo Text</label>
+          <input type="text" id="nav-logo-text" placeholder="Your Logo">
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="nav-logo-showDot">
+            Show Dot
+          </label>
+        </div>
+        <div id="nav-links-container"></div>
+        <button class="btn-add" onclick="addNavLink()">+ Add Navigation Link</button>
+      </div>
+
+      <!-- Theme Section -->
+      <div class="section" id="section-theme">
+        <h2>Theme Colors</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Background</label>
+            <input type="color" id="theme-bg" value="#0f172a">
+          </div>
+          <div class="form-group">
+            <label>Card</label>
+            <input type="color" id="theme-card" value="#1e293b">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Text (Ink)</label>
+            <input type="color" id="theme-ink" value="#f1f5f9">
+          </div>
+          <div class="form-group">
+            <label>Muted</label>
+            <input type="color" id="theme-muted" value="#94a3b8">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Brand</label>
+            <input type="color" id="theme-brand" value="#6366f1">
+          </div>
+          <div class="form-group">
+            <label>Brand 2</label>
+            <input type="color" id="theme-brand2" value="#8b5cf6">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Accent</label>
+            <input type="color" id="theme-accent" value="#f59e0b">
+          </div>
+          <div class="form-group">
+            <label>Success</label>
+            <input type="color" id="theme-success" value="#10b981">
+          </div>
+        </div>
+      </div>
+
+      <!-- Layout Section -->
+      <div class="section" id="section-layout">
+        <h2>Layout Settings</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Max Width</label>
+            <input type="text" id="layout-maxWidth" placeholder="1200px">
+          </div>
+          <div class="form-group">
+            <label>Padding</label>
+            <input type="text" id="layout-padding" placeholder="clamp(20px,4vw,60px)">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Section Spacing</label>
+            <input type="text" id="layout-sectionSpacing" placeholder="60px">
+          </div>
+          <div class="form-group">
+            <label>Grid Columns (Default)</label>
+            <input type="number" id="layout-gridColumns-default" value="3" min="1" max="6">
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Section -->
+      <div class="section" id="section-content">
+        <h2>Content</h2>
+        <div class="form-group">
+          <label>Hero Title</label>
+          <input type="text" id="content-hero-title" placeholder="Hero title">
+        </div>
+        <div class="form-group">
+          <label>Hero Subtitle</label>
+          <input type="text" id="content-hero-subtitle" placeholder="Hero subtitle">
+        </div>
+        <div class="form-group">
+          <label>Hero Description</label>
+          <textarea id="content-hero-description" placeholder="Hero description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Primary CTA Text</label>
+          <input type="text" id="content-hero-cta-text" placeholder="Get Started">
+        </div>
+        <div class="form-group">
+          <label>Primary CTA Link</label>
+          <input type="text" id="content-hero-cta-href" placeholder="/contact.html">
+        </div>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="section" id="section-contact">
+        <h2>Contact Information</h2>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="contact-email" placeholder="contact@yoursite.com">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="contact-phone" placeholder="+1 (555) 123-4567">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" id="contact-city" placeholder="City">
+          </div>
+          <div class="form-group">
+            <label>State</label>
+            <input type="text" id="contact-state" placeholder="State">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Country</label>
+          <input type="text" id="contact-country" placeholder="Country">
+        </div>
+      </div>
+
+      <!-- Inventory Section -->
+      <div class="section" id="section-inventory">
+        <h2>Inventory Settings</h2>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="inventory-enabled" checked>
+            Enable Inventory
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Categories (comma-separated)</label>
+          <input type="text" id="inventory-categories" placeholder="Tools, Equipment, Materials">
+        </div>
+      </div>
+
+      <!-- API Section -->
+      <div class="section" id="section-api">
+        <h2>API Settings</h2>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="api-enabled" checked>
+            Enable API
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Base URL</label>
+          <input type="text" id="api-baseUrl" placeholder="/api">
+        </div>
+      </div>
+
+      <!-- PWA Section -->
+      <div class="section" id="section-pwa">
+        <h2>PWA Settings</h2>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="pwa-enabled" checked>
+            Enable PWA
+          </label>
+        </div>
+        <div class="form-group">
+          <label>Cache Name</label>
+          <input type="text" id="pwa-cacheName" placeholder="site-v1">
+        </div>
+      </div>
+
+      <!-- Integrations Section -->
+      <div class="section" id="section-integrations">
+        <h2>Integrations</h2>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="integration-taskrabbit-enabled">
+            Enable TaskRabbit
+          </label>
+        </div>
+        <div class="form-group">
+          <label>TaskRabbit Profile URL</label>
+          <input type="url" id="integration-taskrabbit-url" placeholder="https://...">
+        </div>
+      </div>
+
+      <!-- Settings Section -->
+      <div class="section" id="section-settings">
+        <h2>General Settings</h2>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="settings-lazyLoadImages" checked>
+            Lazy Load Images
+          </label>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="settings-smoothScroll" checked>
+            Smooth Scroll
+          </label>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="settings-backToTop" checked>
+            Back to Top Button
+          </label>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Timezone</label>
+            <input type="text" id="settings-timezone" placeholder="America/Los_Angeles">
+          </div>
+          <div class="form-group">
+            <label>Date Format</label>
+            <input type="text" id="settings-dateFormat" placeholder="MM/DD/YYYY">
+          </div>
+        </div>
+      </div>
+
+      <!-- JSON View Section -->
+      <div class="section" id="section-json">
+        <h2>Raw JSON Configuration</h2>
+        <div class="json-viewer" id="json-viewer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let config = {};
+let originalConfig = {};
+
+// Detect site name from URL
+function getSiteName() {
+  const pathMatch = window.location.pathname.match(/\/sites\/([^\/]+)/);
+  return pathMatch ? pathMatch[1] : null;
+}
+
+// Load config on page load
+async function loadConfig() {
+  try {
+    const siteName = getSiteName();
+    let configUrl = '/config.json';
+    
+    // If we're in a site-specific path, use API endpoint
+    if (siteName) {
+      configUrl = `/api/config?site=${encodeURIComponent(siteName)}`;
+    }
+    
+    const response = await fetch(configUrl);
+    if (!response.ok) throw new Error('Failed to load config');
+    config = await response.json();
+    originalConfig = JSON.parse(JSON.stringify(config));
+    populateForm();
+    updateJSONView();
+    showStatus('Configuration loaded successfully', 'success');
+  } catch (error) {
+    console.error('Error loading config:', error);
+    showStatus('Error loading configuration: ' + error.message, 'error');
+  }
+}
+
+// Populate form with config values
+function populateForm() {
+  // Site
+  document.getElementById('site-name').value = config.site?.name || '';
+  document.getElementById('site-title').value = config.site?.title || '';
+  document.getElementById('site-description').value = config.site?.description || '';
+  document.getElementById('site-tagline').value = config.site?.tagline || '';
+  document.getElementById('site-mission').value = config.site?.mission || '';
+  document.getElementById('site-version').value = config.site?.version || '';
+  document.getElementById('site-author').value = config.site?.author || '';
+  document.getElementById('site-themeColor').value = config.site?.themeColor || '#6366f1';
+  document.getElementById('site-language').value = config.site?.language || 'en';
+
+  // SEO
+  document.getElementById('seo-metaTitle').value = config.seo?.metaTitle || '';
+  document.getElementById('seo-metaDescription').value = config.seo?.metaDescription || '';
+  document.getElementById('seo-metaKeywords').value = config.seo?.metaKeywords || '';
+  document.getElementById('seo-ogTitle').value = config.seo?.ogTitle || '';
+  document.getElementById('seo-ogDescription').value = config.seo?.ogDescription || '';
+  document.getElementById('seo-canonicalUrl').value = config.seo?.canonicalUrl || '';
+
+  // Navigation
+  document.getElementById('nav-logo-text').value = config.navigation?.logo?.text || '';
+  document.getElementById('nav-logo-showDot').checked = config.navigation?.logo?.showDot || false;
+  renderNavLinks();
+
+  // Theme
+  document.getElementById('theme-bg').value = config.theme?.colors?.bg || '#0f172a';
+  document.getElementById('theme-card').value = config.theme?.colors?.card || '#1e293b';
+  document.getElementById('theme-ink').value = config.theme?.colors?.ink || '#f1f5f9';
+  document.getElementById('theme-muted').value = config.theme?.colors?.muted || '#94a3b8';
+  document.getElementById('theme-brand').value = config.theme?.colors?.brand || '#6366f1';
+  document.getElementById('theme-brand2').value = config.theme?.colors?.brand2 || '#8b5cf6';
+  document.getElementById('theme-accent').value = config.theme?.colors?.accent || '#f59e0b';
+  document.getElementById('theme-success').value = config.theme?.colors?.success || '#10b981';
+
+  // Layout
+  document.getElementById('layout-maxWidth').value = config.layout?.maxWidth || '';
+  document.getElementById('layout-padding').value = config.layout?.padding || '';
+  document.getElementById('layout-sectionSpacing').value = config.layout?.sectionSpacing || '';
+  document.getElementById('layout-gridColumns-default').value = config.layout?.gridColumns?.default || 3;
+
+  // Content
+  document.getElementById('content-hero-title').value = config.content?.hero?.title || '';
+  document.getElementById('content-hero-subtitle').value = config.content?.hero?.subtitle || '';
+  document.getElementById('content-hero-description').value = config.content?.hero?.description || '';
+  document.getElementById('content-hero-cta-text').value = config.content?.hero?.cta?.primary?.text || '';
+  document.getElementById('content-hero-cta-href').value = config.content?.hero?.cta?.primary?.href || '';
+
+  // Contact
+  document.getElementById('contact-email').value = config.contact?.email || '';
+  document.getElementById('contact-phone').value = config.contact?.phone || '';
+  document.getElementById('contact-city').value = config.contact?.address?.city || '';
+  document.getElementById('contact-state').value = config.contact?.address?.state || '';
+  document.getElementById('contact-country').value = config.contact?.address?.country || '';
+
+  // Inventory
+  document.getElementById('inventory-enabled').checked = config.inventory?.enabled !== false;
+  document.getElementById('inventory-categories').value = (config.inventory?.categories || []).join(', ');
+
+  // API
+  document.getElementById('api-enabled').checked = config.api?.enabled !== false;
+  document.getElementById('api-baseUrl').value = config.api?.baseUrl || '';
+
+  // PWA
+  document.getElementById('pwa-enabled').checked = config.pwa?.enabled !== false;
+  document.getElementById('pwa-cacheName').value = config.pwa?.cacheName || '';
+
+  // Integrations
+  document.getElementById('integration-taskrabbit-enabled').checked = config.integrations?.taskrabbit?.enabled || false;
+  document.getElementById('integration-taskrabbit-url').value = config.integrations?.taskrabbit?.profileUrl || '';
+
+  // Settings
+  document.getElementById('settings-lazyLoadImages').checked = config.settings?.lazyLoadImages !== false;
+  document.getElementById('settings-smoothScroll').checked = config.settings?.smoothScroll !== false;
+  document.getElementById('settings-backToTop').checked = config.settings?.backToTop !== false;
+  document.getElementById('settings-timezone').value = config.settings?.timezone || '';
+  document.getElementById('settings-dateFormat').value = config.settings?.dateFormat || '';
+}
+
+// Render navigation links
+function renderNavLinks() {
+  const container = document.getElementById('nav-links-container');
+  const links = config.navigation?.links || [];
+  container.innerHTML = links.map((link, index) => `
+    <div class="array-item">
+      <div class="array-item-header">
+        <span class="array-item-title">${link.label || 'Link ' + (index + 1)}</span>
+        <button class="btn-remove" onclick="removeNavLink(${index})">Remove</button>
+      </div>
+      <div class="form-group">
+        <label>Label</label>
+        <input type="text" value="${link.label || ''}" onchange="updateNavLink(${index}, 'label', this.value)">
+      </div>
+      <div class="form-group">
+        <label>Href</label>
+        <input type="text" value="${link.href || ''}" onchange="updateNavLink(${index}, 'href', this.value)">
+      </div>
+      <div class="form-group">
+        <label>Icon</label>
+        <input type="text" value="${link.icon || ''}" onchange="updateNavLink(${index}, 'icon', this.value)">
+      </div>
+    </div>
+  `).join('');
+}
+
+function addNavLink() {
+  if (!config.navigation) config.navigation = {};
+  if (!config.navigation.links) config.navigation.links = [];
+  config.navigation.links.push({ label: 'New Link', href: '/', icon: '🔗' });
+  renderNavLinks();
+  updateJSONView();
+}
+
+function removeNavLink(index) {
+  config.navigation.links.splice(index, 1);
+  renderNavLinks();
+  updateJSONView();
+}
+
+function updateNavLink(index, field, value) {
+  config.navigation.links[index][field] = value;
+  updateJSONView();
+}
+
+// Save config
+async function saveConfig() {
+  try {
+    // Update config from form
+    updateConfigFromForm();
+
+    const siteName = getSiteName();
+    let apiUrl = '/api/config';
+    
+    // If we're in a site-specific path, include site parameter
+    if (siteName) {
+      apiUrl += `?site=${encodeURIComponent(siteName)}`;
+    }
+
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config, null, 2)
+    });
+
+    if (!response.ok) throw new Error('Failed to save config');
+    
+    showStatus('Configuration saved successfully!', 'success');
+    originalConfig = JSON.parse(JSON.stringify(config));
+    updateJSONView();
+  } catch (error) {
+    console.error('Error saving config:', error);
+    showStatus('Error saving configuration: ' + error.message, 'error');
+  }
+}
+
+// Update config object from form values
+function updateConfigFromForm() {
+  // Site
+  if (!config.site) config.site = {};
+  config.site.name = document.getElementById('site-name').value;
+  config.site.title = document.getElementById('site-title').value;
+  config.site.description = document.getElementById('site-description').value;
+  config.site.tagline = document.getElementById('site-tagline').value;
+  config.site.mission = document.getElementById('site-mission').value;
+  config.site.version = document.getElementById('site-version').value;
+  config.site.author = document.getElementById('site-author').value;
+  config.site.themeColor = document.getElementById('site-themeColor').value;
+  config.site.language = document.getElementById('site-language').value;
+
+  // SEO
+  if (!config.seo) config.seo = {};
+  config.seo.metaTitle = document.getElementById('seo-metaTitle').value;
+  config.seo.metaDescription = document.getElementById('seo-metaDescription').value;
+  config.seo.metaKeywords = document.getElementById('seo-metaKeywords').value;
+  config.seo.ogTitle = document.getElementById('seo-ogTitle').value;
+  config.seo.ogDescription = document.getElementById('seo-ogDescription').value;
+  config.seo.canonicalUrl = document.getElementById('seo-canonicalUrl').value;
+
+  // Navigation
+  if (!config.navigation) config.navigation = {};
+  if (!config.navigation.logo) config.navigation.logo = {};
+  config.navigation.logo.text = document.getElementById('nav-logo-text').value;
+  config.navigation.logo.showDot = document.getElementById('nav-logo-showDot').checked;
+
+  // Theme
+  if (!config.theme) config.theme = {};
+  if (!config.theme.colors) config.theme.colors = {};
+  config.theme.colors.bg = document.getElementById('theme-bg').value;
+  config.theme.colors.card = document.getElementById('theme-card').value;
+  config.theme.colors.ink = document.getElementById('theme-ink').value;
+  config.theme.colors.muted = document.getElementById('theme-muted').value;
+  config.theme.colors.brand = document.getElementById('theme-brand').value;
+  config.theme.colors.brand2 = document.getElementById('theme-brand2').value;
+  config.theme.colors.accent = document.getElementById('theme-accent').value;
+  config.theme.colors.success = document.getElementById('theme-success').value;
+
+  // Layout
+  if (!config.layout) config.layout = {};
+  config.layout.maxWidth = document.getElementById('layout-maxWidth').value;
+  config.layout.padding = document.getElementById('layout-padding').value;
+  config.layout.sectionSpacing = document.getElementById('layout-sectionSpacing').value;
+  if (!config.layout.gridColumns) config.layout.gridColumns = {};
+  config.layout.gridColumns.default = parseInt(document.getElementById('layout-gridColumns-default').value);
+
+  // Content
+  if (!config.content) config.content = {};
+  if (!config.content.hero) config.content.hero = {};
+  config.content.hero.title = document.getElementById('content-hero-title').value;
+  config.content.hero.subtitle = document.getElementById('content-hero-subtitle').value;
+  config.content.hero.description = document.getElementById('content-hero-description').value;
+  if (!config.content.hero.cta) config.content.hero.cta = {};
+  if (!config.content.hero.cta.primary) config.content.hero.cta.primary = {};
+  config.content.hero.cta.primary.text = document.getElementById('content-hero-cta-text').value;
+  config.content.hero.cta.primary.href = document.getElementById('content-hero-cta-href').value;
+
+  // Contact
+  if (!config.contact) config.contact = {};
+  config.contact.email = document.getElementById('contact-email').value;
+  config.contact.phone = document.getElementById('contact-phone').value;
+  if (!config.contact.address) config.contact.address = {};
+  config.contact.address.city = document.getElementById('contact-city').value;
+  config.contact.address.state = document.getElementById('contact-state').value;
+  config.contact.address.country = document.getElementById('contact-country').value;
+
+  // Inventory
+  if (!config.inventory) config.inventory = {};
+  config.inventory.enabled = document.getElementById('inventory-enabled').checked;
+  const categories = document.getElementById('inventory-categories').value.split(',').map(s => s.trim()).filter(s => s);
+  config.inventory.categories = categories;
+
+  // API
+  if (!config.api) config.api = {};
+  config.api.enabled = document.getElementById('api-enabled').checked;
+  config.api.baseUrl = document.getElementById('api-baseUrl').value;
+
+  // PWA
+  if (!config.pwa) config.pwa = {};
+  config.pwa.enabled = document.getElementById('pwa-enabled').checked;
+  config.pwa.cacheName = document.getElementById('pwa-cacheName').value;
+
+  // Integrations
+  if (!config.integrations) config.integrations = {};
+  if (!config.integrations.taskrabbit) config.integrations.taskrabbit = {};
+  config.integrations.taskrabbit.enabled = document.getElementById('integration-taskrabbit-enabled').checked;
+  config.integrations.taskrabbit.profileUrl = document.getElementById('integration-taskrabbit-url').value;
+
+  // Settings
+  if (!config.settings) config.settings = {};
+  config.settings.lazyLoadImages = document.getElementById('settings-lazyLoadImages').checked;
+  config.settings.smoothScroll = document.getElementById('settings-smoothScroll').checked;
+  config.settings.backToTop = document.getElementById('settings-backToTop').checked;
+  config.settings.timezone = document.getElementById('settings-timezone').value;
+  config.settings.dateFormat = document.getElementById('settings-dateFormat').value;
+}
+
+// Update JSON viewer
+function updateJSONView() {
+  updateConfigFromForm();
+  document.getElementById('json-viewer').textContent = JSON.stringify(config, null, 2);
+}
+
+// Export config
+function exportConfig() {
+  updateConfigFromForm();
+  const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'config.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Import config
+function importConfig() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        config = JSON.parse(event.target.result);
+        originalConfig = JSON.parse(JSON.stringify(config));
+        populateForm();
+        updateJSONView();
+        showStatus('Configuration imported successfully', 'success');
+      } catch (error) {
+        showStatus('Error importing configuration: ' + error.message, 'error');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// Reset config
+function resetConfig() {
+  if (confirm('Are you sure you want to reset to the original configuration? All unsaved changes will be lost.')) {
+    config = JSON.parse(JSON.stringify(originalConfig));
+    populateForm();
+    updateJSONView();
+    showStatus('Configuration reset to original', 'success');
+  }
+}
+
+// Show status message
+function showStatus(message, type) {
+  const status = document.getElementById('status');
+  status.textContent = message;
+  status.className = `status ${type}`;
+  setTimeout(() => {
+    status.className = 'status';
+  }, 5000);
+}
+
+// Navigation
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const section = link.dataset.section;
+    
+    // Update active nav
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    
+    // Show section
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(`section-${section}`).classList.add('active');
+  });
+});
+
+// Auto-update JSON view on form changes
+document.querySelectorAll('input, textarea, select').forEach(input => {
+  input.addEventListener('change', updateJSONView);
+});
+
+// Update navigation from config
+function updateNavigation() {
+  const config = window.CONFIG || {};
+  
+  // Update logo
+  const logo = document.getElementById('logo');
+  if (logo && config.navigation?.logo) {
+    logo.innerHTML = `
+      ${config.navigation.logo.showDot ? '<span class="dot"></span>' : ''}
+      <span>${config.navigation.logo.text || 'LearnMappers'}</span>
+    `;
+    if (config.navigation.logo.href) logo.href = config.navigation.logo.href;
+  }
+
+  // Update navigation links
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks && config.navigation?.links) {
+    navLinks.innerHTML = config.navigation.links.map(link => 
+      `<a href="${link.href}" data-nav>${link.icon ? link.icon + ' ' : ''}${link.label}</a>`
+    ).join('');
+  }
+}
+
+// Net pill status
+(function(){
+  const el = document.getElementById('netPill');
+  if(!el) return;
+  function setStatus(){
+    const on = navigator.onLine;
+    el.textContent = (on ? '● online' : '● offline');
+    el.classList.toggle('online', on);
+    el.classList.toggle('offline', !on);
+  }
+  window.addEventListener('online', setStatus);
+  window.addEventListener('offline', setStatus);
+  setStatus();
+})();
+
+// Load config on page load
+loadConfig();
+
+// Update navigation when config loads
+if (window.CONFIG) {
+  updateNavigation();
+} else {
+  window.addEventListener('configLoaded', updateNavigation);
+  // Also try after a delay
+  setTimeout(updateNavigation, 500);
+}
+</script>
+<script src="../../scripts.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('../../service-worker.js').catch(()=>{});}</script>
+</body>
+</html>
+

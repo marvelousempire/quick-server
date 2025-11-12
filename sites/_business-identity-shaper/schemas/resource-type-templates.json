@@ -1,0 +1,359 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Resource Type Templates",
+  "description": "Template configurations for different resource types - each type has its own layout, mockup, and display schema",
+  "type": "object",
+  "properties": {
+    "tool": {
+      "type": "object",
+      "description": "Template for tool resources",
+      "properties": {
+        "mockupType": {
+          "type": "string",
+          "enum": ["toolbox", "workspace", "shelf", "box"],
+          "default": "toolbox",
+          "description": "Default mockup style for tools"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["product", "detailed", "compact"],
+          "default": "product",
+          "description": "Layout style for tool cards"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["specifications", "useCases", "capabilities", "maintenance", "purchase", "links"]
+          },
+          "default": ["specifications", "useCases", "capabilities", "maintenance"],
+          "description": "Sections to display on tool cards"
+        },
+        "priorityFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["brand", "model", "serialNumber", "category", "purpose"],
+          "description": "Fields to prioritize in display"
+        }
+      }
+    },
+    "equipment": {
+      "type": "object",
+      "description": "Template for equipment resources",
+      "properties": {
+        "mockupType": {
+          "type": "string",
+          "enum": ["device", "workspace", "shelf", "box"],
+          "default": "device",
+          "description": "Default mockup style for equipment"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["product", "detailed", "compact"],
+          "default": "detailed",
+          "description": "Layout style for equipment cards"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["specifications", "useCases", "capabilities", "maintenance", "purchase", "links"]
+          },
+          "default": ["specifications", "useCases", "capabilities", "maintenance", "purchase"],
+          "description": "Sections to display on equipment cards"
+        },
+        "priorityFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["brand", "model", "serialNumber", "category", "purpose", "specifications"],
+          "description": "Fields to prioritize in display"
+        }
+      }
+    },
+    "person": {
+      "type": "object",
+      "description": "Template for person/contact resources",
+      "properties": {
+        "mockupType": {
+          "type": "string",
+          "enum": ["idcard", "license", "passport", "business-card"],
+          "default": "idcard",
+          "description": "Default mockup style for persons"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["id-card", "profile", "contact"],
+          "default": "id-card",
+          "description": "Layout style for person cards"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["contact", "role", "capabilities", "abilities", "outcomes", "useCases", "history", "relationships"]
+          },
+          "default": ["contact", "role", "capabilities", "outcomes"],
+          "description": "Sections to display on person cards"
+        },
+        "priorityFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["name", "udin", "role", "relationship", "purpose", "contact"],
+          "description": "Fields to prioritize in display"
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "description": "Template for contact resources (alias for person)",
+      "properties": {
+        "mockupType": {
+          "type": "string",
+          "enum": ["idcard", "license", "passport", "business-card"],
+          "default": "idcard",
+          "description": "Default mockup style for contacts"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["id-card", "profile", "contact"],
+          "default": "id-card",
+          "description": "Layout style for contact cards"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["contact", "role", "capabilities", "abilities", "outcomes", "useCases", "history", "relationships"]
+          },
+          "default": ["contact", "role", "capabilities", "outcomes"],
+          "description": "Sections to display on contact cards"
+        },
+        "priorityFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["name", "udin", "role", "relationship", "purpose", "contact"],
+          "description": "Fields to prioritize in display"
+        }
+      }
+    },
+    "material": {
+      "type": "object",
+      "description": "Template for material resources",
+      "properties": {
+        "mockupType": {
+          "type": "string",
+          "enum": ["shelf", "workspace", "box", "float"],
+          "default": "shelf",
+          "description": "Default mockup style for materials"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["product", "detailed", "compact"],
+          "default": "product",
+          "description": "Layout style for material cards"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["specifications", "useCases", "capabilities", "purchase", "links"]
+          },
+          "default": ["specifications", "useCases", "capabilities"],
+          "description": "Sections to display on material cards"
+        },
+        "priorityFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["category", "purpose", "specifications", "quantity"],
+          "description": "Fields to prioritize in display"
+        }
+      }
+    },
+    "appliance": {
+      "type": "object",
+      "description": "Template for appliance resources",
+      "properties": {
+        "mockupType": {
+          "type": "string",
+          "enum": ["device", "workspace", "box"],
+          "default": "device",
+          "description": "Default mockup style for appliances"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["product", "detailed", "compact"],
+          "default": "detailed",
+          "description": "Layout style for appliance cards"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["specifications", "useCases", "capabilities", "maintenance", "purchase", "links"]
+          },
+          "default": ["specifications", "useCases", "capabilities", "maintenance"],
+          "description": "Sections to display on appliance cards"
+        },
+        "priorityFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["brand", "model", "serialNumber", "category", "purpose", "specifications"],
+          "description": "Fields to prioritize in display"
+        }
+      }
+    },
+    "software": {
+      "type": "object",
+      "description": "Template for software resources",
+      "properties": {
+        "mockupType": {
+          "type": "string",
+          "enum": ["float", "device", "box"],
+          "default": "float",
+          "description": "Default mockup style for software"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["product", "detailed", "compact"],
+          "default": "product",
+          "description": "Layout style for software cards"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["specifications", "useCases", "capabilities", "links"]
+          },
+          "default": ["specifications", "useCases", "capabilities", "links"],
+          "description": "Sections to display on software cards"
+        },
+        "priorityFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["category", "purpose", "specifications", "links"],
+          "description": "Fields to prioritize in display"
+        }
+      }
+    },
+    "company": {
+      "type": "object",
+      "description": "Template for company/partner resources",
+      "properties": {
+        "mockupType": {
+          "type": "string",
+          "enum": ["business-card", "float", "box"],
+          "default": "business-card",
+          "description": "Default mockup style for companies"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["business-card", "profile", "detailed"],
+          "default": "business-card",
+          "description": "Layout style for company cards"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["contact", "services", "capabilities", "relationships", "history"]
+          },
+          "default": ["contact", "services", "capabilities"],
+          "description": "Sections to display on company cards"
+        },
+        "priorityFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["name", "type", "purpose", "contact", "services"],
+          "description": "Fields to prioritize in display"
+        }
+      }
+    },
+    "documentation": {
+      "type": "object",
+      "description": "Template for documentation resources",
+      "properties": {
+        "mockupType": {
+          "type": "string",
+          "enum": ["float", "shelf", "box"],
+          "default": "float",
+          "description": "Default mockup style for documentation"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["product", "detailed", "compact"],
+          "default": "detailed",
+          "description": "Layout style for documentation cards"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["specifications", "useCases", "capabilities", "links"]
+          },
+          "default": ["specifications", "useCases", "links"],
+          "description": "Sections to display on documentation cards"
+        },
+        "priorityFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["category", "purpose", "links"],
+          "description": "Fields to prioritize in display"
+        }
+      }
+    },
+    "other": {
+      "type": "object",
+      "description": "Template for other/uncategorized resources",
+      "properties": {
+        "mockupType": {
+          "type": "string",
+          "enum": ["box", "float", "shelf"],
+          "default": "box",
+          "description": "Default mockup style for other resources"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["product", "detailed", "compact"],
+          "default": "product",
+          "description": "Layout style for other resource cards"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["specifications", "useCases", "capabilities", "purchase", "links"]
+          },
+          "default": ["specifications", "useCases", "capabilities"],
+          "description": "Sections to display on other resource cards"
+        },
+        "priorityFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["category", "purpose"],
+          "description": "Fields to prioritize in display"
+        }
+      }
+    }
+  }
+}
+

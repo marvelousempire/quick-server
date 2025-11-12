@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!--
+  LearnMappers PWA — Configuration
+  =================================
+  Master Config: config.js (single source of truth)
+  Site: sites/default/
+  Version: 7.3.0
+-->
+<script src="../../config.js"></script>
+<script>
+  document.title = window.CONFIG?.site?.title ? `${window.CONFIG.site.name} — Documentation Index (v${window.CONFIG.site.version})` : 'LearnMappers — Documentation Index (v7.0)';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', window.CONFIG?.site?.themeColor || '#0b0c10');
+</script>
+<title>LearnMappers — Documentation Index</title>
+<link rel="manifest" href="../../manifest.webmanifest"><meta name="theme-color" content="#0b0c10">
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; --wide:1200px; }
+*{box-sizing:border-box} html,body{background:radial-gradient(1200px 500px at 15% -10%, rgba(124,227,255,.14), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(96,255,168,.09), transparent 60%), var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6}
+a{color:var(--brand);text-decoration:none}
+main[data-page]{padding:0}
+.wrap{max-width:1440px;margin:0 auto;padding:clamp(18px,4vw,60px)}
+nav.stick{position:sticky;top:0;z-index:90;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter: blur(10px);border-bottom:1px solid var(--line)}
+nav .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900}
+.logo .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+nav .links{display:flex;gap:12px;flex-wrap:wrap}
+nav .links a{padding:10px 12px;border-radius:12px}
+nav .links a:hover{background:color-mix(in srgb, var(--brand) 18%, transparent)}
+header.hero{position:relative;isolation:isolate;padding:54px 0 24px}
+header.hero.wrap{padding-top:54px;padding-bottom:24px;padding-left:clamp(18px,4vw,60px);padding-right:clamp(18px,4vw,60px)}
+.glow{position:absolute;inset:-10% -10% auto -10%;height:60vh;background:radial-gradient(1200px 400px at 20% 0%,rgba(124,227,255,.2),transparent 60%),radial-gradient(900px 350px at 80% 0%,rgba(96,255,168,.12),transparent 70%);filter:blur(20px);z-index:-1}
+h1{font-size:clamp(36px,5vw,56px);margin:0 0 12px;font-weight:900}
+.lead{font-size:clamp(16px,2.2vw,19px);color:var(--muted);max-width:74ch;margin:0 0 10px}
+.card{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 14px 44px -28px var(--shadow)}
+.grid{display:grid;gap:var(--gap)}
+.cols-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.tiny{font-size:12px;color:#9bb1c7}
+.pill{display:inline-flex;align-items:center;gap:6px;margin-right:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 90%, transparent), color-mix(in srgb, var(--card) 96%, transparent));font-size:12px}
+.pill.online{color:#073b18;border-color:#0ea35a;background:linear-gradient(180deg,#d6ffe9,#f1fff7)}
+.pill.offline{color:#4b1a1a;border-color:#cc5151;background:linear-gradient(180deg,#ffe3e3,#fff7f7)}
+.doc-card{display:block;padding:20px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));transition:all 0.2s}
+.doc-card:hover{transform:translateY(-2px);border-color:var(--brand);box-shadow:0 8px 24px -12px var(--shadow)}
+.doc-card h3{margin:0 0 8px 0;font-size:18px}
+.doc-card p{margin:0 0 12px 0;color:var(--muted);font-size:14px}
+.doc-card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.doc-card .tag{padding:4px 8px;border-radius:6px;background:color-mix(in srgb, var(--brand) 20%, transparent);color:var(--brand);font-size:11px;font-weight:700}
+</style>
+</head>
+<body>
+<nav class="stick wrap">
+  <div class="row">
+    <div class="logo"><span class="dot"></span><span>LearnMappers</span></div>
+    <div class="links"><span id="netPill" class="pill" title="Connection status">● offline</span>
+      <a href="index.html" data-nav>Home</a>
+      <a href="docs.html" data-nav>About</a>
+      <a href="inventory.html" data-nav>Resources</a>
+      <a href="service-menu.html" data-nav>Services</a>
+    </div>
+  </div>
+</nav>
+
+<main data-page>
+  <header class="hero wrap">
+    <div class="glow"></div>
+    <h1>Documentation</h1>
+    <p class="lead">Complete guides for configuration, schemas, vendor imports, relationship mapping, and more.</p>
+  </header>
+
+  <section class="wrap">
+    <div class="grid cols-3">
+      <a href="docs-config.html" class="doc-card" data-nav>
+        <h3>⚙️ Configuration System</h3>
+        <p>Master config system using JSON format. Learn how to manage site settings, navigation, themes, and API endpoints.</p>
+        <div class="tags">
+          <span class="tag">config.json</span>
+          <span class="tag">config.js</span>
+          <span class="tag">Settings</span>
+        </div>
+      </a>
+
+      <a href="docs-vendor-import.html" class="doc-card" data-nav>
+        <h3>📦 Vendor Import System</h3>
+        <p>Import vendor files from Amazon, eBay, Home Depot, Lowe's, and B&H with automatic schema validation.</p>
+        <div class="tags">
+          <span class="tag">Import</span>
+          <span class="tag">CSV</span>
+          <span class="tag">Validation</span>
+        </div>
+      </a>
+
+      <a href="docs-relationship-mapping.html" class="doc-card" data-nav>
+        <h3>🔗 Relationship Mapping</h3>
+        <p>Map relationships between resources, services, persons, and companies. Visualize connections and project capabilities.</p>
+        <div class="tags">
+          <span class="tag">Relationships</span>
+          <span class="tag">Graph</span>
+          <span class="tag">Projections</span>
+        </div>
+      </a>
+
+      <a href="docs-schemas.html" class="doc-card" data-nav>
+        <h3>📋 JSON Schemas</h3>
+        <p>Data structure schemas for resources, services, persons, companies, and relationships. Validation and examples.</p>
+        <div class="tags">
+          <span class="tag">Schema</span>
+          <span class="tag">Validation</span>
+          <span class="tag">Data Structure</span>
+        </div>
+      </a>
+
+      <a href="docs-services.html" class="doc-card" data-nav>
+        <h3>⚙️ Services System</h3>
+        <p>Schema-based service pages system. Learn how to create individual service pages, manage service data, and integrate booking systems.</p>
+        <div class="tags">
+          <span class="tag">Services</span>
+          <span class="tag">Pages</span>
+          <span class="tag">Schema</span>
+        </div>
+      </a>
+
+      <a href="docs-adding-services-resources.html" class="doc-card" data-nav>
+        <h3>➕ Adding Services & Resources</h3>
+        <p>Step-by-step guide to adding new services to config.json and resources as JSON files. Perfect for expanding your site's offerings.</p>
+        <div class="tags">
+          <span class="tag">Services</span>
+          <span class="tag">Resources</span>
+          <span class="tag">Tutorial</span>
+        </div>
+      </a>
+
+      <a href="docs-business-identity-shaper.html" class="doc-card" data-nav>
+        <h3>🎯 Business Identity Shaper</h3>
+        <p>The framework used to build LearnMappers — a reusable system for compiling, organizing, and showcasing business capabilities.</p>
+        <div class="tags">
+          <span class="tag">Framework</span>
+          <span class="tag">Business</span>
+          <span class="tag">Identity</span>
+        </div>
+      </a>
+
+      <a href="docs-main-project-entry.html" class="doc-card" data-nav>
+        <h3>📖 Main Project Entry</h3>
+        <p>Start here to understand the project, get started quickly, and find all documentation. Quick start guides and overview.</p>
+        <div class="tags">
+          <span class="tag">Getting Started</span>
+          <span class="tag">Overview</span>
+          <span class="tag">Quick Start</span>
+        </div>
+      </a>
+
+      <a href="docs-envato-3d.html" class="doc-card" data-nav>
+        <h3>🎨 Envato 3D Images</h3>
+        <p>Use professional 3D images from Envato Elements to show your resources in photorealistic mockups with interactive 360-degree views.</p>
+        <div class="tags">
+          <span class="tag">Images</span>
+          <span class="tag">3D</span>
+          <span class="tag">Mockups</span>
+        </div>
+      </a>
+
+      <a href="docs-resource-cards-datapoints.html" class="doc-card" data-nav>
+        <h3>📊 Resource Cards Data Points</h3>
+        <p>Complete guide to resource card data storage, database schema, and data point structure.</p>
+        <div class="tags">
+          <span class="tag">Resources</span>
+          <span class="tag">Database</span>
+          <span class="tag">Schema</span>
+        </div>
+      </a>
+
+      <a href="docs.html" class="doc-card" data-nav>
+        <h3>📖 Main Documentation</h3>
+        <p>Complete LearnMappers documentation with overview, quick start, features, architecture, and deployment guides.</p>
+        <div class="tags">
+          <span class="tag">Overview</span>
+          <span class="tag">Getting Started</span>
+          <span class="tag">Architecture</span>
+        </div>
+      </a>
+
+      <a href="docs-deployment.html" class="doc-card" data-nav>
+        <h3>📦 Deployment Package</h3>
+        <p>Package and distribute the server as a ready-to-use product. Users just drop site folders and run.</p>
+        <div class="tags">
+          <span class="tag">Deployment</span>
+          <span class="tag">Packaging</span>
+          <span class="tag">Distribution</span>
+        </div>
+      </a>
+
+      <a href="docs-project-replication.html" class="doc-card" data-nav>
+        <h3>🚀 Project Replication</h3>
+        <p>Schema-based system for fast project creation. Replicate this project structure in minutes.</p>
+        <div class="tags">
+          <span class="tag">Replication</span>
+          <span class="tag">Schemas</span>
+          <span class="tag">Templates</span>
+        </div>
+      </a>
+
+      <a href="docs-deployment-options.html" class="doc-card" data-nav>
+        <h3>⚡ Deployment Options</h3>
+        <p>Compare Fast Python, Node.js, and Docker options. Choose the right deployment method.</p>
+        <div class="tags">
+          <span class="tag">Fast Python</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Docker</span>
+        </div>
+      </a>
+
+      <a href="docs-docker.html" class="doc-card" data-nav>
+        <h3>🐳 Docker Deployment</h3>
+        <p>Complete Docker setup with MySQL, Caddy, and Traefik. Enterprise-grade deployment.</p>
+        <div class="tags">
+          <span class="tag">Docker</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Caddy</span>
+        </div>
+      </a>
+
+      <a href="docs-server.html" class="doc-card" data-nav>
+        <h3>🖥️ Server Guide</h3>
+        <p>Complete server setup, configuration, and usage. API endpoints, multi-site hosting, and more.</p>
+        <div class="tags">
+          <span class="tag">Server</span>
+          <span class="tag">API</span>
+          <span class="tag">Setup</span>
+        </div>
+      </a>
+
+      <a href="docs-glinet-router.html" class="doc-card" data-nav>
+        <h3>📡 GLiNet Router Deployment</h3>
+        <p>Deploy the server on GLiNet routers with SD card support. Perfect for portable, self-hosted deployments.</p>
+        <div class="tags">
+          <span class="tag">Router</span>
+          <span class="tag">GLiNet</span>
+          <span class="tag">SD Card</span>
+        </div>
+      </a>
+
+      <a href="docs-linux-deployment.html" class="doc-card" data-nav>
+        <h3>🐧 Linux Deployment</h3>
+        <p>Deploy on any Linux system - Raspberry Pi, cloud VPS, embedded devices, or any Linux distribution. Universal portability.</p>
+        <div class="tags">
+          <span class="tag">Linux</span>
+          <span class="tag">Universal</span>
+          <span class="tag">Portable</span>
+        </div>
+      </a>
+
+      <a href="docs-auto-features.html" class="doc-card" data-nav>
+        <h3>⚡ Auto-Fit, Auto-Born, Auto-Heal</h3>
+        <p>Complete guide to automatic setup and maintenance. UV hunts for tools, server initializes itself, and health checks keep everything running.</p>
+        <div class="tags">
+          <span class="tag">Auto-Fit</span>
+          <span class="tag">Auto-Born</span>
+          <span class="tag">Auto-Heal</span>
+        </div>
+      </a>
+
+      <a href="docs-server-scripts.html" class="doc-card" data-nav>
+        <h3>🔧 Server Scripts</h3>
+        <p>Documentation for server startup scripts, automation, and the `go` command system.</p>
+        <div class="tags">
+          <span class="tag">Scripts</span>
+          <span class="tag">Automation</span>
+          <span class="tag">Go Command</span>
+        </div>
+      </a>
+
+      <a href="docs-sites-directory.html" class="doc-card" data-nav>
+        <h3>📁 Sites Directory</h3>
+        <p>How the multi-site directory structure works and how to organize your sites.</p>
+        <div class="tags">
+          <span class="tag">Multi-Site</span>
+          <span class="tag">Directory</span>
+          <span class="tag">Organization</span>
+        </div>
+      </a>
+
+      <a href="docs-go-alias.html" class="doc-card" data-nav>
+        <h3>🚀 Go Alias</h3>
+        <p>How the universal `go` command works and how to set it up for project-specific execution.</p>
+        <div class="tags">
+          <span class="tag">Alias</span>
+          <span class="tag">Command</span>
+          <span class="tag">Setup</span>
+        </div>
+      </a>
+
+      <a href="docs-deployment-options.html" class="doc-card" data-nav>
+        <h3>⚡ Deployment Options</h3>
+        <p>Compare Fast Python, Node.js, and Docker options. Choose the right deployment method for your needs.</p>
+        <div class="tags">
+          <span class="tag">Fast Python</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Docker</span>
+        </div>
+      </a>
+
+      <a href="docs-docker.html" class="doc-card" data-nav>
+        <h3>🐳 Docker Deployment</h3>
+        <p>Complete Docker setup with MySQL, Caddy, and Traefik. Enterprise-grade containerized deployment.</p>
+        <div class="tags">
+          <span class="tag">Docker</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Caddy</span>
+          <span class="tag">Traefik</span>
+        </div>
+      </a>
+    </div>
+  </section>
+</main>
+
+<script>
+/* v7.3 net pill */
+(function(){
+  const el = document.getElementById('netPill'); if(!el) return;
+  function setStatus(){
+    const on = navigator.onLine;
+    el.textContent = (on ? '● online' : '● offline');
+    el.classList.toggle('online', on);
+    el.classList.toggle('offline', !on);
+  }
+  window.addEventListener('online', setStatus);
+  window.addEventListener('offline', setStatus);
+  setStatus();
+})();
+</script>
+<script src="../../scripts.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('../service-worker.js').catch(()=>{});}</script>
+</body>
+</html>
+

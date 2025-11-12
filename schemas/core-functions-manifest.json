@@ -1,0 +1,207 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Core Functions Manifest",
+  "description": "Manifest of core functions and their purposes for project replication",
+  "type": "object",
+  "properties": {
+    "server": {
+      "type": "object",
+      "description": "Server-side core functions",
+      "properties": {
+        "siteDetection": {
+          "type": "object",
+          "properties": {
+            "function": {
+              "type": "string",
+              "default": "detectSites()"
+            },
+            "file": {
+              "type": "string",
+              "default": "server.js"
+            },
+            "purpose": {
+              "type": "string",
+              "default": "Auto-detect sites in sites/ directory"
+            },
+            "returns": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": "string",
+                  "path": "string"
+                }
+              }
+            }
+          }
+        },
+        "accessInfo": {
+          "type": "object",
+          "properties": {
+            "function": {
+              "type": "string",
+              "default": "getAccessInfo()"
+            },
+            "file": {
+              "type": "string",
+              "default": "server.js"
+            },
+            "purpose": {
+              "type": "string",
+              "default": "Get local, network, and DNS access URLs"
+            }
+          }
+        },
+        "networkIP": {
+          "type": "object",
+          "properties": {
+            "function": {
+              "type": "string",
+              "default": "getNetworkIPs()"
+            },
+            "file": {
+              "type": "string",
+              "default": "server.js"
+            },
+            "purpose": {
+              "type": "string",
+              "default": "Get all non-internal IPv4 addresses"
+            }
+          }
+        }
+      }
+    },
+    "client": {
+      "type": "object",
+      "description": "Client-side core functions",
+      "properties": {
+        "router": {
+          "type": "object",
+          "properties": {
+            "function": {
+              "type": "string",
+              "default": "fetchTo(), handlePopState()"
+            },
+            "file": {
+              "type": "string",
+              "default": "scripts.js"
+            },
+            "purpose": {
+              "type": "string",
+              "default": "Client-side routing for SPA feel"
+            }
+          }
+        },
+        "configLoader": {
+          "type": "object",
+          "properties": {
+            "function": {
+              "type": "string",
+              "default": "loadConfig()"
+            },
+            "file": {
+              "type": "string",
+              "default": "config.js"
+            },
+            "purpose": {
+              "type": "string",
+              "default": "Load and apply site configuration"
+            }
+          }
+        },
+        "markdownConverter": {
+          "type": "object",
+          "properties": {
+            "function": {
+              "type": "string",
+              "default": "markdownToHTML()"
+            },
+            "file": {
+              "type": "string",
+              "default": "markdown-to-html.js"
+            },
+            "purpose": {
+              "type": "string",
+              "default": "Convert markdown to HTML for documentation"
+            }
+          }
+        }
+      }
+    },
+    "startup": {
+      "type": "object",
+      "description": "Startup script functions",
+      "properties": {
+        "siteDetection": {
+          "type": "object",
+          "properties": {
+            "function": {
+              "type": "string",
+              "default": "detect_sites()"
+            },
+            "file": {
+              "type": "string",
+              "default": "go.sh"
+            },
+            "purpose": {
+              "type": "string",
+              "default": "Detect available sites for selection"
+            }
+          }
+        },
+        "browserOpen": {
+          "type": "object",
+          "properties": {
+            "function": {
+              "type": "string",
+              "default": "open_private_browser()"
+            },
+            "file": {
+              "type": "string",
+              "default": "go.sh"
+            },
+            "purpose": {
+              "type": "string",
+              "default": "Open default browser in private mode with best URL (TLD > Network > Localhost)"
+            }
+          }
+        },
+        "networkIP": {
+          "type": "object",
+          "properties": {
+            "function": {
+              "type": "string",
+              "default": "get_network_ip()"
+            },
+            "file": {
+              "type": "string",
+              "default": "go.sh"
+            },
+            "purpose": {
+              "type": "string",
+              "default": "Get network IP address"
+            }
+          }
+        },
+        "bestURL": {
+          "type": "object",
+          "properties": {
+            "function": {
+              "type": "string",
+              "default": "get_best_url()"
+            },
+            "file": {
+              "type": "string",
+              "default": "go.sh"
+            },
+            "purpose": {
+              "type": "string",
+              "default": "Get best URL (TLD > Network > Localhost)"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,318 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Company/Partner Schema",
+  "description": "Schema for companies and business partners",
+  "type": "object",
+  "required": ["name", "type", "relationship", "purpose"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the company",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Company name",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "meta": {
+      "type": "object",
+      "description": "Metadata about the company",
+      "properties": {
+        "legalName": {
+          "type": "string",
+          "description": "Legal/registered company name"
+        },
+        "dba": {
+          "type": "string",
+          "description": "Doing business as (DBA) name"
+        },
+        "industry": {
+          "type": "string",
+          "description": "Industry or sector"
+        },
+        "size": {
+          "type": "string",
+          "enum": ["solo", "small", "medium", "large", "enterprise"],
+          "description": "Company size"
+        },
+        "founded": {
+          "type": "string",
+          "format": "date",
+          "description": "Date company was founded (YYYY-MM-DD)"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional tags for categorization"
+        }
+      }
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of company",
+      "enum": [
+        "vendor",
+        "supplier",
+        "partner",
+        "client",
+        "competitor",
+        "service-provider",
+        "platform",
+        "marketplace",
+        "other"
+      ]
+    },
+    "relationship": {
+      "type": "string",
+      "description": "Nature of business relationship",
+      "enum": [
+        "strategic-partner",
+        "preferred-vendor",
+        "active-supplier",
+        "service-provider",
+        "client",
+        "referral-partner",
+        "platform-partner",
+        "affiliate",
+        "competitor",
+        "prospect",
+        "other"
+      ]
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Why this relationship exists and what value it provides",
+      "minLength": 10,
+      "maxLength": 500
+    },
+    "contact": {
+      "type": "object",
+      "description": "Company contact information",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Primary email address"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Primary phone number"
+        },
+        "address": {
+          "type": "object",
+          "properties": {
+            "street": {
+              "type": "string",
+              "description": "Street address"
+            },
+            "city": {
+              "type": "string",
+              "description": "City"
+            },
+            "state": {
+              "type": "string",
+              "description": "State or province"
+            },
+            "zip": {
+              "type": "string",
+              "description": "ZIP or postal code"
+            },
+            "country": {
+              "type": "string",
+              "description": "Country"
+            }
+          }
+        },
+        "website": {
+          "type": "string",
+          "format": "uri",
+          "description": "Company website"
+        },
+        "support": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        }
+      }
+    },
+    "services": {
+      "type": "array",
+      "description": "Services or products this company provides",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Service/product name"
+          },
+          "description": {
+            "type": "string",
+            "description": "What it is"
+          },
+          "category": {
+            "type": "string",
+            "description": "Service category"
+          },
+          "weUse": {
+            "type": "boolean",
+            "description": "Whether we use this service/product"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    "canProduceWith": {
+      "type": "array",
+      "description": "What can be accomplished through this partnership",
+      "items": {
+        "type": "object",
+        "properties": {
+          "output": {
+            "type": "string",
+            "description": "What can be produced/achieved"
+          },
+          "description": {
+            "type": "string",
+            "description": "How this partnership enables the output"
+          },
+          "requires": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "What else is needed"
+          },
+          "value": {
+            "type": "string",
+            "description": "Value or benefit"
+          }
+        },
+        "required": ["output"]
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "description": "What this company can do or provide",
+      "items": {
+        "type": "string",
+        "description": "Capability or offering"
+      }
+    },
+    "pricing": {
+      "type": "object",
+      "description": "Pricing or cost information",
+      "properties": {
+        "model": {
+          "type": "string",
+          "enum": ["fixed", "subscription", "per-use", "tiered", "custom", "free"],
+          "description": "Pricing model"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Pricing notes or conditions"
+        },
+        "ourCost": {
+          "type": "number",
+          "description": "Our cost (if applicable)"
+        }
+      }
+    },
+    "history": {
+      "type": "array",
+      "description": "Relationship history or timeline",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date of interaction (YYYY-MM-DD)"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["partnership", "purchase", "project", "meeting", "contract", "other"],
+            "description": "Type of interaction"
+          },
+          "description": {
+            "type": "string",
+            "description": "What happened"
+          },
+          "outcome": {
+            "type": "string",
+            "description": "Result or outcome"
+          }
+        },
+        "required": ["date", "type", "description"]
+      }
+    },
+    "keyContacts": {
+      "type": "array",
+      "description": "Key people at this company (references to person IDs)",
+      "items": {
+        "type": "string",
+        "description": "Person ID"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "inactive", "archived", "prospect"],
+      "description": "Current relationship status",
+      "default": "active"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or observations",
+      "maxLength": 2000
+    },
+    "links": {
+      "type": "array",
+      "description": "Related links",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Link label"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link URL"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["website", "portal", "documentation", "support", "other"],
+            "description": "Type of link"
+          }
+        },
+        "required": ["label", "url"]
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this company entry was created (ISO 8601)"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this company entry was last updated (ISO 8601)"
+    }
+  }
+}
+

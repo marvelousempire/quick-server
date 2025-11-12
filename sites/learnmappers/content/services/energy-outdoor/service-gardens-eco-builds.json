@@ -1,0 +1,35 @@
+{
+  "id": "gardens-eco-builds",
+  "title": "Gardens & Eco Builds",
+  "description": "Beds, compost, ponds, and drip irrigation.",
+  "purpose": "Low-care systems that stay healthy.",
+  "icon": "\ud83c\udf31",
+  "category": "energy-outdoor",
+  "pricing": {
+    "type": "hourly",
+    "rate": 85,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Soil prep and layout",
+    "Self-watering and drip",
+    "Simple care notes"
+  ],
+  "tools": [
+    "compost-bins",
+    "planters-self-watering",
+    "drip-systems-rain-barrels"
+  ],
+  "outcomes": [
+    "Steady growth with less work",
+    "Cleaner beds and paths",
+    "Clear plan for upkeep"
+  ],
+  "whatYouCanBuild": [
+    "Kitchen beds, pollinator zones, microgreens"
+  ],
+  "whyNeed": "Grow more with less daily work.",
+  "categoryId": "energy-outdoor",
+  "categoryTitle": "Energy & Outdoors"
+}

@@ -1,0 +1,664 @@
+# Loco Gettext template
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: BookCard\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-23 12:26+0000\n"
+"POT-Revision-Date: Sat Oct 21 2017 01:25:43 GMT+0300 (Türkiye Standart Saati)"
+"\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Generator: Loco https://localise.biz/"
+
+#: comments.php:29
+#, php-format
+msgid "1 Comment %2$s"
+msgid_plural "%1$s Comments %2$s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php:48
+msgid "Comment navigation"
+msgstr ""
+
+#: comments.php:55
+msgid "&larr; Older Comments"
+msgstr ""
+
+#: comments.php:62
+msgid "Newer Comments &rarr;"
+msgstr ""
+
+#: comments.php:80
+msgid "Comments are closed."
+msgstr ""
+
+#: functions.php:53
+msgid "Theme Navigation Menu"
+msgstr ""
+
+#: functions.php:223
+msgid "Pingback:"
+msgstr ""
+
+#: functions.php:223
+msgid "(Edit)"
+msgstr ""
+
+#. translators: 1: date, 2: time
+#: functions.php:251
+#, php-format
+msgid "%1$s at %2$s"
+msgstr ""
+
+#: functions.php:259
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: functions.php:270 admin/meta.php:32 admin/post-type-portfolio.php:9
+#: admin/post-type-portfolio.php:147
+msgid "Edit"
+msgstr ""
+
+#: functions.php:277
+msgid "Reply"
+msgstr ""
+
+#: functions.php:578 functions.php:666 functions.php:759 functions.php:856
+#: functions.php:932 pf-audio.php:43 pf-gallery.php:43 pf-video.php:42
+#: single-portfolio.php:94 admin/automatic-excerpt.php:86
+msgid "Pages:"
+msgstr ""
+
+#: functions.php:592
+msgid "OPEN"
+msgstr ""
+
+#: functions.php:780
+msgid "ALL"
+msgstr ""
+
+#. Name of the template
+msgid "Homepage"
+msgstr ""
+
+#: single-portfolio.php:50 single-portfolio.php:101
+msgid "close"
+msgstr ""
+
+#: admin/archive-title.php:19
+msgid "Browsing Category"
+msgstr ""
+
+#: admin/archive-title.php:50
+msgid "Posts Tagged"
+msgstr ""
+
+#: admin/archive-title.php:81
+msgid "Posts Published by"
+msgstr ""
+
+#: admin/archive-title.php:100
+msgid "You Searched For"
+msgstr ""
+
+#: admin/archive-title.php:119
+msgid "Date Archives"
+msgstr ""
+
+#: admin/archive-title.php:132
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr ""
+
+#: admin/archive-title.php:136
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr ""
+
+#: admin/archive-title.php:140 admin/archive-title.php:153
+#: admin/archive-title.php:172
+msgid "Archives"
+msgstr ""
+
+#: admin/automatic-excerpt.php:23
+msgid "Read More"
+msgstr ""
+
+#: admin/blog-page-link.php:8
+msgid "All Posts"
+msgstr ""
+
+#: admin/content-none.php:12
+msgid "You are Lost!"
+msgstr ""
+
+#: admin/content-none.php:16 admin/content-none.php:20
+msgid "Nothing Found"
+msgstr ""
+
+#: admin/content-none.php:30
+msgid "The page you are looking for was not found! Perhaps searching can help."
+msgstr ""
+
+#: admin/content-none.php:34
+msgid ""
+"Sorry, but nothing matched your search terms. Please try again with some "
+"different keywords."
+msgstr ""
+
+#: admin/content-none.php:38
+msgid ""
+"It seems we can not find what you are looking for. Perhaps searching can "
+"help."
+msgstr ""
+
+#: admin/customizer.php:10
+msgid "Fonts"
+msgstr ""
+
+#: admin/customizer.php:11
+msgid "Theme font settings."
+msgstr ""
+
+#. Name of the template
+#: admin/customizer.php:19
+msgid "Blog"
+msgstr ""
+
+#: admin/customizer.php:20
+msgid "Blog page options."
+msgstr ""
+
+#: admin/customizer.php:28
+msgid "Single Post"
+msgstr ""
+
+#: admin/customizer.php:29
+msgid "Individual post options."
+msgstr ""
+
+#: admin/customizer.php:37 admin/sidebar.php:168
+msgid "Sidebar"
+msgstr ""
+
+#: admin/customizer.php:38
+msgid "Theme sidebar options."
+msgstr ""
+
+#: admin/customizer.php:62
+msgid "Text Logo Font"
+msgstr ""
+
+#: admin/customizer.php:63
+msgid "Default: Alfa Slab One"
+msgstr ""
+
+#: admin/customizer.php:84
+msgid "Text Slogan Font"
+msgstr ""
+
+#: admin/customizer.php:85
+msgid "Default: Nixie One"
+msgstr ""
+
+#: admin/customizer.php:106
+msgid "Page Title Font"
+msgstr ""
+
+#: admin/customizer.php:107
+msgid "Default: Arvo"
+msgstr ""
+
+#: admin/customizer.php:128
+msgid "Content Font"
+msgstr ""
+
+#: admin/customizer.php:129 admin/customizer.php:151
+msgid "Default: Lato"
+msgstr ""
+
+#: admin/customizer.php:150
+msgid "Open Button Font"
+msgstr ""
+
+#: admin/customizer.php:176
+msgid "Automatic Excerpt"
+msgstr ""
+
+#: admin/customizer.php:177
+msgid "Generates an excerpt from the post content."
+msgstr ""
+
+#: admin/customizer.php:202
+msgid "Excerpt Length"
+msgstr ""
+
+#: admin/customizer.php:203
+msgid "For blog page. Default: 55 (words)"
+msgstr ""
+
+#: admin/customizer.php:228
+msgid "Blog Navigation"
+msgstr ""
+
+#: admin/customizer.php:256 admin/related-posts.php:49
+msgid "Related Posts"
+msgstr ""
+
+#: admin/customizer.php:280
+msgid "Related Posts Order"
+msgstr ""
+
+#: admin/customizer.php:281
+msgid "Within same category, display posts ordered by:"
+msgstr ""
+
+#: admin/customizer.php:286
+msgid "Relevance - Order by search terms"
+msgstr ""
+
+#: admin/customizer.php:287
+msgid "Random order"
+msgstr ""
+
+#: admin/customizer.php:288
+msgid "Order by date"
+msgstr ""
+
+#: admin/customizer.php:289
+msgid "Order by number of comments"
+msgstr ""
+
+#: admin/customizer.php:307
+msgid "Related Posts Count"
+msgstr ""
+
+#: admin/customizer.php:308
+msgid "Number of posts to show."
+msgstr ""
+
+#: admin/customizer.php:333
+msgid "Post Tags"
+msgstr ""
+
+#: admin/customizer.php:357
+msgid "Post Navigation"
+msgstr ""
+
+#: admin/customizer.php:358
+msgid "For previous post/next post links."
+msgstr ""
+
+#: admin/customizer.php:386 admin/sidebar.php:7 admin/sidebar.php:85
+msgid "Blog Sidebar"
+msgstr ""
+
+#: admin/customizer.php:387
+msgid "Activate sidebar for blog page."
+msgstr ""
+
+#: admin/customizer.php:411 admin/sidebar.php:19 admin/sidebar.php:86
+msgid "Post Sidebar"
+msgstr ""
+
+#: admin/customizer.php:412
+msgid "Activate sidebar for single posts."
+msgstr ""
+
+#: admin/demo-import.php:7
+msgid "Demo Content"
+msgstr ""
+
+#: admin/install-plugins.php:15
+msgid "Install Plugins"
+msgstr ""
+
+#: admin/install-plugins.php:23
+msgid "One Click Demo Import"
+msgstr ""
+
+#: admin/install-plugins.php:28
+msgid "Regenerate Thumbnails"
+msgstr ""
+
+#: admin/install-plugins.php:33
+msgid "Loco Translate"
+msgstr ""
+
+#: admin/latest-from-blog.php:18
+msgid "Latest From The Blog"
+msgstr ""
+
+#: admin/meta.php:17
+msgid "0 Comments"
+msgstr ""
+
+#: admin/meta.php:18
+msgid "1 Comment"
+msgstr ""
+
+#: admin/meta.php:19
+msgid "% Comments"
+msgstr ""
+
+#: admin/navigation-archive.php:11
+msgid "Posts Navigation"
+msgstr ""
+
+#: admin/navigation-archive.php:12
+msgid "Prev"
+msgstr ""
+
+#: admin/navigation-archive.php:13
+msgid "Next"
+msgstr ""
+
+#: admin/navigation-archive.php:16
+msgid "Page"
+msgstr ""
+
+#: admin/navigation-archive.php:32
+msgid "Older Posts"
+msgstr ""
+
+#: admin/navigation-archive.php:39
+msgid "Newer Posts"
+msgstr ""
+
+#: admin/navigation-single.php:15
+msgid "Previous Image"
+msgstr ""
+
+#: admin/navigation-single.php:29
+msgid "Next Image"
+msgstr ""
+
+#: admin/navigation-single.php:51
+msgid "Previous Post"
+msgstr ""
+
+#: admin/navigation-single.php:65
+msgid "Next Post"
+msgstr ""
+
+#: admin/post-type-portfolio.php:5
+msgid "Portfolio"
+msgstr ""
+
+#: admin/post-type-portfolio.php:6
+msgid "Portfolio Item"
+msgstr ""
+
+#: admin/post-type-portfolio.php:7 admin/post-type-portfolio.php:8
+#: admin/post-type-portfolio.php:149
+msgid "Add New"
+msgstr ""
+
+#: admin/post-type-portfolio.php:10
+msgid "New"
+msgstr ""
+
+#: admin/post-type-portfolio.php:11 admin/post-type-portfolio.php:144
+msgid "All"
+msgstr ""
+
+#: admin/post-type-portfolio.php:12
+msgid "View"
+msgstr ""
+
+#: admin/post-type-portfolio.php:13 admin/post-type-portfolio.php:143
+msgid "Search"
+msgstr ""
+
+#: admin/post-type-portfolio.php:14
+msgid "No Items found"
+msgstr ""
+
+#: admin/post-type-portfolio.php:15
+msgid "No Items found in Trash"
+msgstr ""
+
+#: admin/post-type-portfolio.php:44
+#, php-format
+msgid "<strong>Updated.</strong> <a target=\"_blank\" href=\"%s\">View</a>"
+msgstr ""
+
+#: admin/post-type-portfolio.php:45
+msgid "Custom field updated."
+msgstr ""
+
+#: admin/post-type-portfolio.php:46
+msgid "Custom field deleted."
+msgstr ""
+
+#: admin/post-type-portfolio.php:47
+msgid "Updated."
+msgstr ""
+
+#. translators: %s: date and time of the revision
+#: admin/post-type-portfolio.php:49
+#, php-format
+msgid "Restored to revision from %s"
+msgstr ""
+
+#: admin/post-type-portfolio.php:50
+#, php-format
+msgid "<strong>Published.</strong> <a target=\"_blank\" href=\"%s\">View</a>"
+msgstr ""
+
+#: admin/post-type-portfolio.php:51
+msgid "Saved."
+msgstr ""
+
+#: admin/post-type-portfolio.php:52
+#, php-format
+msgid "Submitted. <a target=\"_blank\" href=\"%s\">Preview</a>"
+msgstr ""
+
+#: admin/post-type-portfolio.php:53
+#, php-format
+msgid ""
+"Scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">"
+"Preview</a>"
+msgstr ""
+
+#. translators: Publish box date format, see http://php.net/date
+#: admin/post-type-portfolio.php:55
+msgid "M j, Y @ G:i"
+msgstr ""
+
+#: admin/post-type-portfolio.php:56
+#, php-format
+msgid ""
+"<strong>Item draft updated.</strong> <a target=\"_blank\" href=\"%s\">"
+"Preview</a>"
+msgstr ""
+
+#: admin/post-type-portfolio.php:68
+msgid "Title"
+msgstr ""
+
+#: admin/post-type-portfolio.php:69
+msgid "Featured Image"
+msgstr ""
+
+#: admin/post-type-portfolio.php:70 admin/post-type-portfolio.php:141
+#: admin/post-type-portfolio.php:151
+msgid "Departments"
+msgstr ""
+
+#: admin/post-type-portfolio.php:71 admin/post-type-portfolio.php:280
+msgid "Short Description"
+msgstr ""
+
+#: admin/post-type-portfolio.php:72 admin/post-type-portfolio.php:207
+msgid "Type"
+msgstr ""
+
+#: admin/post-type-portfolio.php:73
+msgid "Date"
+msgstr ""
+
+#: admin/post-type-portfolio.php:142
+msgid "Department"
+msgstr ""
+
+#: admin/post-type-portfolio.php:145
+msgid "Parent Department"
+msgstr ""
+
+#: admin/post-type-portfolio.php:146
+msgid "Parent Department:"
+msgstr ""
+
+#: admin/post-type-portfolio.php:148
+msgid "Update"
+msgstr ""
+
+#: admin/post-type-portfolio.php:150
+msgid "New Department Name"
+msgstr ""
+
+#: admin/post-type-portfolio.php:182
+msgid "Show All"
+msgstr ""
+
+#: admin/post-type-portfolio.php:214
+msgid "Standard"
+msgstr ""
+
+#: admin/post-type-portfolio.php:218
+msgid "Lightbox Featured Image"
+msgstr ""
+
+#: admin/post-type-portfolio.php:222
+msgid "Lightbox Gallery"
+msgstr ""
+
+#: admin/post-type-portfolio.php:226
+msgid "Lightbox Video"
+msgstr ""
+
+#: admin/post-type-portfolio.php:230
+msgid "Lightbox Audio"
+msgstr ""
+
+#: admin/post-type-portfolio.php:234
+msgid "Direct URL"
+msgstr ""
+
+#: admin/post-type-portfolio.php:243
+msgid "Direct URL:"
+msgstr ""
+
+#: admin/post-type-portfolio.php:245
+msgid "Open link in new tab"
+msgstr ""
+
+#: admin/post-type-portfolio.php:267
+msgid "Thumbnail Size"
+msgstr ""
+
+#: admin/post-type-portfolio.php:273
+msgid "1x"
+msgstr ""
+
+#: admin/post-type-portfolio.php:275
+msgid "2x"
+msgstr ""
+
+#: admin/post-type-portfolio.php:295
+msgid "Details"
+msgstr ""
+
+#: admin/shortcodes.php:173
+msgid "What is the sum?"
+msgstr ""
+
+#: admin/shortcodes.php:203
+msgid "Name"
+msgstr ""
+
+#: admin/shortcodes.php:208
+msgid "Email"
+msgstr ""
+
+#: admin/shortcodes.php:213
+msgid "Subject"
+msgstr ""
+
+#: admin/shortcodes.php:218
+msgid "Message"
+msgstr ""
+
+#: admin/shortcodes.php:225
+msgid "Sending ..."
+msgstr ""
+
+#: admin/shortcodes.php:226
+msgid "SEND"
+msgstr ""
+
+#: admin/sidebar.php:9 admin/sidebar.php:21 admin/sidebar.php:33
+#: admin/sidebar.php:54
+msgid "Add widgets."
+msgstr ""
+
+#: admin/sidebar.php:31 admin/sidebar.php:87
+msgid "Page Sidebar"
+msgstr ""
+
+#: admin/sidebar.php:79
+msgid "Select Sidebar"
+msgstr ""
+
+#: admin/sidebar.php:84
+msgid "No Sidebar"
+msgstr ""
+
+#: admin/sidebar.php:112
+msgid ""
+"Sidebar is a widget area. You can find all available sidebars in your "
+"Widgets page under Appearance menu or Widgets section in Customizer."
+msgstr ""
+
+#: admin/sidebar.php:117
+msgid ""
+"Also you can create new sidebars from Appearance > Theme Options > Sidebar."
+msgstr ""
+
+#. Name of the theme
+msgid "BookCard"
+msgstr ""
+
+#. Description of the theme
+msgid "Responsive WordPress theme."
+msgstr ""
+
+#. Theme URI of the theme
+msgid "http://themeforest.net/user/pixelwars/portfolio"
+msgstr ""
+
+#. Author of the theme
+msgid "Pixelwars"
+msgstr ""
+
+#. Author URI of the theme
+msgid "http://themeforest.net/user/pixelwars"
+msgstr ""

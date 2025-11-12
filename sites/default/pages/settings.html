@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Server App Settings — Server Configuration</title>
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; }
+[data-theme="light"]{ --bg:#ffffff; --card:#f8fafc; --ink:#0f172a; --muted:#64748b; --brand:#0ea5e9; --brand2:#10b981; --line:#e2e8f0; --shadow:rgba(15,23,42,.1); }
+*{box-sizing:border-box} html,body{background:radial-gradient(1200px 500px at 15% -10%, rgba(124,227,255,.14), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(96,255,168,.09), transparent 60%), var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6;min-height:100vh;transition:background-color 0.3s ease,color 0.3s ease}
+[data-theme="light"] html,[data-theme="light"] body{background:radial-gradient(1200px 500px at 15% -10%, rgba(14,165,233,.08), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(16,185,129,.06), transparent 60%), var(--bg)}
+.header{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border-bottom:1px solid var(--line);padding:24px 32px}
+.header-content{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.header h1{margin:0;font-size:24px;font-weight:900;display:flex;align-items:center;gap:12px}
+.header h1 .logo-dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+.header-actions{display:flex;align-items:center;gap:12px}
+.header-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:700;text-decoration:none;transition:all 0.2s ease;cursor:pointer}
+.header-btn:hover{background:color-mix(in srgb, var(--brand) 20%, transparent);border-color:var(--brand);color:var(--brand);transform:translateY(-1px)}
+.container{max-width:1400px;margin:0 auto;padding:32px}
+.settings-card{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:16px;padding:32px;margin-bottom:24px}
+.settings-card h2{font-size:20px;font-weight:800;margin:0 0 24px;color:var(--brand);display:flex;align-items:center;gap:10px}
+.settings-card h2::before{content:'';width:4px;height:20px;background:linear-gradient(135deg,var(--brand),var(--brand2));border-radius:2px}
+.form-group{margin-bottom:24px}
+.form-group label{display:block;margin-bottom:8px;font-weight:600;color:var(--ink);font-size:14px}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:14px;font-family:inherit;transition:all 0.2s}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb, var(--brand) 20%, transparent)}
+.form-group small{display:block;margin-top:6px;color:var(--muted);font-size:12px}
+.checkbox-group{display:flex;align-items:center;gap:8px}
+.checkbox-group input[type="checkbox"]{width:auto;cursor:pointer}
+.btn{padding:12px 24px;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;background:var(--brand);color:white}
+.btn:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-success{background:var(--brand2)}
+.btn-secondary{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn-danger{background:#ef4444}
+.status{padding:12px 20px;border-radius:8px;margin-bottom:20px;display:none}
+.status.success{background:rgba(16,185,129,0.2);border:1px solid var(--brand2);color:var(--brand2);display:block}
+.status.error{background:rgba(239,68,68,0.2);border:1px solid #ef4444;color:#ef4444;display:block}
+.controls{display:flex;gap:12px;margin-bottom:30px;flex-wrap:wrap}
+.json-viewer{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:20px;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:13px;line-height:1.6;max-height:600px;overflow:auto;white-space:pre-wrap;word-wrap:break-word}
+@media (max-width:768px){.container{padding:16px}.settings-card{padding:20px}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-content">
+    <h1><span class="logo-dot"></span>Server App Settings</h1>
+    <div class="header-actions">
+      <a href="/" class="header-btn" onclick="navigateBack(event)">← Back to Server</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="controls">
+    <button class="btn btn-success" onclick="saveServerConfig()">💾 Save Changes</button>
+    <button class="btn btn-secondary" onclick="loadServerConfig()">🔄 Reload</button>
+    <button class="btn btn-secondary" onclick="exportServerConfig()">📥 Export JSON</button>
+    <button class="btn btn-secondary" onclick="importServerConfig()">📤 Import JSON</button>
+    <button class="btn btn-danger" onclick="resetServerConfig()">↩️ Reset to Default</button>
+  </div>
+
+  <div id="status" class="status"></div>
+
+  <!-- Server Ports -->
+  <div class="settings-card">
+    <h2>Port Configuration</h2>
+    <p style="color:var(--muted);margin-bottom:24px">Configure the ports on which the server listens for HTTPS and HTTP connections.</p>
+    <div class="form-group">
+      <label>HTTPS Port</label>
+      <input type="number" id="port-https" placeholder="8443" min="1024" max="65535">
+      <small>Default: 8443. The server will automatically find the next available port if this one is in use.</small>
+    </div>
+    <div class="form-group">
+      <label>HTTP Port</label>
+      <input type="number" id="port-http" placeholder="8000" min="1024" max="65535">
+      <small>Default: 8000. Used for HTTP connections when HTTPS is disabled.</small>
+    </div>
+  </div>
+
+  <!-- SSL/HTTPS Settings -->
+  <div class="settings-card">
+    <h2>SSL/HTTPS Settings</h2>
+    <p style="color:var(--muted);margin-bottom:24px">Configure SSL certificate and HTTPS behavior.</p>
+    <div class="form-group">
+      <label class="checkbox-group">
+        <input type="checkbox" id="https-enabled" checked>
+        Enable HTTPS
+      </label>
+      <small>When enabled, the server uses HTTPS with SSL certificates. Disable to use HTTP only.</small>
+    </div>
+    <div class="form-group">
+      <label>SSL Certificate Path</label>
+      <input type="text" id="ssl-cert-path" placeholder="./certs/cert.pem">
+      <small>Path to the SSL certificate file. Default: ./certs/cert.pem</small>
+    </div>
+    <div class="form-group">
+      <label>SSL Key Path</label>
+      <input type="text" id="ssl-key-path" placeholder="./certs/key.pem">
+      <small>Path to the SSL private key file. Default: ./certs/key.pem</small>
+    </div>
+  </div>
+
+  <!-- Sites Directory -->
+  <div class="settings-card">
+    <h2>Sites Directory</h2>
+    <p style="color:var(--muted);margin-bottom:24px">Configure where the server looks for site directories.</p>
+    <div class="form-group">
+      <label>Default Site Directory</label>
+      <input type="text" id="sites-dir" placeholder="sites/learnmappers">
+      <small>Default site to serve when no site is specified. Default: sites/learnmappers</small>
+    </div>
+    <div class="form-group">
+      <label>Sites Root Directory</label>
+      <input type="text" id="sites-root" placeholder="sites">
+      <small>Root directory containing all site folders. Default: sites</small>
+    </div>
+  </div>
+
+  <!-- Network & Domain -->
+  <div class="settings-card">
+    <h2>Network & Domain</h2>
+    <p style="color:var(--muted);margin-bottom:24px">Configure network interfaces and domain names.</p>
+    <div class="form-group">
+      <label>Hostname/Domain</label>
+      <input type="text" id="hostname" placeholder="example.com">
+      <small>Optional: Set a custom hostname or domain. Used for generating access URLs.</small>
+    </div>
+    <div class="form-group">
+      <label class="checkbox-group">
+        <input type="checkbox" id="auto-detect-ip" checked>
+        Auto-detect Network IP
+      </label>
+      <small>Automatically detect and use the current network IP address for access URLs.</small>
+    </div>
+  </div>
+
+  <!-- Auto-Heal Settings -->
+  <div class="settings-card">
+    <h2>Auto-Heal Settings</h2>
+    <p style="color:var(--muted);margin-bottom:24px">Configure automatic server health monitoring and recovery.</p>
+    <div class="form-group">
+      <label class="checkbox-group">
+        <input type="checkbox" id="auto-heal-enabled" checked>
+        Enable Auto-Heal
+      </label>
+      <small>Automatically restart the server if it crashes or becomes unresponsive.</small>
+    </div>
+    <div class="form-group">
+      <label>Health Check Interval (seconds)</label>
+      <input type="number" id="health-check-interval" placeholder="30" min="5" max="300">
+      <small>How often to check server health. Default: 30 seconds.</small>
+    </div>
+    <div class="form-group">
+      <label>Max Restart Attempts</label>
+      <input type="number" id="max-restart-attempts" placeholder="5" min="1" max="20">
+      <small>Maximum number of restart attempts before giving up. Default: 5.</small>
+    </div>
+  </div>
+
+  <!-- Environment Variables -->
+  <div class="settings-card">
+    <h2>Environment Variables</h2>
+    <p style="color:var(--muted);margin-bottom:24px">Configure Node.js environment variables for the server.</p>
+    <div class="form-group">
+      <label>Node Environment</label>
+      <select id="node-env">
+        <option value="production">Production</option>
+        <option value="development">Development</option>
+        <option value="test">Test</option>
+      </select>
+      <small>Sets NODE_ENV environment variable. Affects error reporting and logging.</small>
+    </div>
+    <div class="form-group">
+      <label>Log Level</label>
+      <select id="log-level">
+        <option value="info">Info</option>
+        <option value="debug">Debug</option>
+        <option value="warn">Warn</option>
+        <option value="error">Error</option>
+      </select>
+      <small>Controls the verbosity of server logs.</small>
+    </div>
+  </div>
+
+  <!-- JSON View -->
+  <div class="settings-card">
+    <h2>Raw JSON Configuration</h2>
+    <p style="color:var(--muted);margin-bottom:24px">View and edit the raw server configuration JSON.</p>
+    <div class="json-viewer" id="json-viewer"></div>
+  </div>
+</div>
+
+<script>
+let serverConfig = {};
+let originalConfig = {};
+
+// Load server config on page load
+async function loadServerConfig() {
+  try {
+    const response = await fetch('/api/server/config');
+    if (!response.ok) {
+      // If endpoint doesn't exist, create default config
+      serverConfig = getDefaultConfig();
+      originalConfig = JSON.parse(JSON.stringify(serverConfig));
+      populateForm();
+      updateJSONView();
+      showStatus('Using default configuration', 'success');
+      return;
+    }
+    serverConfig = await response.json();
+    originalConfig = JSON.parse(JSON.stringify(serverConfig));
+    populateForm();
+    updateJSONView();
+    showStatus('Server configuration loaded successfully', 'success');
+  } catch (error) {
+    console.error('Error loading server config:', error);
+    serverConfig = getDefaultConfig();
+    originalConfig = JSON.parse(JSON.stringify(serverConfig));
+    populateForm();
+    updateJSONView();
+    showStatus('Using default configuration (API not available)', 'success');
+  }
+}
+
+// Get default server configuration
+function getDefaultConfig() {
+  return {
+    ports: {
+      https: 8443,
+      http: 8000
+    },
+    ssl: {
+      enabled: true,
+      certPath: './certs/cert.pem',
+      keyPath: './certs/key.pem'
+    },
+    sites: {
+      defaultDir: 'sites/learnmappers',
+      rootDir: 'sites'
+    },
+    network: {
+      hostname: null,
+      autoDetectIP: true
+    },
+    autoHeal: {
+      enabled: true,
+      healthCheckInterval: 30,
+      maxRestartAttempts: 5
+    },
+    environment: {
+      nodeEnv: 'production',
+      logLevel: 'info'
+    }
+  };
+}
+
+// Populate form with config values
+function populateForm() {
+  document.getElementById('port-https').value = serverConfig.ports?.https || 8443;
+  document.getElementById('port-http').value = serverConfig.ports?.http || 8000;
+  document.getElementById('https-enabled').checked = serverConfig.ssl?.enabled !== false;
+  document.getElementById('ssl-cert-path').value = serverConfig.ssl?.certPath || './certs/cert.pem';
+  document.getElementById('ssl-key-path').value = serverConfig.ssl?.keyPath || './certs/key.pem';
+  document.getElementById('sites-dir').value = serverConfig.sites?.defaultDir || 'sites/learnmappers';
+  document.getElementById('sites-root').value = serverConfig.sites?.rootDir || 'sites';
+  document.getElementById('hostname').value = serverConfig.network?.hostname || '';
+  document.getElementById('auto-detect-ip').checked = serverConfig.network?.autoDetectIP !== false;
+  document.getElementById('auto-heal-enabled').checked = serverConfig.autoHeal?.enabled !== false;
+  document.getElementById('health-check-interval').value = serverConfig.autoHeal?.healthCheckInterval || 30;
+  document.getElementById('max-restart-attempts').value = serverConfig.autoHeal?.maxRestartAttempts || 5;
+  document.getElementById('node-env').value = serverConfig.environment?.nodeEnv || 'production';
+  document.getElementById('log-level').value = serverConfig.environment?.logLevel || 'info';
+}
+
+// Update config object from form values
+function updateConfigFromForm() {
+  if (!serverConfig.ports) serverConfig.ports = {};
+  if (!serverConfig.ssl) serverConfig.ssl = {};
+  if (!serverConfig.sites) serverConfig.sites = {};
+  if (!serverConfig.network) serverConfig.network = {};
+  if (!serverConfig.autoHeal) serverConfig.autoHeal = {};
+  if (!serverConfig.environment) serverConfig.environment = {};
+
+  serverConfig.ports.https = parseInt(document.getElementById('port-https').value) || 8443;
+  serverConfig.ports.http = parseInt(document.getElementById('port-http').value) || 8000;
+  serverConfig.ssl.enabled = document.getElementById('https-enabled').checked;
+  serverConfig.ssl.certPath = document.getElementById('ssl-cert-path').value;
+  serverConfig.ssl.keyPath = document.getElementById('ssl-key-path').value;
+  serverConfig.sites.defaultDir = document.getElementById('sites-dir').value;
+  serverConfig.sites.rootDir = document.getElementById('sites-root').value;
+  serverConfig.network.hostname = document.getElementById('hostname').value || null;
+  serverConfig.network.autoDetectIP = document.getElementById('auto-detect-ip').checked;
+  serverConfig.autoHeal.enabled = document.getElementById('auto-heal-enabled').checked;
+  serverConfig.autoHeal.healthCheckInterval = parseInt(document.getElementById('health-check-interval').value) || 30;
+  serverConfig.autoHeal.maxRestartAttempts = parseInt(document.getElementById('max-restart-attempts').value) || 5;
+  serverConfig.environment.nodeEnv = document.getElementById('node-env').value;
+  serverConfig.environment.logLevel = document.getElementById('log-level').value;
+}
+
+// Save server config
+async function saveServerConfig() {
+  try {
+    updateConfigFromForm();
+
+    const response = await fetch('/api/server/config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(serverConfig, null, 2)
+    });
+
+    if (!response.ok) throw new Error('Failed to save server config');
+    
+    showStatus('Server configuration saved successfully! Note: Server restart required for some changes to take effect.', 'success');
+    originalConfig = JSON.parse(JSON.stringify(serverConfig));
+    updateJSONView();
+  } catch (error) {
+    console.error('Error saving server config:', error);
+    showStatus('Error saving server configuration: ' + error.message, 'error');
+  }
+}
+
+// Update JSON viewer
+function updateJSONView() {
+  updateConfigFromForm();
+  document.getElementById('json-viewer').textContent = JSON.stringify(serverConfig, null, 2);
+}
+
+// Export config
+function exportServerConfig() {
+  updateConfigFromForm();
+  const blob = new Blob([JSON.stringify(serverConfig, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'server-config.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Import config
+function importServerConfig() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        serverConfig = JSON.parse(event.target.result);
+        originalConfig = JSON.parse(JSON.stringify(serverConfig));
+        populateForm();
+        updateJSONView();
+        showStatus('Server configuration imported successfully', 'success');
+      } catch (error) {
+        showStatus('Error importing server configuration: ' + error.message, 'error');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// Reset config
+function resetServerConfig() {
+  if (confirm('Are you sure you want to reset to the original server configuration? All unsaved changes will be lost.')) {
+    serverConfig = JSON.parse(JSON.stringify(originalConfig));
+    populateForm();
+    updateJSONView();
+    showStatus('Server configuration reset to original', 'success');
+  }
+}
+
+// Show status message
+function showStatus(message, type) {
+  const status = document.getElementById('status');
+  status.textContent = message;
+  status.className = `status ${type}`;
+  setTimeout(() => {
+    status.className = 'status';
+  }, 5000);
+}
+
+// Navigate back to server page
+function navigateBack(e) {
+  if (e) e.preventDefault();
+  const urlParams = new URLSearchParams(window.location.search);
+  const from = urlParams.get('from');
+  if (from) {
+    window.location.href = from;
+  } else {
+    window.location.href = '/';
+  }
+}
+
+// Auto-update JSON view on form changes
+document.querySelectorAll('input, textarea, select').forEach(input => {
+  input.addEventListener('change', updateJSONView);
+});
+
+// Load config on page load
+loadServerConfig();
+</script>
+</body>
+</html>
+

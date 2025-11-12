@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WordPress Seed - Business Identity Shaper</title>
+<script src="../../config.js"></script>
+<link rel="stylesheet" href="../../css/styles.css">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <h1 id="heroTitle">WordPress Site</h1>
+    <p class="lead" id="heroSubtitle">Powered by Business Identity Shaper</p>
+    <p id="heroDescription">A WordPress site integrated with the BIS framework for comprehensive entity management.</p>
+  </div>
+</header>
+
+<main data-page="index">
+  <div class="wrap">
+    <section class="intro">
+      <h2>WordPress + BIS Framework</h2>
+      <p>This seed template provides a foundation for WordPress sites integrated with the Business Identity Shaper framework.</p>
+      <p>Features:</p>
+      <ul>
+        <li>WordPress content management</li>
+        <li>BIS framework integration</li>
+        <li>Resource and service management</li>
+        <li>RAG-ready data structures</li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<script src="../../scripts.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.CONFIG) {
+    document.title = window.CONFIG.seo?.metaTitle || window.CONFIG.site?.title || 'WordPress Seed';
+    const heroTitle = document.getElementById('heroTitle');
+    const heroSubtitle = document.getElementById('heroSubtitle');
+    const heroDescription = document.getElementById('heroDescription');
+    
+    if (heroTitle && window.CONFIG.content?.hero?.title) {
+      heroTitle.textContent = window.CONFIG.content.hero.title;
+    }
+    if (heroSubtitle && window.CONFIG.content?.hero?.subtitle) {
+      heroSubtitle.textContent = window.CONFIG.content.hero.subtitle;
+    }
+    if (heroDescription && window.CONFIG.content?.hero?.description) {
+      heroDescription.textContent = window.CONFIG.content.hero.description;
+    }
+  }
+});
+</script>
+</body>
+</html>
+

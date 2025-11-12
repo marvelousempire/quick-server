@@ -1,0 +1,34 @@
+{
+  "id": "mounting-installs",
+  "title": "Mounting & Installations",
+  "description": "TVs, shelves, blinds, and art\u2014mounted clean and secure.",
+  "purpose": "Protect walls and devices with correct anchors and layout.",
+  "icon": "\ud83d\uddbc\ufe0f",
+  "category": "assembly",
+  "pricing": {
+    "type": "hourly",
+    "rate": 85,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Stud/anchor selection by material",
+    "Cable routing options",
+    "Precise leveling and spacing"
+  ],
+  "tools": [
+    "stud-finder-laser-level-bubble-level",
+    "drill-driver-impact-combo-compact"
+  ],
+  "outcomes": [
+    "Safe loads and clean lines",
+    "No wobble or sag",
+    "Damage-minimized fasteners"
+  ],
+  "whatYouCanBuild": [
+    "TV mounts, floating shelves, curtain rods, blinds, art walls"
+  ],
+  "whyNeed": "Achieve a safe, aligned look with correct hardware.",
+  "categoryId": "assembly",
+  "categoryTitle": "Furniture Assembly"
+}

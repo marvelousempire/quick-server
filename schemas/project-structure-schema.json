@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LearnMappers Project Structure Schema",
+  "description": "Schema defining the required file structure for replicating this project type",
+  "type": "object",
+  "properties": {
+    "projectName": {
+      "type": "string",
+      "description": "Name of the project",
+      "examples": ["learnmappers", "my-app"]
+    },
+    "structure": {
+      "type": "object",
+      "description": "Required file and directory structure",
+      "properties": {
+        "root": {
+          "type": "array",
+          "description": "Required files in project root",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "server.js",
+            "package.json",
+            "go.sh",
+            "go.bat",
+            "go",
+            ".env.example",
+            ".gitignore"
+          ]
+        },
+        "sites": {
+          "type": "object",
+          "description": "Site directory structure",
+          "properties": {
+            "required": {
+              "type": "array",
+              "description": "Required files in each site directory",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "config.json",
+                "config.js",
+                "scripts.js",
+                "manifest.webmanifest",
+                "service-worker.js"
+              ]
+            },
+            "directories": {
+              "type": "object",
+              "description": "Required subdirectories",
+              "properties": {
+                "pages": {
+                  "type": "array",
+                  "description": "Required HTML pages",
+                  "items": {
+                    "type": "string"
+                  },
+                  "default": ["index.html"]
+                },
+                "css": {
+                  "type": "array",
+                  "description": "CSS files (optional)",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "js": {
+                  "type": "array",
+                  "description": "JavaScript modules (optional)",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "schemas": {
+                  "type": "array",
+                  "description": "JSON schema files",
+                  "items": {
+                    "type": "string"
+                  },
+                  "default": [
+                    "resource-schema.json",
+                    "service-schema.json",
+                    "person-schema.json",
+                    "company-schema.json"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "server": {
+          "type": "object",
+          "description": "Server-side files",
+          "properties": {
+            "core": {
+              "type": "array",
+              "description": "Core server files",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "server.js",
+                "package.json"
+              ]
+            },
+            "scripts": {
+              "type": "array",
+              "description": "Startup scripts",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "go.sh",
+                "go.bat",
+                "go"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "description": "Available features and their requirements",
+      "properties": {
+        "pwa": {
+          "type": "object",
+          "description": "Progressive Web App features",
+          "properties": {
+            "required": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "manifest.webmanifest",
+                "service-worker.js"
+              ]
+            }
+          }
+        },
+        "database": {
+          "type": "object",
+          "description": "Database features",
+          "properties": {
+            "types": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["sqlite", "mysql"]
+              }
+            },
+            "required": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": ["server.js"]
+            }
+          }
+        },
+        "multiSite": {
+          "type": "object",
+          "description": "Multi-site hosting",
+          "properties": {
+            "required": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "sites/default/pages/index.html",
+                "server.js"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["projectName", "structure"]
+}
+

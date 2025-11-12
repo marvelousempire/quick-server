@@ -1,0 +1,593 @@
+{
+  "site": {
+    "name": "Dynamic Site",
+    "title": "Dynamic Site \u2014 Seed Template",
+    "description": "Seed Model: Clone this folder to create a new Business Identity Shaper site. A fully customizable template with extensive configuration options, all templates, schemas, and features included. Ready to customize with your own content.",
+    "version": "7.3.0",
+    "author": "Your Name",
+    "themeColor": "#6366f1",
+    "brand": "#6366f1",
+    "brand2": "#8b5cf6",
+    "accent": "#a78bfa",
+    "language": "en",
+    "charset": "UTF-8",
+    "tagline": "Your tagline here",
+    "mission": "Your mission statement here. This site is built using the Business Identity Shaper framework \u2014 a reusable system that compiles all capabilities into one, helping shape abilities and capabilities so others can better relate and identify relevant use cases.",
+    "type": "BIS",
+    "deployment": {
+      "docker": {
+        "enabled": true,
+        "composeFile": "docker-compose.yml",
+        "services": ["node", "mysql", "redis"]
+      },
+      "caddy": {
+        "enabled": true,
+        "configFile": "Caddyfile"
+      },
+      "traefik": {
+        "enabled": true,
+        "labels": {
+          "traefik.enable": "true",
+          "traefik.http.routers.bis.rule": "Host(`bis.local`)"
+        }
+      }
+    }
+  },
+  "seo": {
+    "metaTitle": "Dynamic Site \u2014 Your Website Title",
+    "metaDescription": "Your website description for search engines and social media sharing.",
+    "metaKeywords": "your, keywords, here",
+    "ogTitle": "Dynamic Site",
+    "ogDescription": "Your Open Graph description for social media sharing.",
+    "ogImage": "/og-image.jpg",
+    "ogType": "website",
+    "twitterCard": "summary_large_image",
+    "twitterSite": "@yoursite",
+    "canonicalUrl": "https://yoursite.com"
+  },
+  "navigation": {
+    "logo": {
+      "text": "Your Site",
+      "showDot": true,
+      "href": "/",
+      "image": null
+    },
+    "links": [
+      {
+        "label": "Home",
+        "href": "/",
+        "page": "index",
+        "icon": "\ud83c\udfe0"
+      },
+      {
+        "label": "About",
+        "href": "/about.html",
+        "page": "about",
+        "icon": "\ud83d\udcbc"
+      },
+      {
+        "label": "Resources",
+        "href": "/inventory.html",
+        "page": "inventory",
+        "icon": "\ud83d\udce6"
+      },
+      {
+        "label": "Services",
+        "href": "/service-menu.html",
+        "page": "service-menu",
+        "icon": "\u2699\ufe0f"
+      }
+    ],
+    "sticky": true,
+    "transparent": false,
+    "showMobileMenu": true,
+    "mobileMenuIcon": "\u2630"
+  },
+  "theme": {
+    "colors": {
+      "bg": "#0f172a",
+      "card": "#1e293b",
+      "ink": "#f1f5f9",
+      "muted": "#94a3b8",
+      "brand": "#6366f1",
+      "brand2": "#8b5cf6",
+      "accent": "#a78bfa",
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "error": "#ef4444",
+      "info": "#3b82f6",
+      "line": "#334155",
+      "shadow": "rgba(0,0,0,0.3)",
+      "overlay": "rgba(0,0,0,0.5)"
+    },
+    "spacing": {
+      "radius": "12px",
+      "gap": "20px",
+      "wide": "1200px",
+      "sectionPadding": "80px",
+      "cardPadding": "32px"
+    },
+    "typography": {
+      "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      "headingFont": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      "bodyFont": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      "monoFont": "ui-monospace, 'SF Mono', Monaco, Consolas, monospace",
+      "baseSize": "16px",
+      "headingScale": 1.25,
+      "lineHeight": 1.6,
+      "letterSpacing": "normal"
+    },
+    "animations": {
+      "enabled": true,
+      "duration": "0.3s",
+      "easing": "ease-in-out",
+      "hoverScale": 1.05,
+      "hoverTranslate": "-4px"
+    },
+    "shadows": {
+      "small": "0 2px 4px rgba(0,0,0,0.1)",
+      "medium": "0 4px 12px rgba(0,0,0,0.15)",
+      "large": "0 8px 24px rgba(0,0,0,0.2)",
+      "glow": "0 0 20px rgba(99,102,241,0.3)"
+    }
+  },
+  "layout": {
+    "maxWidth": "1200px",
+    "padding": "clamp(20px,4vw,60px)",
+    "heroPadding": {
+      "top": "60px",
+      "bottom": "40px",
+      "sides": "clamp(20px,4vw,60px)"
+    },
+    "containerPadding": "clamp(20px,4vw,60px)",
+    "sectionSpacing": "60px",
+    "gridColumns": {
+      "default": 3,
+      "tablet": 2,
+      "mobile": 1
+    }
+  },
+  "content": {
+    "hero": {
+      "title": "Your Hero Title",
+      "subtitle": "Your subtitle here",
+      "description": "Your hero description that explains what you do and why it matters.",
+      "backgroundImage": null,
+      "backgroundVideo": null,
+      "overlay": false,
+      "alignment": "center",
+      "chips": [
+        "Feature 1",
+        "Feature 2",
+        "Feature 3"
+      ],
+      "cta": {
+        "primary": {
+          "text": "Get Started",
+          "href": "/contact.html",
+          "style": "brand",
+          "icon": "\ud83d\ude80",
+          "external": false
+        }
+      },
+      "showScrollIndicator": false
+    },
+    "services": {
+      "categories": [],
+      "showPricing": true,
+      "showDuration": true,
+      "showTools": false
+    },
+    "features": [
+      {
+        "title": "Feature One",
+        "description": "Description of your first key feature.",
+        "icon": "\u2728",
+        "color": "#6366f1"
+      },
+      {
+        "title": "Feature Two",
+        "description": "Description of your second key feature.",
+        "icon": "\ud83d\udd27",
+        "color": "#8b5cf6"
+      },
+      {
+        "title": "Feature Three",
+        "description": "Description of your third key feature.",
+        "icon": "\ud83d\udccb",
+        "color": "#f59e0b"
+      }
+    ],
+    "sections": [
+      {
+        "id": "about",
+        "title": "About",
+        "subtitle": "Learn more about us",
+        "content": "Your about section content goes here.",
+        "image": null,
+        "imagePosition": "right",
+        "backgroundColor": null,
+        "textColor": null
+      }
+    ],
+    "testimonials": [],
+    "stats": [
+      {
+        "label": "Projects",
+        "value": "0+",
+        "icon": "\u2705"
+      },
+      {
+        "label": "Clients",
+        "value": "0+",
+        "icon": "\ud83d\ude0a"
+      },
+      {
+        "label": "Experience",
+        "value": "0+",
+        "icon": "\ud83c\udfaf"
+      },
+      {
+        "label": "Services",
+        "value": "0+",
+        "icon": "\u2699\ufe0f"
+      }
+    ],
+    "tools": {
+      "categories": []
+    },
+    "skills": [],
+    "certifications": [],
+    "serviceAreas": [],
+    "availability": {
+      "enabled": true,
+      "timezone": "America/Los_Angeles",
+      "hours": {
+        "weekdays": "9:00 AM - 6:00 PM",
+        "weekends": "10:00 AM - 4:00 PM",
+        "holidays": "By appointment"
+      },
+      "responseTime": "Within 24 hours",
+      "bookingLink": null
+    },
+    "pricing": {
+      "enabled": true,
+      "model": "hourly",
+      "baseRate": "$50/hr",
+      "minimum": "$50",
+      "plans": []
+    },
+    "faq": [],
+    "footer": {
+      "text": "Dynamic Site \u2014 Seed Template v7.3",
+      "copyright": "\u00a9 2025 Your Site. All rights reserved.",
+      "columns": [
+        {
+          "title": "Services",
+          "links": []
+        },
+        {
+          "title": "Resources",
+          "links": [
+            {
+              "label": "Documentation",
+              "href": "/docs-index.html"
+            },
+            {
+              "label": "Inventory",
+              "href": "/inventory.html"
+            }
+          ]
+        },
+        {
+          "title": "Legal",
+          "links": [
+            {
+              "label": "Privacy Policy",
+              "href": "/privacy.html"
+            },
+            {
+              "label": "Terms of Service",
+              "href": "/terms.html"
+            }
+          ]
+        }
+      ],
+      "social": {
+        "enabled": true,
+        "links": []
+      },
+      "newsletter": {
+        "enabled": false,
+        "title": "Stay Updated",
+        "description": "Get updates and news.",
+        "placeholder": "Enter your email",
+        "buttonText": "Subscribe"
+      }
+    }
+  },
+  "contact": {
+    "enabled": true,
+    "email": "contact@yoursite.com",
+    "phone": null,
+    "address": {
+      "street": null,
+      "city": null,
+      "state": null,
+      "zip": null,
+      "country": null
+    },
+    "form": {
+      "enabled": false,
+      "fields": [],
+      "submitText": "Send Message",
+      "successMessage": "Thank you! We'll get back to you soon.",
+      "errorMessage": "Sorry, there was an error. Please try again."
+    },
+    "map": {
+      "enabled": false,
+      "embedUrl": null,
+      "latitude": null,
+      "longitude": null
+    },
+    "hours": {
+      "enabled": true,
+      "timezone": "America/Los_Angeles",
+      "schedule": [
+        {
+          "day": "Monday - Friday",
+          "hours": "9:00 AM - 6:00 PM"
+        },
+        {
+          "day": "Saturday",
+          "hours": "10:00 AM - 4:00 PM"
+        },
+        {
+          "day": "Sunday",
+          "hours": "By appointment"
+        }
+      ]
+    },
+    "booking": {
+      "enabled": false,
+      "primaryLink": null,
+      "primaryText": "Book Now",
+      "secondaryLink": null,
+      "secondaryText": null
+    }
+  },
+  "inventory": {
+    "enabled": true,
+    "categories": [
+      "Tools",
+      "Equipment",
+      "Materials",
+      "Software",
+      "Hardware"
+    ],
+    "fields": {
+      "name": true,
+      "type": true,
+      "power": true,
+      "state": true,
+      "spot": true,
+      "notes": true,
+      "created_at": true,
+      "updated_at": true
+    },
+    "import": {
+      "enabled": true,
+      "vendors": [
+        "Amazon",
+        "eBay",
+        "Home Depot",
+        "Lowe's",
+        "B&H"
+      ],
+      "formats": [
+        "CSV",
+        "JSON",
+        "ZIP"
+      ]
+    }
+  },
+  "relationships": {
+    "enabled": true,
+    "types": [
+      "uses",
+      "produces",
+      "requires",
+      "complements",
+      "replaces"
+    ],
+    "entities": [
+      "resource",
+      "service",
+      "person",
+      "company"
+    ],
+    "visualization": {
+      "enabled": true,
+      "layout": "force",
+      "showLabels": true,
+      "showWeights": true
+    }
+  },
+  "documentation": {
+    "enabled": true,
+    "sections": [
+      {
+        "title": "Getting Started",
+        "pages": [
+          {
+            "title": "Overview",
+            "href": "/docs.html"
+          }
+        ]
+      },
+      {
+        "title": "Configuration",
+        "pages": [
+          {
+            "title": "Config System",
+            "href": "/docs-config.html"
+          }
+        ]
+      }
+    ]
+  },
+  "analytics": {
+    "enabled": false,
+    "googleAnalytics": {
+      "trackingId": null
+    },
+    "facebookPixel": {
+      "pixelId": null
+    },
+    "custom": {
+      "scripts": []
+    }
+  },
+  "pwa": {
+    "enabled": true,
+    "manifest": "/manifest.webmanifest",
+    "serviceWorker": "/service-worker.js",
+    "offlinePage": "/index.html",
+    "cacheName": "dynamic-site-v1",
+    "installPrompt": true
+  },
+  "api": {
+    "baseUrl": "",
+    "enabled": true,
+    "endpoints": {
+      "inventory": "/api/inventory",
+      "stats": "/api/stats",
+      "sites": "/api/sites",
+      "health": "/api/health"
+    },
+    "authentication": {
+      "enabled": false,
+      "method": "none"
+    }
+  },
+  "integrations": {
+    "taskrabbit": {
+      "enabled": false,
+      "profileUrl": null,
+      "utmSource": null,
+      "utmMedium": null,
+      "utmCampaign": null
+    },
+    "mailchimp": {
+      "enabled": false,
+      "listId": null,
+      "apiKey": null
+    },
+    "stripe": {
+      "enabled": false,
+      "publishableKey": null
+    }
+  },
+  "settings": {
+    "lazyLoadImages": true,
+    "smoothScroll": true,
+    "backToTop": true,
+    "darkMode": {
+      "enabled": false,
+      "default": "dark"
+    },
+    "language": {
+      "default": "en",
+      "supported": [
+        "en"
+      ]
+    },
+    "timezone": "America/Los_Angeles",
+    "dateFormat": "MM/DD/YYYY",
+    "timeFormat": "12h"
+  },
+  "schemas": {
+    "resource": {
+      "path": "/schemas/resource-schema.json",
+      "example": "/schemas/resource-example.json"
+    },
+    "service": {
+      "path": "/schemas/service-schema.json",
+      "example": "/schemas/service-example.json"
+    },
+    "person": {
+      "path": "/schemas/person-schema.json",
+      "example": "/schemas/person-example.json"
+    },
+    "company": {
+      "path": "/schemas/company-schema.json",
+      "example": "/schemas/company-example.json"
+    },
+    "relationship": {
+      "path": "/schemas/relationship-schema.json",
+      "example": "/schemas/relationship-example.json"
+    },
+    "validator": "/schemas/validator.js"
+  },
+  "mapping": {
+    "relationshipMapper": "/js/relationship-mapper.js",
+    "relationshipModal": "/js/relationship-modal.js",
+    "modalStyles": "/css/relationship-modal.css"
+  },
+  "import": {
+    "vendorImporter": "/js/vendor-importer.js",
+    "validator": "/schemas/validator.js"
+  },
+  "features": {
+    "offline": true,
+    "notifications": false,
+    "analytics": false,
+    "inventory": true,
+    "relationships": true,
+    "vendorImport": true,
+    "documentation": true,
+    "pwa": true
+  },
+  "deployment": {
+    "enabled": false,
+    "remote": {
+      "host": null,
+      "port": 22,
+      "username": null,
+      "useSSHKey": true,
+      "sshKeyPath": "~/.ssh/id_rsa",
+      "password": null,
+      "remotePath": "/var/www/html",
+      "protocol": "sftp",
+      "timeout": 30000
+    },
+    "sync": {
+      "enabled": false,
+      "autoSync": false,
+      "exclude": [
+        "node_modules",
+        ".git",
+        ".DS_Store",
+        "*.log"
+      ],
+      "include": [
+        "content/**",
+        "config.json",
+        "config.js",
+        "scripts.js",
+        "manifest.webmanifest",
+        "service-worker.js"
+      ]
+    },
+    "environment": {
+      "production": {
+        "url": null,
+        "apiUrl": null
+      },
+      "staging": {
+        "url": null,
+        "apiUrl": null
+      }
+    }
+  }
+}

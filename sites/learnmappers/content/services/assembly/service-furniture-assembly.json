@@ -1,0 +1,37 @@
+{
+  "id": "furniture-assembly",
+  "title": "Furniture Assembly",
+  "description": "Flat-pack and custom sets built square, level, and secure.",
+  "purpose": "Deliver ready-to-use furniture without stress or rework.",
+  "icon": "\ud83e\uddf0",
+  "category": "assembly",
+  "pricing": {
+    "type": "hourly",
+    "rate": 75,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "Prepped parts and fasteners",
+    "Level, square, and stud-safe methods",
+    "Clean work area and tidy finish"
+  ],
+  "tools": [
+    "drill-driver-impact-combo-compact",
+    "circular-7-1-4",
+    "random-orbit-detail-sanders-5",
+    "stud-finder-laser-level-bubble-level",
+    "rubber-mallet"
+  ],
+  "outcomes": [
+    "Strong, clean builds that last",
+    "No missing parts or loose joints",
+    "Ready to use the same day"
+  ],
+  "whatYouCanBuild": [
+    "Beds, frames, dressers, desks, tables, shelving"
+  ],
+  "whyNeed": "Get a pro build with the right tools and a neat finish.",
+  "categoryId": "assembly",
+  "categoryTitle": "Furniture Assembly"
+}

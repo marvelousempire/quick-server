@@ -1,0 +1,131 @@
+version: '3.8'
+
+services:
+  # LearnMappers Application Server
+  learnmappers-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: learnmappers-app
+    ports:
+      - "${HTTP_PORT:-8000}:8000"
+      - "${HTTPS_PORT:-8443}:8443"
+    volumes:
+      - ./sites:/app/sites:ro
+      - ./data:/app/data
+      # SSL certificates (optional - server will use HTTP if not mounted)
+      - ./localhost+3.pem:/app/localhost+3.pem:ro
+      - ./localhost+3-key.pem:/app/localhost+3-key.pem:ro
+    environment:
+      - NODE_ENV=production
+      - PORT=8443
+      - HTTP_PORT=8000
+      - HTTPS=true
+      - SITE_DIR=${SITE_DIR:-sites/learnmappers}
+      # Database configuration (SQLite by default, MySQL optional)
+      - DB_TYPE=${DB_TYPE:-sqlite}
+      - DB_HOST=${DB_HOST:-learnmappers-mysql}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_NAME=${DB_NAME:-learnmappers}
+      - DB_USER=${DB_USER:-learnmappers}
+      - DB_PASSWORD=${DB_PASSWORD:-learnmappers}
+    restart: unless-stopped
+    networks:
+      - learnmappers-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.learnmappers.rule=Host(`learnmappers.localhost`)"
+      - "traefik.http.routers.learnmappers.entrypoints=web,websecure"
+      - "traefik.http.routers.learnmappers.tls.certresolver=letsencrypt"
+      - "traefik.http.services.learnmappers.loadbalancer.server.port=8000"
+
+  # MySQL Database Service (optional - only used if DB_TYPE=mysql)
+  learnmappers-mysql:
+    image: mysql:8.0
+    container_name: learnmappers-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-rootpassword}
+      - MYSQL_DATABASE=${DB_NAME:-learnmappers}
+      - MYSQL_USER=${DB_USER:-learnmappers}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-learnmappers}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    restart: unless-stopped
+    networks:
+      - learnmappers-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Only start if DB_TYPE is mysql
+    profiles:
+      - mysql
+
+  # Caddy Reverse Proxy (optional - automatic HTTPS)
+  learnmappers-caddy:
+    image: caddy:2-alpine
+    container_name: learnmappers-caddy
+    ports:
+      - "${CADDY_HTTP_PORT:-80}:80"
+      - "${CADDY_HTTPS_PORT:-443}:443"
+      - "${CADDY_HTTP_PORT:-80}:80/udp"
+      - "${CADDY_HTTPS_PORT:-443}:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    networks:
+      - learnmappers-network
+    # Only start if CADDY_ENABLED=true
+    profiles:
+      - caddy
+    depends_on:
+      - learnmappers-app
+
+  # Traefik Reverse Proxy (optional - advanced routing)
+  learnmappers-traefik:
+    image: traefik:v2.11
+    container_name: learnmappers-traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-admin@example.com}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "${TRAEFIK_HTTP_PORT:-80}:80"
+      - "${TRAEFIK_HTTPS_PORT:-443}:443"
+      - "${TRAEFIK_DASHBOARD_PORT:-8080}:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_letsencrypt:/letsencrypt
+    restart: unless-stopped
+    networks:
+      - learnmappers-network
+    # Only start if TRAEFIK_ENABLED=true
+    profiles:
+      - traefik
+    depends_on:
+      - learnmappers-app
+
+volumes:
+  mysql_data:
+    name: learnmappers-mysql-data
+  caddy_data:
+    name: learnmappers-caddy-data
+  caddy_config:
+    name: learnmappers-caddy-config
+  traefik_letsencrypt:
+    name: learnmappers-traefik-letsencrypt
+
+networks:
+  learnmappers-network:
+    name: learnmappers-network
+    driver: bridge

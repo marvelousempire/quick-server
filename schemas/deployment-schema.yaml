@@ -1,0 +1,227 @@
+# LearnMappers Server - Deployment Schema
+# YAML configuration for automated deployment and setup
+
+version: "1.0"
+name: "LearnMappers Server"
+description: "Multi-site hosting server with auto-detection"
+
+# Deployment Methods
+deployment:
+  methods:
+    - name: "Native (go.sh)"
+      command: "./go"
+      requirements:
+        - "Node.js 18+"
+        - "pnpm or npm"
+      features:
+        - "Auto-fit, auto-born, auto-heal"
+        - "Browser auto-open"
+        - "Multi-site detection"
+    
+    - name: "Fast Mode (Python)"
+      command: "./go --fast"
+      requirements:
+        - "Python 3.6+"
+      features:
+        - "Instant startup"
+        - "Static file serving"
+        - "No database/API"
+    
+    - name: "Docker"
+      command: "docker-compose up -d"
+      requirements:
+        - "Docker"
+        - "Docker Compose"
+      features:
+        - "Containerized"
+        - "MySQL support"
+        - "Reverse proxy (Caddy/Traefik)"
+
+# Server Configuration
+server:
+  ports:
+    http: 8000
+    https: 8443
+  
+  url_priority:
+    - tld: "${DOMAIN:-${HOSTNAME:-}}"
+      description: "Top-level domain or hostname"
+    - network: "auto-detect"
+      description: "Auto-detected network IP"
+    - localhost: "127.0.0.1"
+      description: "Localhost fallback"
+
+# Site Configuration
+sites:
+  directory: "sites/"
+  selector_path: "sites/default/pages/index.html"
+  
+  detection:
+    patterns:
+      - "pages/index.html"
+      - "index.html"
+    skip:
+      - "default"
+      - ".*"  # Hidden directories
+  
+  behavior:
+    none: "show_help"
+    single: "auto_launch"
+    multiple: "show_selector"
+
+# Features
+features:
+  multi_site: true
+  site_selector: true
+  rest_api: true
+  database:
+    types: ["sqlite", "mysql"]
+    default: "sqlite"
+    auto_create: true
+  https:
+    enabled: true
+    certificates: "mkcert"
+    auto_generate: true
+  docker:
+    enabled: true
+    services:
+      - app
+      - mysql
+      - caddy
+      - traefik
+
+# Startup Configuration
+startup:
+  auto_fit: true
+    description: "Auto-install dependencies"
+  auto_born: true
+    description: "Auto-create database"
+  auto_heal: true
+    description: "Auto-restart on failure"
+  browser_open: true
+    priority: ["tld", "network", "localhost"]
+    default_browser: true
+
+# Required Files
+files:
+  core:
+    - path: "server.js"
+      description: "Main server application"
+    - path: "package.json"
+      description: "Node.js dependencies"
+    - path: "go.sh"
+      description: "Startup script (macOS/Linux)"
+    - path: "go.bat"
+      description: "Startup script (Windows)"
+    - path: "go"
+      description: "Universal startup script"
+    - path: ".env.example"
+      description: "Environment template"
+  
+  site:
+    required:
+      - path: "pages/index.html"
+        description: "Main page (recommended)"
+      - path: "index.html"
+        description: "Root index (alternative)"
+    optional:
+      - path: "config.json"
+        description: "Site configuration"
+      - path: "config.js"
+        description: "Config loader"
+      - path: "scripts.js"
+        description: "Client router"
+      - path: "manifest.webmanifest"
+        description: "PWA manifest"
+      - path: "service-worker.js"
+        description: "PWA service worker"
+
+# Schemas
+schemas:
+  location: "schemas/"
+  files:
+    - "env-schema.json"
+    - "project-structure-schema.json"
+    - "core-functions-manifest.json"
+  purpose: "Enable fast project replication"
+
+# API Endpoints
+api:
+  base: "/api"
+  endpoints:
+    - path: "/health"
+      method: "GET"
+      description: "Health check"
+    - path: "/sites"
+      method: "GET"
+      description: "List available sites"
+    - path: "/inventory"
+      method: "GET|POST"
+      description: "Inventory management"
+    - path: "/stats"
+      method: "GET"
+      description: "Statistics"
+
+# Environment Variables
+environment:
+  url:
+    - name: "DOMAIN"
+      type: "string"
+      priority: 1
+      description: "Top-level domain"
+    - name: "HOSTNAME"
+      type: "string"
+      priority: 1
+      description: "Hostname"
+  
+  server:
+    - name: "HTTP_PORT"
+      type: "integer"
+      default: 8000
+    - name: "HTTPS_PORT"
+      type: "integer"
+      default: 8443
+    - name: "HTTPS"
+      type: "boolean"
+      default: true
+    - name: "SITE_DIR"
+      type: "string"
+      default: "sites/learnmappers"
+  
+  database:
+    - name: "DB_TYPE"
+      type: "enum"
+      values: ["sqlite", "mysql"]
+      default: "sqlite"
+
+# Build Configuration
+build:
+  script: "./build.sh"
+  output: "dist/learnmappers-server"
+  archives:
+    - format: "zip"
+      name: "learnmappers-server-v{VERSION}.zip"
+    - format: "tar.gz"
+      name: "learnmappers-server-v{VERSION}.tar.gz"
+  
+  includes:
+    - "server.js"
+    - "package.json"
+    - "go.sh"
+    - "go.bat"
+    - "go"
+    - ".env.example"
+    - "Dockerfile"
+    - "docker-compose.yml"
+    - "schemas/"
+    - "sites/default/"
+    - "README.md"
+    - "QUICK-START.md"
+  
+  excludes:
+    - "node_modules/"
+    - "data/"
+    - ".env"
+    - "*.db"
+    - "*.pem"
+

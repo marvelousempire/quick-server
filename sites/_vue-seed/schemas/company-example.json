@@ -1,0 +1,107 @@
+{
+  "id": "taskrabbit-platform",
+  "name": "TaskRabbit",
+  "meta": {
+    "legalName": "TaskRabbit, Inc.",
+    "industry": "On-demand services marketplace",
+    "size": "large",
+    "founded": "2008-01-01",
+    "tags": ["marketplace", "platform", "gig-economy", "services"]
+  },
+  "type": "platform",
+  "relationship": "platform-partner",
+  "purpose": "Primary platform for connecting with clients and managing service bookings. Provides payment processing, client communication, and business tools. Essential for service delivery and business operations.",
+  "contact": {
+    "website": "https://www.taskrabbit.com",
+    "support": {
+      "email": "support@taskrabbit.com",
+      "url": "https://support.taskrabbit.com"
+    }
+  },
+  "services": [
+    {
+      "name": "Client matching",
+      "description": "Connects Taskers with clients needing services",
+      "category": "platform",
+      "weUse": true
+    },
+    {
+      "name": "Payment processing",
+      "description": "Handles client payments and Tasker payouts",
+      "category": "financial",
+      "weUse": true
+    },
+    {
+      "name": "Client communication",
+      "description": "In-app messaging and communication tools",
+      "category": "communication",
+      "weUse": true
+    },
+    {
+      "name": "Business analytics",
+      "description": "Earnings reports and performance metrics",
+      "category": "analytics",
+      "weUse": true
+    }
+  ],
+  "canProduceWith": [
+    {
+      "output": "Client bookings and service delivery",
+      "description": "Enables finding and serving clients through the platform",
+      "requires": ["active profile", "completed tasks", "good ratings"],
+      "value": "Steady stream of clients, reliable payment processing"
+    },
+    {
+      "output": "Business growth and scaling",
+      "description": "Provides tools and reach to grow service business",
+      "requires": ["quality service", "good reviews", "availability"],
+      "value": "Scalable client acquisition, business insights"
+    }
+  ],
+  "capabilities": [
+    "Client matching and booking",
+    "Payment processing",
+    "Insurance coverage",
+    "Background checks",
+    "Client reviews and ratings",
+    "Business analytics",
+    "Mobile app for taskers"
+  ],
+  "pricing": {
+    "model": "commission",
+    "notes": "TaskRabbit takes a percentage of each task. Rates vary by market and task type.",
+    "ourCost": 0
+  },
+  "history": [
+    {
+      "date": "2023-01-01",
+      "type": "partnership",
+      "description": "Joined TaskRabbit as Tasker",
+      "outcome": "Active platform partner, completed 200+ tasks"
+    },
+    {
+      "date": "2024-06-01",
+      "type": "project",
+      "description": "Reached Elite Tasker status",
+      "outcome": "Increased visibility and booking priority"
+    }
+  ],
+  "keyContacts": [],
+  "status": "active",
+  "notes": "Primary platform for service delivery. Excellent for furniture assembly, mounting, and general handyman services. Good payment processing and client communication tools.",
+  "links": [
+    {
+      "label": "Tasker Portal",
+      "url": "https://www.taskrabbit.com/tasker",
+      "type": "portal"
+    },
+    {
+      "label": "Support Center",
+      "url": "https://support.taskrabbit.com",
+      "type": "support"
+    }
+  ],
+  "createdAt": "2023-01-01T08:00:00Z",
+  "updatedAt": "2024-11-08T15:15:00Z"
+}
+

@@ -1,0 +1,34 @@
+{
+  "id": "real-estate-photo",
+  "title": "Real Estate & Space Photography",
+  "description": "Wide, bright, and true-to-life images of your space.",
+  "purpose": "Help listings and docs look their best.",
+  "icon": "\ud83c\udfe0",
+  "category": "media",
+  "pricing": {
+    "type": "fixed",
+    "rate": 250,
+    "minimum": 1,
+    "currency": "USD"
+  },
+  "features": [
+    "On-site plan and staging tips",
+    "Pro lighting and lens kit",
+    "Prompt edits and delivery"
+  ],
+  "tools": [
+    "photography-equipment-4k-cinema-camera-dslr-kit",
+    "meters-tripods-led-panels-light"
+  ],
+  "outcomes": [
+    "Crisp photos that show value",
+    "Consistent color and light",
+    "Fast turnaround"
+  ],
+  "whatYouCanBuild": [
+    "Listing sets, before/after docs, product shots"
+  ],
+  "whyNeed": "Share your space with clarity and trust.",
+  "categoryId": "media",
+  "categoryTitle": "Photo & Media"
+}

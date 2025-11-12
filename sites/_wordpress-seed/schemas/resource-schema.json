@@ -1,0 +1,436 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Resource Schema",
+  "description": "Schema for resources (tools, equipment, materials, etc.) in the LearnMappers inventory system",
+  "type": "object",
+  "required": ["title", "type", "category", "purpose"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the resource",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "serialNumber": {
+      "type": "string",
+      "description": "Serial number for the product/resource (if applicable). Used to prevent duplicates - each physical item should have a unique serial number. If you have two of the same tool, they should have different serial numbers.",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "description": "Name/title of the resource",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "image": {
+      "type": "object",
+      "description": "Image information for the resource",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Primary image URL (auto-retrieved or manually set)"
+        },
+        "thumbnail": {
+          "type": "string",
+          "format": "uri",
+          "description": "Thumbnail image URL (auto-generated from primary)"
+        },
+        "alt": {
+          "type": "string",
+          "description": "Alt text for accessibility (auto-generated from title)"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["auto-retrieved", "manual", "user-uploaded", "vendor"],
+          "description": "Source of the image"
+        },
+        "lastRetrieved": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When image was last auto-retrieved"
+        },
+        "verified": {
+          "type": "boolean",
+          "description": "Whether image has been verified as accurate"
+        },
+        "is3D": {
+          "type": "boolean",
+          "description": "Whether this is a 3D-rendered image (from Envato or similar)"
+        },
+        "envatoId": {
+          "type": "string",
+          "description": "Envato Elements item ID (if image is from Envato)"
+        },
+        "envatoUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "Direct URL to Envato Elements 3D image or item page"
+        },
+        "view360": {
+          "type": "object",
+          "description": "360-degree view configuration for 3D images",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable 360-degree interactive view"
+            },
+            "images": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              },
+              "description": "Array of image URLs for 360-degree rotation"
+            },
+            "autoplay": {
+              "type": "boolean",
+              "description": "Auto-rotate 360 view"
+            }
+          }
+        },
+        "mockup": {
+          "type": "object",
+          "description": "Photorealistic mockup settings (PlaceIt-like)",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enable photorealistic mockup display",
+              "default": true
+            },
+            "type": {
+              "type": "string",
+              "enum": ["toolbox", "device", "shelf", "workspace", "box", "float", "auto"],
+              "description": "Mockup template type. 'auto' uses category-based selection",
+              "default": "auto"
+            },
+            "showBadge": {
+              "type": "boolean",
+              "description": "Show status/category badge on mockup",
+              "default": true
+            },
+            "showLabel": {
+              "type": "boolean",
+              "description": "Show title label on mockup",
+              "default": true
+            },
+            "animated": {
+              "type": "boolean",
+              "description": "Enable subtle animation for verified images",
+              "default": true
+            }
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "description": "Metadata about the resource",
+      "properties": {
+        "brand": {
+          "type": "string",
+          "description": "Brand or manufacturer name"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model number or identifier"
+        },
+        "purchaseDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Date when resource was acquired (YYYY-MM-DD)"
+        },
+        "purchasePrice": {
+          "type": "number",
+          "description": "Purchase price in USD (what you paid for it)"
+        },
+        "msrp": {
+          "type": "number",
+          "description": "Manufacturer's Suggested Retail Price (MSRP) in USD (original retail price)"
+        },
+        "location": {
+          "type": "string",
+          "description": "Physical location or storage area"
+        },
+        "condition": {
+          "type": "string",
+          "enum": ["new", "excellent", "good", "fair", "poor", "needs-repair"],
+          "description": "Current condition of the resource"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional tags for categorization"
+        }
+      }
+    },
+    "type": {
+      "type": "string",
+      "description": "Primary type of the resource - determines template, layout, and mockup style",
+      "enum": [
+        "tool",
+        "equipment",
+        "person",
+        "contact",
+        "material",
+        "appliance",
+        "software",
+        "company",
+        "documentation",
+        "other"
+      ],
+      "default": "other"
+    },
+    "category": {
+      "type": "string",
+      "description": "Category/subcategory of the resource (more specific than type)",
+      "enum": [
+        "tool",
+        "equipment",
+        "appliance",
+        "material",
+        "consumable",
+        "hardware",
+        "software",
+        "documentation",
+        "person",
+        "contact",
+        "company",
+        "other"
+      ]
+    },
+    "template": {
+      "type": "object",
+      "description": "Template configuration override (uses type template by default)",
+      "properties": {
+        "mockupType": {
+          "type": "string",
+          "enum": ["toolbox", "device", "shelf", "workspace", "box", "float", "idcard", "license", "passport", "business-card", "auto"],
+          "description": "Override mockup type (auto uses type template default)"
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["product", "detailed", "compact", "id-card", "profile", "contact", "business-card"],
+          "description": "Override layout style (auto uses type template default)"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Override sections to display (auto uses type template default)"
+        }
+      }
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Primary purpose or function of the resource",
+      "minLength": 10,
+      "maxLength": 500
+    },
+    "useCases": {
+      "type": "array",
+      "description": "List of specific use cases or applications",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scenario": {
+            "type": "string",
+            "description": "Description of the use case"
+          },
+          "frequency": {
+            "type": "string",
+            "enum": ["daily", "weekly", "monthly", "occasional", "rare"],
+            "description": "How often this use case occurs"
+          }
+        },
+        "required": ["scenario"]
+      },
+      "minItems": 1
+    },
+    "outcomes": {
+      "type": "array",
+      "description": "What happens when this resource is applied or used - the results, achievements, or deliverables",
+      "items": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "The outcome or result achieved"
+          },
+          "description": {
+            "type": "string",
+            "description": "How this resource produces this outcome"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value or benefit of this outcome"
+          }
+        },
+        "required": ["result"]
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "description": "What this resource can do - its core capabilities and functions",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "abilities": {
+      "type": "array",
+      "description": "Specific abilities, skills, or features this resource possesses",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ability": {
+            "type": "string",
+            "description": "The specific ability or skill"
+          },
+          "level": {
+            "type": "string",
+            "enum": ["basic", "intermediate", "advanced", "expert"],
+            "description": "Proficiency or capability level"
+          },
+          "description": {
+            "type": "string",
+            "description": "How this ability is applied or used"
+          }
+        },
+        "required": ["ability"]
+      }
+    },
+    "canProduceWith": {
+      "type": "array",
+      "description": "List of things that can be produced, created, or accomplished using this resource",
+      "items": {
+        "type": "object",
+        "properties": {
+          "output": {
+            "type": "string",
+            "description": "What can be produced/created"
+          },
+          "description": {
+            "type": "string",
+            "description": "How this resource enables the output"
+          },
+          "requires": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Other resources or materials needed alongside this one"
+          }
+        },
+        "required": ["output"]
+      }
+    },
+    "specifications": {
+      "type": "object",
+      "description": "Technical specifications",
+      "properties": {
+        "dimensions": {
+          "type": "string",
+          "description": "Physical dimensions (e.g., '12x8x4 inches')"
+        },
+        "weight": {
+          "type": "string",
+          "description": "Weight (e.g., '2.5 lbs')"
+        },
+        "power": {
+          "type": "string",
+          "description": "Power requirements (e.g., '110V AC', 'USB-C')"
+        },
+        "capacity": {
+          "type": "string",
+          "description": "Capacity or limits (e.g., '500GB', '1000W')"
+        },
+        "compatibility": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Compatible systems, standards, or platforms"
+        }
+      }
+    },
+    "maintenance": {
+      "type": "object",
+      "description": "Maintenance information",
+      "properties": {
+        "schedule": {
+          "type": "string",
+          "enum": ["daily", "weekly", "monthly", "quarterly", "annually", "as-needed"],
+          "description": "Recommended maintenance schedule"
+        },
+        "lastMaintenance": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of last maintenance (YYYY-MM-DD)"
+        },
+        "nextMaintenance": {
+          "type": "string",
+          "format": "date",
+          "description": "Scheduled next maintenance date (YYYY-MM-DD)"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Maintenance notes or requirements"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["available", "in-use", "reserved", "maintenance", "retired"],
+      "description": "Current availability status",
+      "default": "available"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or observations",
+      "maxLength": 2000
+    },
+    "links": {
+      "type": "array",
+      "description": "Related links (documentation, manuals, etc.)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Link label"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Link URL"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["manual", "documentation", "website", "video", "other"],
+            "description": "Type of link"
+          }
+        },
+        "required": ["label", "url"]
+      }
+    },
+    "lastUsed": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last date and time this resource was used (ISO 8601 format with full timestamp down to the second, e.g., '2024-01-15T14:30:45Z')"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this resource entry was created (ISO 8601)"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this resource entry was last updated (ISO 8601)"
+    }
+  }
+}
+

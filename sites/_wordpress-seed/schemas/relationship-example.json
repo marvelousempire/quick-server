@@ -1,0 +1,44 @@
+{
+  "id": "drill-enables-assembly",
+  "from": {
+    "type": "resource",
+    "id": "drill-bosch-gsb18v-21",
+    "name": "Bosch GSB18V-21 Cordless Drill"
+  },
+  "to": {
+    "type": "service",
+    "id": "furniture-assembly",
+    "name": "Furniture Assembly"
+  },
+  "type": "enables",
+  "purpose": "The drill is essential for efficiently assembling furniture. It enables fast, secure screw driving and pilot hole drilling, making the assembly service possible.",
+  "strength": "critical",
+  "bidirectional": false,
+  "capabilities": [
+    {
+      "capability": "Fast screw driving",
+      "description": "Enables quick and secure attachment of furniture pieces"
+    },
+    {
+      "capability": "Pilot hole drilling",
+      "description": "Prevents wood splitting and ensures proper alignment"
+    }
+  ],
+  "conditions": [
+    "Drill must be charged",
+    "Appropriate drill bits available",
+    "Service location has power or battery backup"
+  ],
+  "examples": [
+    {
+      "scenario": "Assembled IKEA desk using drill for all screws",
+      "outcome": "Completed assembly in 45 minutes vs 2+ hours manually",
+      "date": "2024-10-15"
+    }
+  ],
+  "status": "active",
+  "notes": "This is a critical relationship - without the drill, assembly service would be much slower and less efficient.",
+  "createdAt": "2024-01-15T10:00:00Z",
+  "updatedAt": "2024-11-08T16:00:00Z"
+}
+

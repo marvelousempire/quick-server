@@ -1,0 +1,29 @@
+{
+  "name": "learnmappers-pwa",
+  "version": "7.3.0",
+  "description": "LearnMappers PWA with Node.js backend and SQLite",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "init-db": "node scripts/init-db.js",
+    "go": "./go",
+    "build": "./build.sh",
+    "package": "./package-server.sh",
+    "serve": "node server.js",
+    "serve:site": "node server.js"
+  },
+  "keywords": [
+    "pwa",
+    "sqlite",
+    "inventory"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^12.4.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

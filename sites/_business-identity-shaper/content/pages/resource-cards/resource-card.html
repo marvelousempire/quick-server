@@ -1,0 +1,1261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LearnMappers — Resource Card</title>
+<link rel="stylesheet" href="../../../css/mockups.css">
+<script src="../../config.js"></script>
+<script>
+  // Update title after config loads
+  function updateTitle() {
+    if (window.CONFIG?.site?.name) {
+      document.title = `${window.CONFIG.site.name} — Resource Card`;
+    } else {
+      document.title = 'LearnMappers — Resource Card';
+    }
+    if (window.CONFIG?.site?.themeColor) {
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', window.CONFIG.site.themeColor);
+    }
+  }
+  // Try immediately, then on config load
+  updateTitle();
+  window.addEventListener('configLoaded', updateTitle);
+  // Fallback: try again after a short delay
+  setTimeout(updateTitle, 100);
+</script>
+<link rel="manifest" href="../../manifest.webmanifest"><meta name="theme-color" content="#0b0c10">
+<style>
+:root{ --bg:#0b0c10; --card:#0f131c; --ink:#e9f3ff; --muted:#9bb1c7; --brand:#7ce3ff; --brand2:#60ffa8; --line:#1e2636; --shadow:rgba(3,8,18,.5); --radius:16px; --gap:16px; }
+*{box-sizing:border-box} html,body{background:radial-gradient(1200px 500px at 15% -10%, rgba(124,227,255,.14), transparent 50%), radial-gradient(900px 450px at 90% -10%, rgba(96,255,168,.09), transparent 60%), var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;line-height:1.6}
+a{color:var(--brand);text-decoration:none}
+main[data-page]{padding:0}
+.wrap{max-width:1440px;margin:0 auto;padding:clamp(18px,4vw,60px)}
+nav.stick{position:sticky;top:0;z-index:90;background:color-mix(in srgb, var(--bg) 86%, transparent);backdrop-filter: blur(10px);border-bottom:1px solid var(--line)}
+nav .row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:900}
+.logo .dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand2))}
+nav .links{display:flex;gap:12px;flex-wrap:wrap}
+nav .links a{padding:10px 12px;border-radius:12px}
+nav .links a:hover{background:color-mix(in srgb, var(--brand) 18%, transparent)}
+.pill{display:inline-flex;align-items:center;gap:6px;margin-right:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 90%, transparent), color-mix(in srgb, var(--card) 96%, transparent));font-size:12px}
+.pill.online{color:#073b18;border-color:#0ea35a;background:linear-gradient(180deg,#d6ffe9,#f1fff7)}
+.pill.offline{color:#4b1a1a;border-color:#cc5151;background:linear-gradient(180deg,#ffe3e3,#fff7f7)}
+header.hero{position:relative;isolation:isolate;padding:54px 0 24px;margin-bottom:32px}
+header.hero.wrap{padding-top:54px;padding-bottom:24px;padding-left:clamp(18px,4vw,60px);padding-right:clamp(18px,4vw,60px)}
+h1{font-size:clamp(36px,5vw,56px);margin:0 0 12px;font-weight:900;background:linear-gradient(135deg,var(--ink) 0%,var(--brand) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.lead{font-size:clamp(16px,2.2vw,19px);color:var(--muted);max-width:74ch;margin:0 0 20px;line-height:1.6}
+.btn{padding:12px 16px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(180deg, color-mix(in srgb, var(--card) 85%, transparent), color-mix(in srgb, var(--card) 95%, transparent));color:var(--ink);font-weight:800;cursor:pointer;transition:.18s ease;box-shadow:0 14px 40px -20px var(--shadow);text-decoration:none;display:inline-block}
+.btn:hover{transform:translateY(-2px)}
+.btn.brand{background:linear-gradient(135deg,var(--brand),#c9f5ff);color:#041018;border:none}
+.card{background:linear-gradient(180deg, color-mix(in srgb, var(--card) 88%, transparent), color-mix(in srgb, var(--card) 97%, transparent));border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:0 14px 44px -28px var(--shadow);transition:all 0.2s}
+.card:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:0 20px 48px -16px var(--shadow)}
+.section{margin:48px 0}
+.section h2{font-size:32px;font-weight:900;margin:0 0 24px;padding-top:16px;border-top:1px solid var(--line);margin-top:32px}
+.section h2:first-child{border-top:none;margin-top:0;padding-top:0}
+.section h3{font-size:24px;font-weight:800;margin:32px 0 16px}
+.section p{margin:16px 0;font-size:16px;line-height:1.7;color:var(--ink)}
+.section ul,.section ol{margin:16px 0;padding-left:24px}
+.section li{margin:8px 0;line-height:1.6}
+.resource-icon{font-size:64px;margin-bottom:16px;display:block}
+.resource-meta{display:flex;gap:24px;flex-wrap:wrap;margin:24px 0;padding:20px;background:color-mix(in srgb, var(--card) 88%, transparent);border:1px solid var(--line);border-radius:12px}
+.meta-item{display:flex;flex-direction:column;gap:4px}
+.meta-label{font-size:12px;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);font-weight:700}
+.meta-value{font-size:18px;font-weight:800;color:var(--brand)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:24px 0}
+.feature-item{display:flex;align-items:start;gap:12px;padding:16px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:12px}
+.feature-item::before{content:'✓';color:var(--brand2);font-weight:900;font-size:20px}
+.tags-list{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.tag{font-size:12px;padding:6px 12px;border-radius:8px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:0.5px}
+.back-link{display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;color:var(--muted);font-size:14px}
+.back-link:hover{color:var(--brand)}
+.engagement-card{background:linear-gradient(135deg, color-mix(in srgb, var(--brand) 15%, transparent), color-mix(in srgb, var(--brand2) 10%, transparent));border:1px solid var(--line);border-radius:var(--radius);padding:28px;margin:24px 0;position:relative;overflow:hidden}
+.engagement-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--brand),var(--brand2))}
+.engagement-card h3{color:var(--brand);margin-top:0}
+.use-case-item{display:flex;align-items:start;gap:12px;padding:14px;background:color-mix(in srgb, var(--card) 85%, transparent);border-left:3px solid var(--brand2);border-radius:8px;margin:12px 0}
+.use-case-item::before{content:'💡';font-size:20px}
+.produce-item{display:flex;align-items:start;gap:12px;padding:14px;background:color-mix(in srgb, var(--card) 90%, transparent);border:1px solid var(--line);border-radius:8px;margin:8px 0}
+.produce-item::before{content:'🔧';font-size:18px}
+.status-badge{display:inline-block;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px}
+.status-available{background:color-mix(in srgb, #10b981 20%, transparent);color:#10b981;border:1px solid #10b981}
+.status-in-use{background:color-mix(in srgb, #f59e0b 20%, transparent);color:#f59e0b;border:1px solid #f59e0b}
+.status-maintenance{background:color-mix(in srgb, #ef4444 20%, transparent);color:#ef4444;border:1px solid #ef4444}
+.status-retired{background:color-mix(in srgb, var(--muted) 20%, transparent);color:var(--muted);border:1px solid var(--muted)}
+</style>
+</head>
+<body>
+<nav class="stick wrap">
+  <div class="row">
+    <a href="../../" class="logo" id="logo">
+      <span class="dot"></span>
+      <span>LearnMappers</span>
+    </a>
+    <div class="links">
+      <span id="netPill" class="pill" title="Connection status">● offline</span>
+      <div id="navLinks">
+        <a href="../../index.html" data-nav>Home</a>
+        <a href="../../docs-index.html" data-nav>Docs</a>
+        <a href="../../inventory.html" data-nav>Resources</a>
+        <a href="../../service-menu.html" data-nav>Services</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main data-page>
+  <section class="wrap">
+    <a href="../../inventory.html" class="back-link">← Back to Resources</a>
+    <!-- Resource card loaded from: API (SQLite) → localStorage → inventory data -->
+    
+    <header class="hero" id="resourceHeader">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;flex-wrap:wrap" id="headerGrid">
+        <!-- Photorealistic Mockup (with 3D/360 support) -->
+        <div class="mockup-container" id="mockupContainer" style="display:none">
+          <!-- 360-Degree View (for 3D images) -->
+          <div class="view360-container" id="view360Container" style="display:none">
+            <div class="view360-images" id="view360Images"></div>
+            <div class="view360-controls">
+              <button class="view360-btn" id="view360Prev" title="Previous view">‹</button>
+              <button class="view360-btn" id="view360Play" title="Auto-rotate">▶</button>
+              <button class="view360-btn" id="view360Next" title="Next view">›</button>
+            </div>
+            <div class="view360-indicator" id="view360Indicator">3D View</div>
+          </div>
+          
+          <!-- Standard Mockup -->
+          <div class="mockup" id="mockup">
+            <img id="mockupImage" class="mockup-image" src="" alt="">
+            <div class="mockup-badge" id="mockupBadge" style="display:none"></div>
+            <div class="mockup-label" id="mockupLabel" style="display:none"></div>
+          </div>
+        </div>
+        
+        <!-- Fallback: Regular Image or Icon -->
+        <div style="flex:1;min-width:300px">
+          <span class="resource-icon" id="resourceIcon" style="display:none">🔧</span>
+          <img id="resourceImage" src="" alt="" style="width:100%;max-width:500px;height:auto;border-radius:var(--radius);box-shadow:0 14px 44px -28px var(--shadow);margin-bottom:24px;display:none;object-fit:cover;aspect-ratio:4/3">
+          <h1 id="resourceTitle">Resource Name</h1>
+          <p class="lead" id="resourcePurpose">Resource purpose and description.</p>
+        </div>
+      </div>
+      
+      <div class="resource-meta" id="resourceMeta">
+        <div class="meta-item">
+          <span class="meta-label">Category</span>
+          <span class="meta-value" id="resourceCategory">Tool</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Status</span>
+          <span class="meta-value" id="resourceStatus">Available</span>
+        </div>
+        <div class="meta-item" id="brandItem" style="display:none">
+          <span class="meta-label">Brand</span>
+          <span class="meta-value" id="resourceBrand">—</span>
+        </div>
+        <div class="meta-item" id="modelItem" style="display:none">
+          <span class="meta-label">Model</span>
+          <span class="meta-value" id="resourceModel">—</span>
+        </div>
+        <div class="meta-item" id="locationItem" style="display:none">
+          <span class="meta-label">Location</span>
+          <span class="meta-value" id="resourceLocation">—</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="section" id="purposeSection">
+      <div class="engagement-card">
+        <h3>🎯 Purpose</h3>
+        <p id="purposeText" style="font-size:18px;line-height:1.7;margin:0">Resource purpose and primary function.</p>
+      </div>
+    </div>
+
+    <div class="section" id="useCasesSection" style="display:none">
+      <h2>Use Cases</h2>
+      <div id="useCasesList">
+        <!-- Populated from resource data -->
+      </div>
+    </div>
+
+    <div class="section" id="canProduceSection" style="display:none">
+      <h2>What You Can Build</h2>
+      <div id="canProduceList">
+        <!-- Populated from resource data -->
+      </div>
+    </div>
+
+    <div class="section" id="specsSection" style="display:none">
+      <h2>Specifications</h2>
+      <div class="card" id="specsCard">
+        <!-- Specifications populated from resource data -->
+      </div>
+    </div>
+
+    <div class="section" id="metaSection" style="display:none">
+      <h2>Details</h2>
+      <div class="card" id="metaCard">
+        <!-- Metadata populated from resource data -->
+      </div>
+    </div>
+
+    <div class="section" id="tagsSection" style="display:none">
+      <h2>Tags</h2>
+      <div class="tags-list" id="tagsList">
+        <!-- Tags populated from resource data -->
+      </div>
+    </div>
+
+    <div class="section" id="notesSection" style="display:none">
+      <h2>Notes</h2>
+      <div class="card">
+        <p id="notesText" style="margin:0;color:var(--muted);line-height:1.7"></p>
+      </div>
+    </div>
+
+    <div class="section" id="capabilitiesSection" style="display:none">
+      <h2>Capabilities</h2>
+      <div class="card">
+        <ul id="capabilitiesList" style="margin:0;padding-left:20px;line-height:1.8">
+          <!-- Capabilities populated from resource data -->
+        </ul>
+      </div>
+    </div>
+
+    <div class="section" id="abilitiesSection" style="display:none">
+      <h2>Abilities</h2>
+      <div class="card">
+        <ul id="abilitiesList" style="margin:0;padding-left:20px;line-height:1.8">
+          <!-- Abilities populated from resource data -->
+        </ul>
+      </div>
+    </div>
+
+    <div class="section" id="outcomesSection" style="display:none">
+      <h2>Outcomes</h2>
+      <div class="card">
+        <ul id="outcomesList" style="margin:0;padding-left:20px;line-height:1.8">
+          <!-- Outcomes populated from resource data -->
+        </ul>
+      </div>
+    </div>
+
+    <div class="section" id="linksSection" style="display:none">
+      <h2>Links</h2>
+      <div class="card">
+        <ul id="linksList" style="margin:0;padding-left:20px;line-height:1.8">
+          <!-- Links populated from resource data -->
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="../../scripts.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('../../service-worker.js').catch(()=>{});}</script>
+<script>
+// Populate resource card from API, localStorage, or URL parameter
+async function populateResourceCard() {
+  const config = window.CONFIG;
+  if (!config) {
+    setTimeout(populateResourceCard, 100);
+    return;
+  }
+
+  // Get resource ID from filename or URL parameter
+  const currentFile = window.location.pathname.split('/').pop() || 'resource-card.html';
+  let resourceId = currentFile.replace('.html', '');
+  
+  // Handle the new routing: if it's resource-card.html, get slug from URL
+  if (resourceId === 'resource-card') {
+    // Try to get slug from URL path: /pages/resource-cards/{slug}.html
+    const pathMatch = window.location.pathname.match(/\/pages\/resource-cards\/([^\/]+)\.html$/);
+    if (pathMatch) {
+      resourceId = pathMatch[1];
+    } else {
+      // Fallback: try query parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      resourceId = urlParams.get('slug') || urlParams.get('id') || 'template';
+    }
+  }
+  
+  // Extract numeric ID if it's in format "resource-123"
+  let numericMatch = resourceId.match(/^resource-(\d+)$/);
+  let dbId = numericMatch ? numericMatch[1] : null;
+  
+  // Try to load from JSON file first (for on-the-fly imports)
+  if (!dbId && resourceId !== 'template') {
+    try {
+      // Try loading from JSON file: /content/resources/{slug}.json (Multisite structure)
+      // Fallback to legacy /data/resources/ for backward compatibility
+      const jsonPath = `/content/resources/${resourceId}.json`;
+      const legacyPath = `/data/resources/${resourceId}.json`;
+      
+      // Try new content path first, then legacy data path
+      let jsonResponse = await fetch(jsonPath);
+      if (!jsonResponse.ok) {
+        jsonResponse = await fetch(legacyPath);
+      }
+      
+      if (jsonResponse.ok) {
+        const resourceData = await jsonResponse.json();
+        console.log('✅ Loaded resource from JSON file:', resourceId);
+        populateCardFromData(resourceData);
+        return;
+      }
+    } catch (jsonError) {
+      console.log('JSON file not found, trying API...');
+    }
+    
+    // Fallback to API
+    try {
+      const apiBase = config.api?.baseUrl || '/api';
+      // Try to get mapping or search by slug
+      const allItems = await fetch(`${apiBase}/inventory`).then(r => r.ok ? r.json() : []);
+      // Create slug function (same as tool-inventory.html)
+      function createSlug(name) {
+        const leadingDescriptors = ['compact', 'cordless', 'brushless', 'single', 'double', 'portable', 'foldable', 'self', 'smart', 'professional', 'heavy', 'light', 'mini', 'micro', 'large', 'small', 'watering'];
+        const words = name.toLowerCase().split(/[^a-z0-9]+/).filter(w => w);
+        
+        // Find the LAST main noun (usually the actual object name)
+        let mainNounIndex = -1;
+        for (let i = words.length - 1; i >= 0; i--) {
+          if (!leadingDescriptors.includes(words[i]) && !/^\d+$/.test(words[i])) {
+            mainNounIndex = i;
+            break;
+          }
+        }
+        
+        if (mainNounIndex === -1) {
+          // Fallback: just join all words
+          return words.join('-').substring(0, 80);
+        }
+        
+        // Build noun phrase: include ALL consecutive non-descriptor words ending at the last noun
+        let nounStart = mainNounIndex;
+        for (let i = mainNounIndex - 1; i >= 0; i--) {
+          // Stop if we hit a descriptor
+          if (leadingDescriptors.includes(words[i]) || /^\d+$/.test(words[i])) {
+            break;
+          }
+          // Include this word in noun phrase (it's part of compound noun like 'jig saw')
+          nounStart = i;
+        }
+        
+        // Reorder: noun phrase first, then descriptors
+        const nounPhrase = words.slice(nounStart, mainNounIndex + 1);
+        const beforeNoun = words.slice(0, nounStart);
+        const afterNoun = words.slice(mainNounIndex + 1);
+        const ordered = [...nounPhrase, ...beforeNoun, ...afterNoun];
+        
+        return ordered.join('-').substring(0, 80);
+      }
+      
+      const item = allItems.find(item => {
+        const slug = createSlug(item.name);
+        return slug === resourceId;
+      });
+      if (item) {
+        dbId = item.id;
+        resourceId = `resource-${item.id}`;
+      }
+    } catch (e) {
+      console.warn('Could not lookup by slug:', e);
+    }
+  }
+  
+  let resource = null;
+  
+  // Try API first (server mode) - Load from SQLite database
+  if (dbId) {
+    try {
+      const apiBase = config.api?.baseUrl || '/api';
+      const response = await fetch(`${apiBase}/inventory/${dbId}`);
+      if (response.ok) {
+        const item = await response.json();
+        // Convert database item to resource format (with rich schema support)
+        // Parse JSON fields
+        let tags = [];
+        try {
+          if (item.tags) {
+            tags = typeof item.tags === 'string' ? JSON.parse(item.tags) : item.tags;
+          } else {
+            tags = extractTagsFromNotes(item.notes);
+          }
+        } catch (e) {
+          tags = extractTagsFromNotes(item.notes);
+        }
+        
+        let useCases = [];
+        try {
+          if (item.use_cases) {
+            useCases = typeof item.use_cases === 'string' ? JSON.parse(item.use_cases) : item.use_cases;
+          }
+        } catch (e) {
+          // Ignore
+        }
+        
+        let canProduceWith = [];
+        try {
+          if (item.can_produce_with) {
+            canProduceWith = typeof item.can_produce_with === 'string' ? JSON.parse(item.can_produce_with) : item.can_produce_with;
+          }
+        } catch (e) {
+          // Ignore
+        }
+        
+        let links = [];
+        try {
+          if (item.links) {
+            links = typeof item.links === 'string' ? JSON.parse(item.links) : item.links;
+          }
+        } catch (e) {
+          // Ignore
+        }
+        
+        let compatibility = [];
+        try {
+          if (item.compatibility) {
+            compatibility = typeof item.compatibility === 'string' ? JSON.parse(item.compatibility) : item.compatibility;
+          }
+        } catch (e) {
+          // Ignore
+        }
+        
+        resource = {
+          id: resourceId,
+          title: item.name || 'Untitled',
+          category: item.category || mapTypeToCategory(item.type),
+          purpose: item.purpose || item.notes || `Tool/equipment: ${item.name}`,
+          meta: {
+            brand: item.brand || undefined,
+            model: item.model || undefined,
+            serialNumber: item.serial_number || undefined,
+            purchaseDate: item.purchase_date || undefined,
+            purchasePrice: item.purchase_price || undefined,
+            location: item.spot || item.location || undefined,
+            condition: mapStateToCondition(item.state),
+            tags: tags
+          },
+          useCases: useCases.length > 0 ? useCases : undefined,
+          canProduceWith: canProduceWith.length > 0 ? canProduceWith : undefined,
+          specifications: {
+            power: item.power || undefined,
+            dimensions: item.dimensions || undefined,
+            weight: item.weight || undefined,
+            capacity: item.capacity || undefined,
+            compatibility: compatibility.length > 0 ? compatibility : undefined
+          },
+          maintenance: (item.maintenance_schedule || item.last_maintenance || item.next_maintenance || item.maintenance_notes) ? {
+            schedule: item.maintenance_schedule || undefined,
+            lastMaintenance: item.last_maintenance || undefined,
+            nextMaintenance: item.next_maintenance || undefined,
+            notes: item.maintenance_notes || undefined
+          } : undefined,
+          status: item.status || 'available',
+          notes: item.notes || undefined,
+          links: links.length > 0 ? links : undefined
+        };
+      }
+    } catch (e) {
+      console.warn('API not available, trying localStorage:', e);
+    }
+  }
+  
+  // Fallback: Try to load from resource cards storage
+  if (!resource) {
+    const cardsStorageKey = 'lm_resource_cards';
+    try {
+      const cardsRaw = localStorage.getItem(cardsStorageKey);
+      if (cardsRaw) {
+        const cards = JSON.parse(cardsRaw);
+        resource = cards[resourceId];
+      }
+    } catch (e) {
+      console.warn('Error loading resource cards:', e);
+    }
+  }
+  
+  // If we have resource data, populate the card
+  if (resource) {
+    populateCardFromData(resource);
+    return;
+  }
+  
+  // Fallback: Try to load from inventory
+  if (!resource) {
+    const storageKey = 'lm_inventory';
+    try {
+      const raw = localStorage.getItem(storageKey);
+      if (raw) {
+        const data = JSON.parse(raw);
+        // Check for _resourceData first (new format)
+        const itemWithData = data.find(item => item._resourceData && item._resourceData.id === resourceId);
+        if (itemWithData && itemWithData._resourceData) {
+          resource = itemWithData._resourceData;
+        } else {
+          // Convert old format to new format if needed
+          const item = data.find(item => {
+            const id = item._resourceData?.id || (item.name ? item.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').substring(0, 50) : null);
+            return id === resourceId;
+          });
+          
+          if (item) {
+            resource = {
+              id: resourceId,
+              title: item.name || 'Untitled',
+              category: mapTypeToCategory(item.type),
+              purpose: item.notes || `Tool/equipment: ${item.name}`,
+              meta: {
+                condition: mapStateToCondition(item.state),
+                location: item.spot,
+                tags: extractTagsFromNotes(item.notes)
+              },
+              specifications: {
+                power: item.power || undefined
+              },
+              status: 'available',
+              notes: item.notes
+            };
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Error loading resources:', e);
+    }
+  }
+  
+  // If we have resource data, populate the card
+  if (resource) {
+    populateCardFromData(resource);
+    return;
+  }
+  
+  // Resource not found
+  document.getElementById('resourceTitle').textContent = 'Resource Not Found';
+  document.getElementById('resourcePurpose').textContent = 'This resource card could not be found.';
+  document.title = `${config.site?.name || 'LearnMappers'} — Resource Not Found`;
+}
+
+// Function to populate card from resource data (used by both JSON files and API)
+function populateCardFromData(resource) {
+  const config = window.CONFIG || {};
+  
+  // Update logo and navigation
+  const logo = document.getElementById('logo');
+  if (logo && config.navigation?.logo) {
+    logo.innerHTML = `
+      ${config.navigation.logo.showDot ? '<span class="dot"></span>' : ''}
+      <span>${config.navigation.logo.text || 'LearnMappers'}</span>
+    `;
+    if (config.navigation.logo.href) logo.href = config.navigation.logo.href;
+  }
+
+  const navLinks = document.getElementById('navLinks');
+  if (navLinks && config.navigation?.links) {
+    navLinks.innerHTML = config.navigation.links.map(link => 
+      `<a href="../../${link.href}" data-nav>${link.icon ? link.icon + ' ' : ''}${link.label}</a>`
+    ).join('');
+  }
+
+  // Update resource details
+  const resourceIcon = document.getElementById('resourceIcon');
+  const resourceTitle = document.getElementById('resourceTitle');
+  const resourcePurpose = document.getElementById('resourcePurpose');
+  const resourceCategory = document.getElementById('resourceCategory');
+  const resourceStatus = document.getElementById('resourceStatus');
+  const purposeText = document.getElementById('purposeText');
+  const useCasesList = document.getElementById('useCasesList');
+  const canProduceList = document.getElementById('canProduceList');
+  const specsCard = document.getElementById('specsCard');
+  const metaCard = document.getElementById('metaCard');
+  const tagsList = document.getElementById('tagsList');
+  const notesText = document.getElementById('notesText');
+  
+  // Populate basic resource info
+  if (resourceTitle) {
+    resourceTitle.textContent = resource.title || resource.name || 'Untitled Resource';
+  }
+  
+  if (resourcePurpose) {
+    resourcePurpose.textContent = resource.purpose || resource.description || '';
+  }
+  
+  if (resourceCategory) {
+    resourceCategory.textContent = resource.category || resource.type || 'other';
+  }
+  
+  if (resourceStatus) {
+    resourceStatus.textContent = resource.status || 'available';
+    resourceStatus.className = `pill ${resource.status === 'available' ? 'online' : 'offline'}`;
+  }
+  
+  // Populate purpose section
+  if (purposeText && resource.purpose) {
+    purposeText.textContent = resource.purpose;
+    document.getElementById('purposeSection').style.display = 'block';
+  }
+  
+  // Populate use cases
+  if (useCasesList && resource.useCases && resource.useCases.length > 0) {
+    useCasesList.innerHTML = resource.useCases.map(uc => {
+      const scenario = typeof uc === 'string' ? uc : uc.scenario || uc;
+      return `<li>${scenario}</li>`;
+    }).join('');
+    document.getElementById('useCasesSection').style.display = 'block';
+  }
+  
+  // Populate can produce with
+  if (canProduceList && resource.canProduceWith && resource.canProduceWith.length > 0) {
+    canProduceList.innerHTML = resource.canProduceWith.map(cp => {
+      const output = typeof cp === 'string' ? cp : cp.output || cp;
+      return `<li>${output}</li>`;
+    }).join('');
+    document.getElementById('canProduceSection').style.display = 'block';
+  }
+  
+  // Populate specifications
+  if (specsCard && (resource.meta || resource.specifications)) {
+    const specs = resource.specifications || resource.meta || {};
+    let specsHTML = '';
+    if (specs.brand) specsHTML += `<p><strong>Brand:</strong> ${specs.brand}</p>`;
+    if (specs.model) specsHTML += `<p><strong>Model:</strong> ${specs.model}</p>`;
+    if (specs.serialNumber || resource.serialNumber) specsHTML += `<p><strong>Serial Number:</strong> ${specs.serialNumber || resource.serialNumber}</p>`;
+    if (specs.dimensions || resource.dimensions) specsHTML += `<p><strong>Dimensions:</strong> ${specs.dimensions || resource.dimensions}</p>`;
+    if (specs.weight || resource.weight) specsHTML += `<p><strong>Weight:</strong> ${specs.weight || resource.weight}</p>`;
+    if (specs.capacity || resource.capacity) specsHTML += `<p><strong>Capacity:</strong> ${specs.capacity || resource.capacity}</p>`;
+    if (specsHTML) {
+      specsCard.innerHTML = specsHTML;
+      document.getElementById('specsSection').style.display = 'block';
+    }
+  }
+  
+  // Populate meta/purchase info
+  if (metaCard && resource.meta) {
+    let metaHTML = '';
+    if (resource.meta.purchaseDate || resource.purchaseDate) metaHTML += `<p><strong>Purchase Date:</strong> ${resource.meta.purchaseDate || resource.purchaseDate}</p>`;
+    if (resource.meta.purchasePrice || resource.purchasePrice) metaHTML += `<p><strong>Purchase Price:</strong> $${resource.meta.purchasePrice || resource.purchasePrice}</p>`;
+    if (resource.meta.msrp || resource.msrp) metaHTML += `<p><strong>MSRP:</strong> $${resource.meta.msrp || resource.msrp}</p>`;
+    if (resource.meta.location || resource.location) metaHTML += `<p><strong>Location:</strong> ${resource.meta.location || resource.location}</p>`;
+    if (resource.meta.condition || resource.condition) metaHTML += `<p><strong>Condition:</strong> ${resource.meta.condition || resource.condition}</p>`;
+    if (metaHTML) {
+      metaCard.innerHTML = metaHTML;
+      document.getElementById('metaSection').style.display = 'block';
+    }
+  }
+  
+  // Populate tags
+  if (tagsList && resource.tags && resource.tags.length > 0) {
+    tagsList.innerHTML = resource.tags.map(tag => `<span class="pill">${tag}</span>`).join('');
+    document.getElementById('tagsSection').style.display = 'block';
+  }
+  
+  // Populate notes
+  if (notesText && (resource.notes || resource.meta?.notes)) {
+    notesText.textContent = resource.notes || resource.meta.notes || '';
+    if (notesText.textContent) {
+      document.getElementById('notesSection').style.display = 'block';
+    }
+  }
+  
+  // Populate capabilities
+  if (resource.capabilities && resource.capabilities.length > 0) {
+    const capabilitiesList = document.getElementById('capabilitiesList');
+    if (capabilitiesList) {
+      capabilitiesList.innerHTML = resource.capabilities.map(cap => {
+        const capability = typeof cap === 'string' ? cap : cap.capability || cap;
+        const level = typeof cap === 'object' ? cap.level : '';
+        return `<li>${capability}${level ? ` <span class="pill">${level}</span>` : ''}</li>`;
+      }).join('');
+      document.getElementById('capabilitiesSection').style.display = 'block';
+    }
+  }
+  
+  // Populate abilities
+  if (resource.abilities && resource.abilities.length > 0) {
+    const abilitiesList = document.getElementById('abilitiesList');
+    if (abilitiesList) {
+      abilitiesList.innerHTML = resource.abilities.map(ability => {
+        const ab = typeof ability === 'string' ? ability : ability.ability || ability;
+        const level = typeof ability === 'object' ? ability.level : '';
+        return `<li>${ab}${level ? ` <span class="pill">${level}</span>` : ''}</li>`;
+      }).join('');
+      document.getElementById('abilitiesSection').style.display = 'block';
+    }
+  }
+  
+  // Populate outcomes
+  if (resource.outcomes && resource.outcomes.length > 0) {
+    const outcomesList = document.getElementById('outcomesList');
+    if (outcomesList) {
+      outcomesList.innerHTML = resource.outcomes.map(outcome => {
+        const result = typeof outcome === 'string' ? outcome : outcome.result || outcome;
+        const desc = typeof outcome === 'object' ? outcome.description : '';
+        return `<li><strong>${result}</strong>${desc ? `: ${desc}` : ''}</li>`;
+      }).join('');
+      document.getElementById('outcomesSection').style.display = 'block';
+    }
+  }
+  
+  // Populate links
+  if (resource.links && resource.links.length > 0) {
+    const linksList = document.getElementById('linksList');
+    if (linksList) {
+      linksList.innerHTML = resource.links.map(link => {
+        const url = typeof link === 'string' ? link : link.url || link;
+        const label = typeof link === 'object' ? (link.label || link.name || url) : url;
+        return `<li><a href="${url}" target="_blank" rel="noopener">${label}</a></li>`;
+      }).join('');
+      document.getElementById('linksSection').style.display = 'block';
+    }
+  }
+
+      // Set photorealistic mockup or fallback image/icon
+      const resourceImage = document.getElementById('resourceImage');
+      const mockupContainer = document.getElementById('mockupContainer');
+      const mockup = document.getElementById('mockup');
+      const mockupImage = document.getElementById('mockupImage');
+      const mockupBadge = document.getElementById('mockupBadge');
+      const mockupLabel = document.getElementById('mockupLabel');
+      
+      const categoryIcons = {
+        'tool': '🔧',
+        'equipment': '⚙️',
+        'hardware': '🔩',
+        'material': '📦',
+        'consumable': '🧪',
+        'software': '💻',
+        'documentation': '📚',
+        'other': '📋'
+      };
+      
+      // Load resource type templates
+      let typeTemplates = {};
+      try {
+        // Try shared schemas path first (served by server)
+        const templatesResponse = await fetch('/schemas/resource-type-templates.json');
+        if (templatesResponse.ok) {
+          typeTemplates = await templatesResponse.json();
+        } else {
+          // Fallback to relative path (from content/pages/resource-cards/)
+          const fallbackResponse = await fetch('../../../schemas/resource-type-templates.json');
+          if (fallbackResponse.ok) {
+            typeTemplates = await fallbackResponse.json();
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load type templates, using defaults');
+      }
+      
+      // Get resource type (primary identifier for template selection)
+      const resourceType = resource.type || resource.category || 'other';
+      
+      // Get template for this resource type
+      const typeTemplate = typeTemplates[resourceType] || typeTemplates['other'] || {};
+      
+      // Category to mockup type mapping (fallback)
+      const categoryMockups = {
+        'tool': 'toolbox',
+        'equipment': 'device',
+        'hardware': 'workspace',
+        'material': 'shelf',
+        'consumable': 'shelf',
+        'software': 'float',
+        'documentation': 'float',
+        'appliance': 'device',
+        'person': 'idcard',
+        'contact': 'idcard',
+        'company': 'business-card',
+        'other': 'box'
+      };
+      
+      // Check if mockup is enabled (default: true)
+      const mockupEnabled = resource.image?.mockup?.enabled !== false;
+      const view360Container = document.getElementById('view360Container');
+      const view360Images = document.getElementById('view360Images');
+      const view360Prev = document.getElementById('view360Prev');
+      const view360Next = document.getElementById('view360Next');
+      const view360Play = document.getElementById('view360Play');
+      const view360Indicator = document.getElementById('view360Indicator');
+      
+      // Show photorealistic mockup if image is available and enabled
+      if (resource.image?.url && mockupEnabled) {
+        // Check if this is a 3D image with 360-degree view
+        const has360View = resource.image?.view360?.enabled && 
+                          resource.image?.view360?.images && 
+                          resource.image.view360.images.length > 0;
+        const is3D = resource.image?.is3D || has360View;
+        
+        // Show 360-degree view if available
+        if (has360View) {
+          view360Container.style.display = 'block';
+          mockup.style.display = 'none';
+          
+          // Load 360-degree images
+          const images = resource.image.view360.images;
+          view360Images.innerHTML = images.map((img, index) => 
+            `<img class="view360-image ${index === 0 ? 'active' : ''}" src="${img}" alt="${resource.title} - View ${index + 1}">`
+          ).join('');
+          
+          // 360-degree view controls
+          let currentView = 0;
+          const totalViews = images.length;
+          
+          const showView = (index) => {
+            const allImages = view360Images.querySelectorAll('.view360-image');
+            allImages.forEach((img, i) => {
+              img.classList.toggle('active', i === index);
+            });
+            currentView = index;
+            view360Indicator.textContent = `3D View ${currentView + 1}/${totalViews}`;
+          };
+          
+          view360Prev.addEventListener('click', () => {
+            showView((currentView - 1 + totalViews) % totalViews);
+          });
+          
+          view360Next.addEventListener('click', () => {
+            showView((currentView + 1) % totalViews);
+          });
+          
+          // Auto-rotate if enabled
+          let autoRotateInterval = null;
+          if (resource.image.view360.autoplay) {
+            view360Play.addEventListener('click', () => {
+              if (autoRotateInterval) {
+                clearInterval(autoRotateInterval);
+                autoRotateInterval = null;
+                view360Play.textContent = '▶';
+              } else {
+                autoRotateInterval = setInterval(() => {
+                  showView((currentView + 1) % totalViews);
+                }, 2000);
+                view360Play.textContent = '⏸';
+              }
+            });
+          }
+          
+          // Mouse drag for 360 rotation
+          let isDragging = false;
+          let startX = 0;
+          view360Container.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+          });
+          view360Container.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+              const deltaX = e.clientX - startX;
+              const threshold = 50;
+              if (Math.abs(deltaX) > threshold) {
+                if (deltaX > 0) {
+                  showView((currentView + 1) % totalViews);
+                } else {
+                  showView((currentView - 1 + totalViews) % totalViews);
+                }
+                startX = e.clientX;
+              }
+            }
+          });
+          view360Container.addEventListener('mouseup', () => {
+            isDragging = false;
+          });
+          view360Container.addEventListener('mouseleave', () => {
+            isDragging = false;
+          });
+        } else {
+          // Standard mockup (with 3D enhancements if applicable)
+          view360Container.style.display = 'none';
+          mockup.style.display = 'block';
+          
+          // Determine mockup type using type template system
+          let mockupType = resource.template?.mockupType || 
+                          resource.image?.mockup?.type || 
+                          'auto';
+          
+          if (mockupType === 'auto') {
+            // Use type template default
+            if (typeTemplate.mockupType) {
+              mockupType = typeTemplate.mockupType;
+            } else {
+              // Fallback to category mapping
+              mockupType = categoryMockups[resource.category] || 
+                          categoryMockups[resourceType] || 
+                          'box';
+            }
+          }
+          
+          // Get layout from template
+          const layoutStyle = resource.template?.layout || 
+                             typeTemplate.layout || 
+                             'product';
+          
+          // Get sections from template
+          const displaySections = resource.template?.sections || 
+                                 typeTemplate.sections || 
+                                 [];
+          
+          // Special handling for person/contact ID cards
+          const isPerson = resourceType === 'person' || 
+                          resourceType === 'contact' ||
+                          resource.category === 'person' || 
+                          resource.category === 'contact' || 
+                          resource.type === 'person' || 
+                          resource.type === 'contact';
+          
+          if (isPerson && mockupType === 'idcard') {
+            // Use ID card, license, or passport mockup
+            const personMockupType = resource.image?.mockup?.type || 'idcard';
+            mockupType = personMockupType === 'auto' ? 'idcard' : personMockupType;
+            
+            // Set mockup image (person photo)
+            mockupImage.src = resource.image.url;
+            mockupImage.alt = resource.image.alt || `${resource.title} - Photo`;
+            
+            // Create ID card info overlay
+            const idInfo = document.createElement('div');
+            idInfo.className = 'id-info';
+            
+            if (resource.image?.mockup?.showHeader !== false) {
+              const idHeader = document.createElement('div');
+              idHeader.className = 'id-header';
+              idHeader.textContent = 'IDENTIFICATION';
+              idInfo.appendChild(idHeader);
+            }
+            
+            const idName = document.createElement('div');
+            idName.className = 'id-name';
+            // Handle both string name and name object
+            let displayName = resource.title || 'Name';
+            if (resource.name) {
+              if (typeof resource.name === 'string') {
+                displayName = resource.name;
+              } else if (resource.name.full) {
+                displayName = resource.name.full;
+              } else if (resource.name.first && resource.name.last) {
+                displayName = `${resource.name.first} ${resource.name.last}`;
+              } else if (resource.name.preferred) {
+                displayName = resource.name.preferred;
+              }
+            }
+            idName.textContent = displayName;
+            idInfo.appendChild(idName);
+            
+            if (resource.image?.mockup?.showDetails !== false) {
+              const idDetails = document.createElement('div');
+              idDetails.className = 'id-details';
+              
+              // Add person details
+              if (resource.udin) {
+                const row = document.createElement('div');
+                row.className = 'id-detail-row';
+                row.innerHTML = `<span class="id-label">UDIN:</span><span class="id-value">${resource.udin}</span>`;
+                idDetails.appendChild(row);
+              }
+              
+              // Contact info (from contact object or direct)
+              const email = resource.contact?.email || resource.email;
+              if (email) {
+                const row = document.createElement('div');
+                row.className = 'id-detail-row';
+                row.innerHTML = `<span class="id-label">Email:</span><span class="id-value">${email}</span>`;
+                idDetails.appendChild(row);
+              }
+              
+              const phone = resource.contact?.phone || resource.contact?.mobile || resource.phone;
+              if (phone) {
+                const row = document.createElement('div');
+                row.className = 'id-detail-row';
+                row.innerHTML = `<span class="id-label">Phone:</span><span class="id-value">${phone}</span>`;
+                idDetails.appendChild(row);
+              }
+              
+              // Role
+              if (resource.role) {
+                const row = document.createElement('div');
+                row.className = 'id-detail-row';
+                row.innerHTML = `<span class="id-label">Role:</span><span class="id-value">${resource.role}</span>`;
+                idDetails.appendChild(row);
+              }
+              
+              // Company (from meta or direct)
+              const company = resource.meta?.company || resource.company;
+              if (company) {
+                const row = document.createElement('div');
+                row.className = 'id-detail-row';
+                row.innerHTML = `<span class="id-label">Company:</span><span class="id-value">${company}</span>`;
+                idDetails.appendChild(row);
+              }
+              
+              // Professional title
+              if (resource.meta?.title) {
+                const row = document.createElement('div');
+                row.className = 'id-detail-row';
+                row.innerHTML = `<span class="id-label">Title:</span><span class="id-value">${resource.meta.title}</span>`;
+                idDetails.appendChild(row);
+              }
+              
+              idInfo.appendChild(idDetails);
+            }
+            
+            // Add footer for ID card
+            if (mockupType === 'idcard' && resource.image?.mockup?.showHeader !== false) {
+              const idFooter = document.createElement('div');
+              idFooter.className = 'id-footer';
+              idFooter.textContent = 'OFFICIAL IDENTIFICATION';
+              mockup.appendChild(idFooter);
+            }
+            
+            mockup.appendChild(idInfo);
+          } else {
+            // Standard product mockup
+            mockupImage.src = resource.image.url;
+            mockupImage.alt = resource.image.alt || `${resource.title} - Product image`;
+          }
+          
+          // Apply mockup type class (add 3D class if 3D image)
+          mockup.className = `mockup mockup-${mockupType} mockup-${resource.category || 'other'}`;
+          if (is3D) {
+            mockup.classList.add('mockup-3d');
+          }
+          if (resource.image?.verified && (resource.image?.mockup?.animated !== false)) {
+            mockup.classList.add('mockup-animated');
+          }
+        
+        // Set badge (status or category) - if enabled
+        const showBadge = resource.image?.mockup?.showBadge !== false;
+        if (showBadge) {
+          if (resource.status && resource.status !== 'available') {
+            mockupBadge.textContent = resource.status.toUpperCase();
+            mockupBadge.style.display = 'block';
+          } else if (resource.category) {
+            mockupBadge.textContent = resource.category.toUpperCase();
+            mockupBadge.style.display = 'block';
+          }
+        } else {
+          mockupBadge.style.display = 'none';
+        }
+        
+        // Set label (title) - if enabled
+        const showLabel = resource.image?.mockup?.showLabel !== false;
+        if (showLabel && resource.title) {
+          mockupLabel.textContent = resource.title;
+          mockupLabel.style.display = 'block';
+        } else {
+          mockupLabel.style.display = 'none';
+        }
+        
+        // Show mockup, hide fallback
+        mockupContainer.style.display = 'block';
+        if (resourceImage) resourceImage.style.display = 'none';
+        if (resourceIcon) resourceIcon.style.display = 'none';
+        
+        // Adjust grid layout for mockup
+        const headerGrid = document.getElementById('headerGrid');
+        if (headerGrid) {
+          headerGrid.style.gridTemplateColumns = '1fr 1fr';
+        }
+      } else if (resource.image?.url) {
+        // Image available but mockup disabled - show regular image
+        mockupContainer.style.display = 'none';
+        resourceImage.src = resource.image.url;
+        resourceImage.alt = resource.image.alt || `${resource.title} - Product image`;
+        resourceImage.style.display = 'block';
+        if (resourceIcon) resourceIcon.style.display = 'none';
+        
+        // Adjust grid layout for single column
+        const headerGrid = document.getElementById('headerGrid');
+        if (headerGrid) {
+          headerGrid.style.gridTemplateColumns = '1fr';
+        }
+      } else {
+        // Fallback: show icon
+        mockupContainer.style.display = 'none';
+        if (resourceImage) resourceImage.style.display = 'none';
+        if (resourceIcon) {
+          resourceIcon.textContent = categoryIcons[resource.category] || '📋';
+          resourceIcon.style.display = 'block';
+        }
+        
+        // Adjust grid layout for single column
+        const headerGrid = document.getElementById('headerGrid');
+        if (headerGrid) {
+          headerGrid.style.gridTemplateColumns = '1fr';
+        }
+      }
+  
+  // Populate brand, model, location in meta bar
+  if (resource.meta) {
+    if (resource.meta.brand) {
+      const brandEl = document.getElementById('resourceBrand');
+      const brandItem = document.getElementById('brandItem');
+      if (brandEl) brandEl.textContent = resource.meta.brand;
+      if (brandItem) brandItem.style.display = 'flex';
+    }
+    if (resource.meta.model) {
+      const modelEl = document.getElementById('resourceModel');
+      const modelItem = document.getElementById('modelItem');
+      if (modelEl) modelEl.textContent = resource.meta.model;
+      if (modelItem) modelItem.style.display = 'flex';
+    }
+    if (resource.meta.location || resource.location) {
+      const locationEl = document.getElementById('resourceLocation');
+      const locationItem = document.getElementById('locationItem');
+      if (locationEl) locationEl.textContent = resource.meta.location || resource.location;
+      if (locationItem) locationItem.style.display = 'flex';
+    }
+  }
+  
+  // Enhanced use cases display (with frequency)
+  if (useCasesList && resource.useCases && resource.useCases.length > 0) {
+    useCasesList.innerHTML = resource.useCases.map(uc => {
+      const scenario = typeof uc === 'string' ? uc : uc.scenario || uc;
+      const frequency = typeof uc === 'object' ? uc.frequency : '';
+      return `<div class="use-case-item">
+        <div>
+          <strong>${scenario}</strong>
+          ${frequency ? `<span style="color:var(--muted);font-size:12px;margin-left:8px">(${frequency})</span>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+    document.getElementById('useCasesSection').style.display = 'block';
+  }
+  
+  // Enhanced can produce display (with description and requires)
+  if (canProduceList && resource.canProduceWith && resource.canProduceWith.length > 0) {
+    canProduceList.innerHTML = resource.canProduceWith.map(item => {
+      const output = typeof item === 'string' ? item : item.output || item;
+      const description = typeof item === 'object' ? item.description : '';
+      const requires = typeof item === 'object' ? item.requires : null;
+      return `<div class="produce-item">
+        <div>
+          <strong>${output}</strong>
+          ${description ? `<p style="margin:4px 0 0 0;color:var(--muted);font-size:14px">${description}</p>` : ''}
+          ${requires && requires.length > 0 ? `<p style="margin:4px 0 0 0;color:var(--muted);font-size:12px">Requires: ${requires.join(', ')}</p>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+    document.getElementById('canProduceSection').style.display = 'block';
+  }
+  
+  // Enhanced specifications (include compatibility)
+  if (specsCard) {
+    const specs = resource.specifications || {};
+    let specsHTML = '';
+    if (specs.power || resource.meta?.power) specsHTML += `<p><strong>Power:</strong> ${specs.power || resource.meta.power}</p>`;
+    if (specs.dimensions || resource.dimensions || resource.meta?.dimensions) specsHTML += `<p><strong>Dimensions:</strong> ${specs.dimensions || resource.dimensions || resource.meta.dimensions}</p>`;
+    if (specs.weight || resource.weight || resource.meta?.weight) specsHTML += `<p><strong>Weight:</strong> ${specs.weight || resource.weight || resource.meta.weight}</p>`;
+    if (specs.capacity || resource.capacity || resource.meta?.capacity) specsHTML += `<p><strong>Capacity:</strong> ${specs.capacity || resource.capacity || resource.meta.capacity}</p>`;
+    if (specs.compatibility && specs.compatibility.length > 0) {
+      specsHTML += `<p><strong>Compatibility:</strong> ${specs.compatibility.join(', ')}</p>`;
+    } else if (resource.compatibility && Array.isArray(resource.compatibility) && resource.compatibility.length > 0) {
+      specsHTML += `<p><strong>Compatibility:</strong> ${resource.compatibility.join(', ')}</p>`;
+    }
+    if (specsHTML) {
+      specsCard.innerHTML = specsHTML;
+      document.getElementById('specsSection').style.display = 'block';
+    }
+  }
+  
+  // Enhanced metadata (include all purchase info)
+  if (metaCard) {
+    let metaHTML = '';
+    if (resource.meta?.purchasePrice || resource.purchasePrice) {
+      const price = resource.meta?.purchasePrice || resource.purchasePrice;
+      metaHTML += `<p><strong>Purchase Price:</strong> $${typeof price === 'number' ? price.toFixed(2) : price}</p>`;
+    }
+    if (resource.meta?.purchaseDate || resource.purchaseDate) metaHTML += `<p><strong>Purchase Date:</strong> ${resource.meta?.purchaseDate || resource.purchaseDate}</p>`;
+    if (resource.meta?.msrp || resource.msrp) {
+      const msrp = resource.meta?.msrp || resource.msrp;
+      metaHTML += `<p><strong>MSRP:</strong> $${typeof msrp === 'number' ? msrp.toFixed(2) : msrp}</p>`;
+    }
+    if (resource.meta?.condition || resource.condition) metaHTML += `<p><strong>Condition:</strong> ${resource.meta?.condition || resource.condition}</p>`;
+    if (resource.meta?.serialNumber || resource.serialNumber) metaHTML += `<p><strong>Serial Number:</strong> ${resource.meta?.serialNumber || resource.serialNumber}</p>`;
+    if (resource.meta?.location || resource.location) metaHTML += `<p><strong>Location:</strong> ${resource.meta?.location || resource.location}</p>`;
+    if (resource.lastUsed) metaHTML += `<p><strong>Last Used:</strong> ${resource.lastUsed}</p>`;
+    if (metaHTML) {
+      metaCard.innerHTML = metaHTML;
+      document.getElementById('metaSection').style.display = 'block';
+    }
+  }
+  
+  // Enhanced tags (support both resource.tags and resource.meta.tags)
+  if (tagsList) {
+    const tags = resource.tags || resource.meta?.tags || [];
+    if (tags.length > 0) {
+      tagsList.innerHTML = tags.map(tag => `<span class="pill">${tag}</span>`).join('');
+      document.getElementById('tagsSection').style.display = 'block';
+    }
+  }
+
+  // Update page title with resource name
+  if (resource && resource.title) {
+    document.title = `${config.site?.name || 'LearnMappers'} — ${resource.title}`;
+  } else {
+    document.title = `${config.site?.name || 'LearnMappers'} — Resource Card`;
+  }
+}
+
+// Helper functions
+function mapTypeToCategory(type) {
+  const map = {
+    'Drill / Driver': 'tool',
+    'Miter Saw': 'tool',
+    'Circular Saw': 'tool',
+    'Jig Saw': 'tool',
+    'Recip Saw': 'tool',
+    'Sander': 'tool',
+    'Rotary Tool': 'tool',
+    'Hand Tool': 'tool',
+    '3D Printer': 'equipment',
+    'Scanner': 'equipment',
+    'Network': 'equipment',
+    'Solar / Power': 'equipment',
+    'Photo / Video': 'equipment',
+    'Garden': 'material',
+    'Hardware': 'hardware',
+    'Software': 'software',
+    'Documentation': 'documentation'
+  };
+  return map[type] || 'other';
+}
+
+function mapStateToCondition(state) {
+  const map = {
+    'New': 'new',
+    'Great': 'excellent',
+    'Good': 'good',
+    'Repair': 'needs-repair'
+  };
+  return map[state] || 'good';
+}
+
+function extractTagsFromNotes(notes) {
+  if (!notes) return [];
+  const tags = [];
+  const text = notes.toLowerCase();
+  if (/cordless|battery/i.test(text)) tags.push('cordless');
+  if (/compact|portable/i.test(text)) tags.push('portable');
+  if (/professional|pro/i.test(text)) tags.push('professional');
+  return tags;
+}
+
+// Listen for config loaded
+window.addEventListener('configLoaded', populateResourceCard);
+populateResourceCard();
+</script>
+<script>
+/* v7.3 net pill */
+(function(){
+  const el = document.getElementById('netPill'); if(!el) return;
+  function setStatus(){
+    const on = navigator.onLine;
+    el.textContent = (on ? '● online' : '● offline');
+    el.classList.toggle('online', on);
+    el.classList.toggle('offline', !on);
+  }
+  window.addEventListener('online', setStatus);
+  window.addEventListener('offline', setStatus);
+  setStatus();
+})();
+</script>
+</body>
+</html>
+
