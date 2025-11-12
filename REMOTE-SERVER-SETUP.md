@@ -77,6 +77,55 @@ Create a file `remote-config.json` (don't commit this!):
 
 ## Quick Start on Remote Server
 
+### 0. Set Up Git (Optional but Recommended)
+
+If you want to use Git on the remote server (for pulling updates, etc.):
+
+**Option A: Use the Setup Script (Recommended)**
+```bash
+# On your local machine, edit the script with your server details
+nano setup-git-remote-server.sh
+# Update: REMOTE_HOST, REMOTE_USER, REMOTE_PORT, SSH_KEY
+
+# Run the script
+./setup-git-remote-server.sh
+```
+
+**Option B: Manual Setup**
+```bash
+# SSH into your remote server
+ssh username@your-server.com
+
+# Install Git (if not installed)
+# Ubuntu/Debian:
+sudo apt-get update && sudo apt-get install -y git
+
+# CentOS/RHEL:
+sudo yum install -y git
+
+# Configure Git
+git config --global user.name "Your Name"
+git config --global user.email "your-email@example.com"
+git config --global init.defaultBranch main
+git config --global core.editor nano
+git config --global color.ui auto
+
+# Verify
+git config --global --list
+```
+
+**Option C: Clone Repository Directly**
+```bash
+# SSH into your remote server
+ssh username@your-server.com
+
+# Clone the repository
+git clone https://github.com/marvelousempire/quick-server.git
+cd quick-server
+
+# This automatically sets up everything!
+```
+
 ### 1. Extract and Navigate
 
 ```bash
@@ -241,13 +290,71 @@ netstat -tlnp | grep -E "(8000|8443)"
 
 ---
 
+## Git Setup on Remote Server
+
+### Why Set Up Git on Remote Server?
+
+- **Pull Updates:** Easily update your server with `git pull`
+- **Track Changes:** See what's been modified
+- **Rollback:** Revert to previous versions if needed
+- **Sync:** Keep server in sync with GitHub repository
+
+### Setup Methods
+
+**1. Automated Script (Easiest)**
+```bash
+# Edit script with your server details
+nano setup-git-remote-server.sh
+
+# Run it
+./setup-git-remote-server.sh
+```
+
+**2. Manual Setup**
+```bash
+ssh username@your-server.com
+git config --global user.name "Your Name"
+git config --global user.email "your-email@example.com"
+```
+
+**3. Clone Repository (Best for Fresh Setup)**
+```bash
+ssh username@your-server.com
+git clone https://github.com/marvelousempire/quick-server.git
+cd quick-server
+./go
+```
+
+### Using Git on Remote Server
+
+**Pull Latest Updates:**
+```bash
+ssh username@your-server.com
+cd /path/to/quick-server
+git pull origin main
+```
+
+**Check Status:**
+```bash
+git status
+git log --oneline -5
+```
+
+**View Configuration:**
+```bash
+git config --global --list
+```
+
 ## Remote Monitoring Script
 
-I can create a script that:
+The `check-remote.sh` script:
 - Connects to your remote server via SSH
 - Checks server status
 - Tests API endpoints
 - Reports back to you
 
-Would you like me to create this?
+**Usage:**
+```bash
+./check-remote.sh
+```
 
